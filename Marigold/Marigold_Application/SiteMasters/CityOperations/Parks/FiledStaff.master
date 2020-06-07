@@ -1,0 +1,11 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/SiteMasters/CityOperations/CityOperations.Master" AutoEventWireup="true" CodeBehind="FiledStaff.master.cs" Inherits="Marigold_Application.SiteMasters.CityOperations.Parks.FiledStaff" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <asp:ContentPlaceHolder ID="mainContent" runat="server">
+
+    </asp:ContentPlaceHolder>
+</asp:Content>

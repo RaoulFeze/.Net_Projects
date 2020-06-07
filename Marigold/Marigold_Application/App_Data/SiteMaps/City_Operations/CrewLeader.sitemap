@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="" title=""  description="">
+    <siteMapNode url="#" title="Statistics"  description="" />
+    <siteMapNode url="#!" title="Routes"  description="" />
+    <siteMapNode url="#?#" title="Crews"  description="" />
+    <siteMapNode url="#$" title="Time Card"  description="" />
+    <siteMapNode url="#%" title="Fleet"  description="" >
+      <siteMapNode url="#^" title="Trucks"  description="" />
+      <siteMapNode url="#?!" title="Equipments"  description="" />
+    </siteMapNode>
+    <siteMapNode url="" title="Staff"  description="" >
+      <siteMapNode url="#?" title="Employees"  description="" />
+      <siteMapNode url="#*" title="Training"  description="" />
+      <siteMapNode url="#(" title="Review"  description="" />
+    </siteMapNode>
+    <siteMapNode url="#)" title="Incident"  description="" />
+  </siteMapNode>
+</siteMap>
