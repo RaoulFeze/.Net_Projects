@@ -18,11 +18,11 @@ namespace MarigoldSystem.Data.Entities
 
         public int SiteID { get; set; }
 
-        public int SiteTypeID { get; set; }
+        public int? SiteTypeID { get; set; }
 
-        public int YardID { get; set; }
+        public int? YardID { get; set; }
 
-        public int CommunityID { get; set; }
+        public int? CommunityID { get; set; }
 
         public int Pin { get; set; }
 

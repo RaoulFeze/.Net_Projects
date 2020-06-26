@@ -9,20 +9,20 @@ namespace MarigoldSystem.Data.Entities
     [Table("EmployeeRole")]
     public partial class EmployeeRole
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public EmployeeRole()
-        {
-            Employees = new HashSet<Employee>();
-        }
+        [Key]
+        [Column(Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int EmployeeID { get; set; }
 
         [Key]
+        [Column(Order = 1)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int RoleID { get; set; }
 
-        [Required]
-        [StringLength(20)]
-        public string Description { get; set; }
+        public DateTime? AppointmentDate { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Employee> Employees { get; set; }
+        public virtual Employee Employee { get; set; }
+
+        public virtual Role Role { get; set; }
     }
 }

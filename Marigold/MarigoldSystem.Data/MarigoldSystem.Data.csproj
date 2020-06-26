@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0AB8A0D1-25FE-430C-AF70-60CD000DDDD2}</ProjectGuid>
+    <ProjectGuid>{7A2C0369-2E72-4B5F-B0DF-D4D3A8ECF989}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MarigoldSystem.Data</RootNamespace>
@@ -12,6 +13,8 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,10 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -55,36 +58,51 @@
     <Compile Include="Entities\Crew.cs" />
     <Compile Include="Entities\CrewMember.cs" />
     <Compile Include="Entities\District.cs" />
-    <Compile Include="Entities\DriverPermit.cs" />
     <Compile Include="Entities\Employee.cs" />
-    <Compile Include="Entities\EmployeePermit.cs" />
+    <Compile Include="Entities\EmployeeLicense.cs" />
     <Compile Include="Entities\EmployeeRole.cs" />
-    <Compile Include="Entities\EmployeeStatu.cs" />
+    <Compile Include="Entities\EmployeeStanding.cs" />
     <Compile Include="Entities\Employee_Audit_Trail.cs" />
     <Compile Include="Entities\Equipment.cs" />
+    <Compile Include="Entities\EquipmentCategory.cs" />
     <Compile Include="Entities\Hazard.cs" />
     <Compile Include="Entities\HazardCategory.cs" />
     <Compile Include="Entities\JobCard.cs" />
+    <Compile Include="Entities\LicenseClass.cs" />
     <Compile Include="Entities\OperatorPermit.cs" />
+    <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\Site.cs" />
     <Compile Include="Entities\SiteHazard.cs" />
     <Compile Include="Entities\SiteType.cs" />
     <Compile Include="Entities\Site_Audit_Trail.cs" />
+    <Compile Include="Entities\Standing.cs" />
     <Compile Include="Entities\sysdiagram.cs" />
     <Compile Include="Entities\Task.cs" />
     <Compile Include="Entities\Tool.cs" />
     <Compile Include="Entities\ToolsChecklist.cs" />
-    <Compile Include="Entities\Unit.cs" />
+    <Compile Include="Entities\TrailerOperator.cs" />
+    <Compile Include="Entities\Truck.cs" />
+    <Compile Include="Entities\TruckCategory.cs" />
+    <Compile Include="Entities\TruckLicense.cs" />
     <Compile Include="Entities\Yard.cs" />
+    <Compile Include="Entities\YardEmployee.cs" />
+    <Compile Include="POCO%27s\TruckDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="POCOs\" />
+    <Folder Include="DTO%27s\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
 </Project>

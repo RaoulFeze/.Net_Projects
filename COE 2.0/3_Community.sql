@@ -1,0 +1,22 @@
+			/*COMMUNITY*/
+insert into Community (Name) values ('Blue Quill');
+insert into Community (Name) values ('Heritage');
+insert into Community (Name) values ('Ambleside');
+insert into Community (Name) values ('Steel Hight');
+insert into Community (Name) values ('Margrath');
+insert into Community (Name) values ('Bonnie Doon');
+insert into Community (Name) values ('Charlesworth');
+insert into Community (Name) values ('Cloverdale');
+insert into Community (Name) values ('Ellerslie');
+insert into Community (Name) values ('Collin wood');
+insert into Community (Name) values ('Avonmore');
+insert into Community (Name) values ('McEwan');
+insert into Community (Name) values ('Beacon Height');
+insert into Community (Name) values ('South Park');
+insert into Community (Name) values ('Glenridding');
+insert into Community (Name) values ('Allard');
+insert into Community (Name) values ('Buleya');
+insert into Community (Name) values ('Twin Brooks');
+insert into Community (Name) values ('Hermitage');
+insert into Community (Name) values ('Landcaster');
+insert into Community (Name) values ('Victoria Heights');

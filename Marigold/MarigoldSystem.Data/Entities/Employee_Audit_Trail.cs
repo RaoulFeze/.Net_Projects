@@ -21,11 +21,9 @@ namespace MarigoldSystem.Data.Entities
 
         public DateTime ChangedDate { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string OldValue { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string NewValue { get; set; }
 

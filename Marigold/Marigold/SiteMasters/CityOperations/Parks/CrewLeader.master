@@ -1,0 +1,13 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/SiteMasters/CityOperations/CityOperations.Master" AutoEventWireup="true" CodeBehind="CrewLeader.master.cs" Inherits="Marigold.SiteMasters.CityOperations.Parks.CrewLeader" %>
+<%@ MasterType VirtualPath="~/SiteMasters/CityOperations/CityOperations.Master" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="crewleader-content-layout">
+        <asp:ContentPlaceHolder ID="mainContent" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+</asp:Content>
+

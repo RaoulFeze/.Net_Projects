@@ -1,5 +1,4 @@
 ﻿using MarigoldSystem.DAL;
-using MarigoldSystem.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +9,18 @@ namespace MarigoldSystem.BLL
 {
     public class EmployeeController
     {
-        public string GetUserRole(int? userId)
+        public int? GetYardID(int userId)
         {
             using(var context = new MarigoldSystemContext())
             {
-                return context.Employees.Find(userId).EmployeeRole.Description;
+                return context.YardEmployees
+                                        .Where(x => x.EmployeeID == userId)
+                                        .OrderBy(x => x.AssignedDate)
+                                        .Select(x => x.YardID)
+                                        .AsEnumerable()
+                                        .Last();
+                
             }
         }
     }
-}
+}   

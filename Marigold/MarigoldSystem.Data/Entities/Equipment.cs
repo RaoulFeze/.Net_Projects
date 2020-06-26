@@ -9,23 +9,22 @@ namespace MarigoldSystem.Data.Entities
     [Table("Equipment")]
     public partial class Equipment
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Equipment()
-        {
-            OperatorPermits = new HashSet<OperatorPermit>();
-        }
-
         public int EquipmentID { get; set; }
+
+        public int? CategoryID { get; set; }
 
         public int? YardID { get; set; }
 
         [Required]
         [StringLength(20)]
+        public string EquipmentNumber { get; set; }
+
+        [Required]
+        [StringLength(20)]
         public string Description { get; set; }
 
-        public virtual Yard Yard { get; set; }
+        public virtual EquipmentCategory EquipmentCategory { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OperatorPermit> OperatorPermits { get; set; }
+        public virtual Yard Yard { get; set; }
     }
 }

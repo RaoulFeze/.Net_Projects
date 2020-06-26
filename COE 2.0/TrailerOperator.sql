@@ -1,0 +1,16 @@
+insert into TrailerOperator (EmployeeID, TrainedDate) values (14, '4/6/2012');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (13, '3/24/2016');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (2, '11/1/2019');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (24, '5/21/2013');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (25, '2/16/2013');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (16, '2/11/2018');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (11, '12/22/2018');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (1, '5/22/2012');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (15, '11/18/2017');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (17, '5/24/2013');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (23, '4/24/2017');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (19, '9/6/2014');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (10, '8/23/2016');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (6, '6/19/2013');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (7, '7/29/2010');
+insert into TrailerOperator (EmployeeID, TrainedDate) values (26, '7/29/2010');

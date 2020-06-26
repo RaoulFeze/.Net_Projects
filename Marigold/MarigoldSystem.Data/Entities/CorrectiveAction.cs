@@ -11,7 +11,7 @@ namespace MarigoldSystem.Data.Entities
     {
         public int CorrectiveActionID { get; set; }
 
-        public int HazardID { get; set; }
+        public int? HazardID { get; set; }
 
         [Required]
         [StringLength(500)]

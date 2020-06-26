@@ -9,11 +9,12 @@ namespace MarigoldSystem.Data.Entities
     [Table("OperatorPermit")]
     public partial class OperatorPermit
     {
-        public int OperatorPermitID { get; set; }
+        [Key]
+        public int PermitID { get; set; }
 
         public int EmployeeID { get; set; }
 
-        public int EquipmentID { get; set; }
+        public int CategoryID { get; set; }
 
         public DateTime? CompletionDate { get; set; }
 
@@ -21,6 +22,6 @@ namespace MarigoldSystem.Data.Entities
 
         public virtual Employee Employee { get; set; }
 
-        public virtual Equipment Equipment { get; set; }
+        public virtual EquipmentCategory EquipmentCategory { get; set; }
     }
 }

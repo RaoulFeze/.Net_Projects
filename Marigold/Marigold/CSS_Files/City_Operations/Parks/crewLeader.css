@@ -1,0 +1,73 @@
+﻿.crew-content-layout {
+	margin: 55px 10px 0 10px;
+	background-color: #FFFFFF;
+	clear:both;
+}
+
+.sites-pane {
+	border: 2px solid #000000;
+	margin: 0 1px 0 0;
+	background-color: #E8E8E8;
+	height: 84.7vh;
+	width: 49vw;
+	float: right;
+	overflow: auto;
+}
+
+.selection-column {
+	float: left;
+	margin: 0 0 0 1px;
+	width: 48.8vw;
+}
+
+.truck-selection-pane {
+	margin: 0 0 1px 0;
+	border: 2px solid #000000;
+	height:33px;
+}
+.UnitDDL {
+	margin-top: 2px;
+}
+.fleet-category-selection {
+	float: left;
+	padding-left: 10px;
+}
+.staff-selection-pane {
+	height: 32vh;
+	border: 2px solid #000000;
+	margin-bottom: 3.5px;
+	background-color: #E8E8E8;
+	text-align:center;
+	overflow: auto;
+	clear:both;
+}
+.pager{
+	position:relative;
+	top:2vh;
+}
+.driverListView {
+	justify-content: center;
+	align-items:center;
+	display: flex;
+	margin-top:15px;
+}
+.crew-selection-pane {
+	height: 48.6vh;
+	background-color: #E8E8E8;
+	border: 2px solid #000000;
+	margin-top: 3.5px;
+	overflow: auto;
+}
+
+.nav .nav-tabs{
+	margin-top:15px !important;
+}
+.summary {
+	height: 30px;
+	width: inherit;
+	background-color: #E8E8E8;
+	border-bottom: 1px solid #000000;
+	border-left: 2px solid #000000;
+	border-right: 2px solid #000000;
+	clear: both;
+}

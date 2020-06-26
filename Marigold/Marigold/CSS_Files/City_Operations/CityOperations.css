@@ -1,0 +1,64 @@
+﻿
+body {
+	padding: 0px;
+	margin: 0px;
+	background-color: #FFFFFF;
+	
+}
+.body-content {
+	height: 848px;
+}
+
+
+.logo {
+	position: absolute;
+	z-index: 1;
+	left: 5%;
+}
+
+.navbar {
+	position: relative;
+	/*top: 20px;*/
+}
+
+.bg-dark{
+	background-color:#000000 !important;
+}
+
+.dropdown-setting {
+	padding-left: 10px;
+	margin-bottom:5px;
+}
+
+.dropdown-setting:hover {
+	color: #FFF;
+	background-color:black;
+	opacity:0.5;
+}
+
+#Navigation {
+	font-size: 17px;
+}
+
+footer {
+	height: 90px;
+	background-color: forestgreen;
+	color: #FFFFFF;
+	text-align: center;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	border: 0.5px solid #000000;
+}
+
+.city-operations-footer {
+	font-size: 20px;
+	margin-top: 10px;
+}
+
+.city-operations-footer p{
+	margin:0 0 0 0;
+}
+.denied {
+	margin-top: 10%;
+}

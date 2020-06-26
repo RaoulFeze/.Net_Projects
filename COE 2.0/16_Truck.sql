@@ -1,0 +1,10 @@
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (1, 1, 'WBAGH83491D934881', 'TOW345');
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (1, 1, '1GYS4DEF9ER091834', 'TOW346');
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (2, 1, '1B3CB1HA9BD591467', 'LER210');
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (2, 1, '5N1BA0NC3FN250820', 'LER211');
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (3, 1, '19XFB2E53DE817612', 'SUY114');
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (3, 1, '2C3CCARGXFH566864', 'SUY115');
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (3, 1, 'WAUSF98K09A348662', 'SUY116');
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (4, 1, '2C3CDYBT5DH386749', 'VRA103');
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (5, 1, 'WAUDF98E48A520256', 'JPG201');
+insert into Truck (CategoryID, YardID, TruckNumber, TruckDescription) values (5, 1, '1G6AA1RX8F0849148', 'JPG202');

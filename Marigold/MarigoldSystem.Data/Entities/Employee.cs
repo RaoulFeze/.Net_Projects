@@ -14,21 +14,18 @@ namespace MarigoldSystem.Data.Entities
         {
             CrewMembers = new HashSet<CrewMember>();
             Employee_Audit_Trail = new HashSet<Employee_Audit_Trail>();
-            EmployeePermits = new HashSet<EmployeePermit>();
+            EmployeeLicenses = new HashSet<EmployeeLicense>();
+            EmployeeRoles = new HashSet<EmployeeRole>();
+            EmployeeStandings = new HashSet<EmployeeStanding>();
             OperatorPermits = new HashSet<OperatorPermit>();
+            TrailerOperators = new HashSet<TrailerOperator>();
+            YardEmployees = new HashSet<YardEmployee>();
         }
 
         public int EmployeeID { get; set; }
 
-        public int YardID { get; set; }
+        public int? PayrollNumber { get; set; }
 
-        public int RoleID { get; set; }
-
-        public int StatusID { get; set; }
-
-        public int PayrollNumber { get; set; }
-
-        [Required]
         [StringLength(20)]
         public string FirstName { get; set; }
 
@@ -48,16 +45,22 @@ namespace MarigoldSystem.Data.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee_Audit_Trail> Employee_Audit_Trail { get; set; }
 
-        public virtual EmployeeRole EmployeeRole { get; set; }
-
-        public virtual EmployeeStatu EmployeeStatu { get; set; }
-
-        public virtual Yard Yard { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmployeeLicense> EmployeeLicenses { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmployeePermit> EmployeePermits { get; set; }
+        public virtual ICollection<EmployeeRole> EmployeeRoles { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmployeeStanding> EmployeeStandings { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OperatorPermit> OperatorPermits { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TrailerOperator> TrailerOperators { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<YardEmployee> YardEmployees { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace MarigoldSystem.Data.Entities
 
         public DateTime CrewDate { get; set; }
 
-        public int UnitID { get; set; }
+        public int TruckID { get; set; }
 
         public bool? Driver { get; set; }
 
@@ -34,7 +34,7 @@ namespace MarigoldSystem.Data.Entities
         [StringLength(100)]
         public string AdditionalComments { get; set; }
 
-        public virtual Unit Unit { get; set; }
+        public virtual Truck Truck { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CrewMember> CrewMembers { get; set; }

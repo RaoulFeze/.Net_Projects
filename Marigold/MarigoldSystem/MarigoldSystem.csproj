@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2B83DE55-94C3-46AF-845D-2115D0F6111E}</ProjectGuid>
+    <ProjectGuid>{E108EE1C-9D24-43D1-89B7-E63B844FBC88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MarigoldSystem</RootNamespace>
@@ -52,17 +52,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL\BusinessRuleException.cs" />
     <Compile Include="BLL\EmployeeController.cs" />
+    <Compile Include="BLL\FleetController.cs" />
     <Compile Include="DAL\MarigoldSystemContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\MarigoldSystem.Data\MarigoldSystem.Data.csproj">
-      <Project>{0ab8a0d1-25fe-430c-af70-60cd000dddd2}</Project>
+      <Project>{7a2c0369-2e72-4b5f-b0df-d4d3a8ecf989}</Project>
       <Name>MarigoldSystem.Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

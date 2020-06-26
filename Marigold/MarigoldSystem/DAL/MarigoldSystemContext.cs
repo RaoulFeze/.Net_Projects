@@ -1,3 +1,4 @@
+
 using System;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,11 +7,11 @@ using MarigoldSystem.Data.Entities;
 
 namespace MarigoldSystem.DAL
 {
-   
+
     public partial class MarigoldSystemContext : DbContext
     {
         public MarigoldSystemContext()
-            : base("name=COE_DB")
+            : base("name=COE_Db")
         {
         }
 
@@ -19,38 +20,40 @@ namespace MarigoldSystem.DAL
         public virtual DbSet<Crew> Crews { get; set; }
         public virtual DbSet<CrewMember> CrewMembers { get; set; }
         public virtual DbSet<District> Districts { get; set; }
-        public virtual DbSet<DriverPermit> DriverPermits { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Employee_Audit_Trail> Employee_Audit_Trail { get; set; }
-        public virtual DbSet<EmployeePermit> EmployeePermits { get; set; }
+        public virtual DbSet<EmployeeLicense> EmployeeLicenses { get; set; }
         public virtual DbSet<EmployeeRole> EmployeeRoles { get; set; }
-        public virtual DbSet<EmployeeStatu> EmployeeStatus { get; set; }
+        public virtual DbSet<EmployeeStanding> EmployeeStandings { get; set; }
         public virtual DbSet<Equipment> Equipments { get; set; }
+        public virtual DbSet<EquipmentCategory> EquipmentCategories { get; set; }
         public virtual DbSet<Hazard> Hazards { get; set; }
         public virtual DbSet<HazardCategory> HazardCategories { get; set; }
         public virtual DbSet<JobCard> JobCards { get; set; }
+        public virtual DbSet<LicenseClass> LicenseClasses { get; set; }
         public virtual DbSet<OperatorPermit> OperatorPermits { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Site_Audit_Trail> Site_Audit_Trail { get; set; }
         public virtual DbSet<SiteHazard> SiteHazards { get; set; }
         public virtual DbSet<SiteType> SiteTypes { get; set; }
+        public virtual DbSet<Standing> Standings { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Tool> Tools { get; set; }
         public virtual DbSet<ToolsChecklist> ToolsChecklists { get; set; }
-        public virtual DbSet<Unit> Units { get; set; }
+        public virtual DbSet<TrailerOperator> TrailerOperators { get; set; }
+        public virtual DbSet<Truck> Trucks { get; set; }
+        public virtual DbSet<TruckCategory> TruckCategories { get; set; }
+        public virtual DbSet<TruckLicense> TruckLicenses { get; set; }
         public virtual DbSet<Yard> Yards { get; set; }
+        public virtual DbSet<YardEmployee> YardEmployees { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Community>()
                 .Property(e => e.Name)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<Community>()
-                .HasMany(e => e.Sites)
-                .WithRequired(e => e.Community)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CorrectiveAction>()
                 .Property(e => e.CorrectiveActionDescription)
@@ -84,15 +87,6 @@ namespace MarigoldSystem.DAL
                 .WithRequired(e => e.District)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<DriverPermit>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<DriverPermit>()
-                .HasMany(e => e.EmployeePermits)
-                .WithRequired(e => e.DriverPermit)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<Employee>()
                 .Property(e => e.FirstName)
                 .IsUnicode(false);
@@ -120,12 +114,27 @@ namespace MarigoldSystem.DAL
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Employee>()
-                .HasMany(e => e.EmployeePermits)
+                .HasMany(e => e.EmployeeLicenses)
+                .WithRequired(e => e.Employee)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Employee>()
+                .HasMany(e => e.EmployeeRoles)
+                .WithRequired(e => e.Employee)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Employee>()
+                .HasMany(e => e.EmployeeStandings)
                 .WithRequired(e => e.Employee)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Employee>()
                 .HasMany(e => e.OperatorPermits)
+                .WithRequired(e => e.Employee)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Employee>()
+                .HasMany(e => e.YardEmployees)
                 .WithRequired(e => e.Employee)
                 .WillCascadeOnDelete(false);
 
@@ -141,41 +150,26 @@ namespace MarigoldSystem.DAL
                 .Property(e => e.NewValue)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<EmployeeRole>()
-                .Property(e => e.Description)
+            modelBuilder.Entity<Equipment>()
+                .Property(e => e.EquipmentNumber)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<EmployeeRole>()
-                .HasMany(e => e.Employees)
-                .WithRequired(e => e.EmployeeRole)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<EmployeeStatu>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<EmployeeStatu>()
-                .HasMany(e => e.Employees)
-                .WithRequired(e => e.EmployeeStatu)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Equipment>()
                 .Property(e => e.Description)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Equipment>()
+            modelBuilder.Entity<EquipmentCategory>()
+                .Property(e => e.Description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<EquipmentCategory>()
                 .HasMany(e => e.OperatorPermits)
-                .WithRequired(e => e.Equipment)
+                .WithRequired(e => e.EquipmentCategory)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Hazard>()
                 .Property(e => e.HazardDescription)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<Hazard>()
-                .HasMany(e => e.CorrectiveActions)
-                .WithRequired(e => e.Hazard)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Hazard>()
                 .HasMany(e => e.SiteHazards)
@@ -193,6 +187,29 @@ namespace MarigoldSystem.DAL
             modelBuilder.Entity<JobCard>()
                 .HasMany(e => e.SiteHazards)
                 .WithRequired(e => e.JobCard)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<LicenseClass>()
+                .Property(e => e.Description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<LicenseClass>()
+                .HasMany(e => e.EmployeeLicenses)
+                .WithRequired(e => e.LicenseClass)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<LicenseClass>()
+                .HasMany(e => e.TruckLicenses)
+                .WithRequired(e => e.LicenseClass)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Role>()
+                .Property(e => e.Description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Role>()
+                .HasMany(e => e.EmployeeRoles)
+                .WithRequired(e => e.Role)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Site>()
@@ -234,9 +251,13 @@ namespace MarigoldSystem.DAL
                 .IsFixedLength()
                 .IsUnicode(false);
 
-            modelBuilder.Entity<SiteType>()
-                .HasMany(e => e.Sites)
-                .WithRequired(e => e.SiteType)
+            modelBuilder.Entity<Standing>()
+                .Property(e => e.Description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Standing>()
+                .HasMany(e => e.EmployeeStandings)
+                .WithRequired(e => e.Standing)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Task>()
@@ -257,17 +278,26 @@ namespace MarigoldSystem.DAL
                 .WithRequired(e => e.Tool)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Unit>()
-                .Property(e => e.UnitNumber)
+            modelBuilder.Entity<Truck>()
+                .Property(e => e.TruckNumber)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Unit>()
-                .Property(e => e.UnitDescription)
+            modelBuilder.Entity<Truck>()
+                .Property(e => e.TruckDescription)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Unit>()
+            modelBuilder.Entity<Truck>()
                 .HasMany(e => e.Crews)
-                .WithRequired(e => e.Unit)
+                .WithRequired(e => e.Truck)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<TruckCategory>()
+                .Property(e => e.Description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<TruckCategory>()
+                .HasMany(e => e.TruckLicenses)
+                .WithRequired(e => e.TruckCategory)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Yard>()
@@ -275,22 +305,7 @@ namespace MarigoldSystem.DAL
                 .IsUnicode(false);
 
             modelBuilder.Entity<Yard>()
-                .HasMany(e => e.Employees)
-                .WithRequired(e => e.Yard)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Yard>()
-                .HasMany(e => e.Sites)
-                .WithRequired(e => e.Yard)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Yard>()
-                .HasMany(e => e.Tools)
-                .WithRequired(e => e.Yard)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Yard>()
-                .HasMany(e => e.Units)
+                .HasMany(e => e.YardEmployees)
                 .WithRequired(e => e.Yard)
                 .WillCascadeOnDelete(false);
         }

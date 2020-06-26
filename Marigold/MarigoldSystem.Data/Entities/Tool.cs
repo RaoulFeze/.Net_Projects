@@ -17,7 +17,7 @@ namespace MarigoldSystem.Data.Entities
 
         public int ToolID { get; set; }
 
-        public int YardID { get; set; }
+        public int? YardID { get; set; }
 
         [Required]
         [StringLength(30)]
