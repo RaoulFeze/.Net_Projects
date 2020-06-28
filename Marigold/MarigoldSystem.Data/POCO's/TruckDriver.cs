@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace MarigoldSystem.Data.POCO_s
 {
-    public class TruckDriver
+    public class Driver
     {
+        public int EmployeeID { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
         public string License { get; set; }

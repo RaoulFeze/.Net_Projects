@@ -22,7 +22,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             {
                 if (!User.IsInRole(crewLeaderRole))
                 {
-                    Response.Redirect("~/Account/Login.aspx");
+                    Response.Redirect("~/Login.aspx");
                 }
 
                 MessageUserControl.TryRun(() =>
@@ -52,26 +52,29 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             string selected = FleetCategory.SelectedValue;
             if (selected == "1")
             {
-                Drivers.DataSource = null;
-                Drivers.DataBind();
-                Drivers.Visible = false;
-                DriverPager.Visible = false;
+                EmployeeGridView.DataSource = null;
+                EmployeeGridView.DataBind();
+                EmployeeGridView.Visible = false;
+                AddMember.Visible = false;
+                Next.Visible = false;
                 MessageUserControl.TryRun(() =>
                 {
                     List<Equipment> equipments = fleet.GetEquipments(yardId);
                     SelectUnitDDL.DataSource = equipments;
                     SelectUnitDDL.DataTextField = nameof(Equipment.EquipmentNumber);
                     SelectUnitDDL.DataValueField = nameof(Equipment.EquipmentID);
+                    SelectUnitDDL.Visible = true;
                     SelectUnitDDL.DataBind();
                     SelectUnitDDL.Items.Insert(0, "Select an Equipment");
                 });
             }
             else if (selected == "2")
             {
-                Drivers.DataSource = null;
-                Drivers.DataBind();
-                Drivers.Visible = false;
-                DriverPager.Visible = false;
+                EmployeeGridView.DataSource = null;
+                EmployeeGridView.DataBind();
+                EmployeeGridView.Visible = false;
+                AddMember.Visible = false;
+                Next.Visible = false;
                 MessageUserControl.TryRun(() =>
                 {
                     List<Truck> units = fleet.GetUnits(yardId);
@@ -92,18 +95,20 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
 
             if (selected == "1")
             {
-                
+                EmployeeGridView.PageIndex = 0;
+                EmployeeGridView.Columns[4].Visible = false;
+                EmployeeGridView.Visible = true;
+                RefreshDriverList(1);
+            
+
             }
             else if(selected == "2")
             {
-                MessageUserControl.TryRun(() =>
-                {
-                    DriverPager.SetPageProperties(0, DriverPager.PageSize, true);
-                    RefreshDriverListView();
-                    Drivers.Visible = true;
-                    DriverPager.Visible = true;
-                });
-
+                EmployeeGridView.PageIndex = 0;
+                //DriverPager.SetPageProperties(0, DriverPager.PageSize, true);
+                EmployeeGridView.Visible = true;
+                EmployeeGridView.Columns[4].Visible = true;
+                RefreshDriverList(2);
             }
         }
 
@@ -112,8 +117,8 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         {
             MessageUserControl.TryRun(() =>
             {
-                DriverPager.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
-                RefreshDriverListView();
+                //DriverPager.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+                //RefreshDriverListView();
             });
         }
 
@@ -122,22 +127,43 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         {
             RadioButton selectedButton = new RadioButton();
             selectedButton = (RadioButton)sender;
-            foreach (ListViewItem listItem in this.Drivers.Items)
+            foreach (GridViewRow row in EmployeeGridView.Rows)
             {
-                (listItem.FindControl("SelectedDriver") as RadioButton).Checked = false;
+                (row.FindControl("SelectedDriver") as RadioButton).Checked = false;
             }
             selectedButton.Checked = true;
+            AddMember.Visible = true;
+            Next.Visible = true;
         }
 
         //this Methos refreshes the ListView
-        protected void RefreshDriverListView()
+        protected void RefreshDriverList(int type)
         {
-            int unitId = int.Parse(SelectUnitDDL.SelectedValue);
-            int yardId = int.Parse(YardID.Text);
-            FleetController fleetManager = new FleetController();
-            List<TruckDriver> drivers = fleetManager.GetTruckDrivers(yardId, unitId);
-            Drivers.DataSource = drivers;
-            Drivers.DataBind();
+            MessageUserControl.TryRun(() =>
+            {
+                int unitId = int.Parse(SelectUnitDDL.SelectedValue);
+                int yardId = int.Parse(YardID.Text);
+                FleetController fleetManager = new FleetController();
+                List<Driver> drivers = fleetManager.GetTruckDrivers(yardId, unitId, type);
+                EmployeeGridView.DataSource = drivers;
+                EmployeeGridView.DataBind();
+
+            });
+
+        }
+
+        protected void EmployeeGridView_PageIndexChanged(object sender, EventArgs e)
+        {
+          
+        }
+
+        protected void EmployeeGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            int type = int.Parse(FleetCategory.SelectedValue);
+            GridView grid = sender as GridView;
+            grid.PageIndex = e.NewPageIndex;
+            grid.DataBind();
+            RefreshDriverList(type);
         }
     }
 }

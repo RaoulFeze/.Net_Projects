@@ -114,22 +114,31 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected global::System.Web.UI.WebControls.DropDownList SelectUnitDDL;
 
         /// <summary>
-        /// Drivers control.
+        /// AddMember control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView Drivers;
+        protected global::System.Web.UI.WebControls.Button AddMember;
 
         /// <summary>
-        /// DriverPager control.
+        /// Next control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataPager DriverPager;
+        protected global::System.Web.UI.WebControls.Button Next;
+
+        /// <summary>
+        /// EmployeeGridView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView EmployeeGridView;
 
         /// <summary>
         /// GetTruckDrivers control.

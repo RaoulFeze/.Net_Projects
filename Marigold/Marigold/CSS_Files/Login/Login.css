@@ -1,0 +1,70 @@
+﻿body {
+	margin: 0;
+	padding: 0;
+	/*background-image: url('../../Images/Marigold-Garuda-Deep-Gold.jpg');*/
+	background-image: url('../../Images/marigolds.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	height:100vh;
+}
+.login-box{
+	width:320px;
+	height:470px;
+	background:rgba(0, 0, 0, 0.5);
+	color:#fff;
+	top:50%;
+	left:50%;
+	position:absolute;
+	transform:translate(-50%, -50%);
+	box-sizing:border-box;
+	padding:50px 30px;
+	font-size:20px;
+	border-radius:10px;
+}
+
+.login-box h1{
+	font-size:22px;
+	text-align:center;
+}
+ .login-box p{
+	 text-align:center;
+	 font-size:15px;
+	 margin:0;
+	 padding:0;
+ }
+.text-box {
+	margin:0;
+	padding:0;
+	border: none;
+	border-bottom: 1px solid #fff;
+	background: transparent;
+	outline: none;
+	height: 30px;
+	color: #fff;
+	font-size: 16px;
+	width: 100%;
+}
+.control-label {
+	margin: 0;
+	padding: 0;
+}
+
+.text-danger {
+	color: red;
+}
+
+.login-button{
+	margin-top:20px;
+	width:70px;
+	height:30px;
+}
+form-control:focus ~
+./*avatar {
+	width: 20%;
+	height: auto;*/
+	/*border-radius: 50%;
+	position: absolute;
+	top: -50px;
+	left: calc(50% - 50px);*/
+/*}*/

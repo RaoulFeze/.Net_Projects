@@ -9,7 +9,7 @@
 	margin: 0 1px 0 0;
 	background-color: #E8E8E8;
 	height: 84.7vh;
-	width: 49vw;
+	width: calc(60% - 2.5px);
 	float: right;
 	overflow: auto;
 }
@@ -17,7 +17,7 @@
 .selection-column {
 	float: left;
 	margin: 0 0 0 1px;
-	width: 48.8vw;
+	width: calc(40% - 2.5px);
 }
 
 .truck-selection-pane {
@@ -27,30 +27,52 @@
 }
 .UnitDDL {
 	margin-top: 2px;
+	border-radius:5px;
+	border: 1px solid #000000;
 }
+
 .fleet-category-selection {
 	float: left;
 	padding-left: 10px;
 }
+
+.crew-member-button {
+	border-radius: 2.5px;
+	border: 1px solid #000000;
+}
+
+.done-control-button{
+	border-radius:2.5px;
+	border:1px solid #000000;
+	float:right;
+	background-color:forestgreen;
+	color:#FFFFFF;
+	font-weight:bold;
+	margin-right:10px;
+	margin-top:2px;
+}
+
 .staff-selection-pane {
 	height: 32vh;
 	border: 2px solid #000000;
 	margin-bottom: 3.5px;
 	background-color: #E8E8E8;
-	text-align:center;
+	text-align: center;
 	overflow: auto;
-	clear:both;
+	clear: both;
 }
-.pager{
-	position:relative;
-	top:2vh;
+
+.driverGriView{
+	
 }
-.driverListView {
-	justify-content: center;
-	align-items:center;
-	display: flex;
-	margin-top:15px;
+.Cssgrid {
+	background-color: #FFFFFF;
 }
+
+.align-cell-left {
+	text-align: left;
+}
+
 .crew-selection-pane {
 	height: 48.6vh;
 	background-color: #E8E8E8;
@@ -71,3 +93,4 @@
 	border-right: 2px solid #000000;
 	clear: both;
 }
+

@@ -22,5 +22,16 @@ namespace MarigoldSystem.BLL
                 
             }
         }
+
+        public string GetUserRole(int userId)
+        {
+            using(var context = new MarigoldSystemContext())
+            {
+                return context.EmployeeRoles
+                              .Where(x => x.EmployeeID == userId)
+                              .Select(x => x.Role.EmployeeRoles)
+                              .ToString();
+            }
+        }
     }
 }   

@@ -18,7 +18,7 @@
     <script src="../../Scripts/jquery-3.4.1.min.js"></script>
     <script src="../../Scripts/popper.min.js"></script>
     <script src="../../Scripts/bootstrap.js"></script>
-
+    <script src="../../JavaScript/CLScript.js"></script>
     <link href="../../CSS_Files/City_Operations/CityOperations.css" rel="stylesheet" />
     <link href="../../CSS_Files/City_Operations/Parks/crewLeader.css" rel="stylesheet" />
     <asp:ContentPlaceHolder ID="head" runat="server">
@@ -85,7 +85,7 @@
                                     <li class="nav-item"><a class="nav-link" runat="server" href="~/Account/Manage" title="Manage your account">Hello, <%: Context.User.Identity.GetUserName()  %> !</a></li>
                                     <li class="nav-item">
                                         <span class="nav-link">
-                                            <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/Account/Login.aspx" OnLoggingOut="Unnamed_LoggingOut" />
+                                            <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/Login.aspx" OnLoggingOut="Unnamed_LoggingOut" />
                                         </span>
                                     </li>
                                 </ul>

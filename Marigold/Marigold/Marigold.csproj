@@ -229,6 +229,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="CSS_Files\City_Operations\CityOperations.css" />
     <Content Include="CSS_Files\City_Operations\Parks\crewLeader.css" />
+    <Content Include="CSS_Files\Login\Login.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -237,6 +238,12 @@
     <Content Include="App_Data\SiteMaps\City_Operations\CrewLeader.sitemap" />
     <Content Include="App_Data\SiteMaps\City_Operations\FieldStaff.sitemap" />
     <Content Include="App_Data\SiteMaps\City_Operations\TeamLeader.sitemap" />
+    <Content Include="Images\dispthumb.aspx.jpg" />
+    <Content Include="Images\Marigold-Garuda-Deep-Gold-Mar888-15.jpg" />
+    <Content Include="Images\Marigold-Garuda-Deep-Gold.jpg" />
+    <Content Include="Images\marigolds.jpg" />
+    <Content Include="JavaScript\CLScript.js" />
+    <Content Include="Login.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -521,6 +528,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

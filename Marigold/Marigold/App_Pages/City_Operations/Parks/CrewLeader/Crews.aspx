@@ -35,7 +35,7 @@
             <div class="truck-selection-pane">
                 <div class="fleet-category-selection">
                     <asp:RadioButtonList ID="FleetCategory" runat="server"
-                        RepeatDirection="Horizontal" 
+                        RepeatDirection="Horizontal"
                         AutoPostBack="true"
                         OnSelectedIndexChanged="FleetCategory_SelectedIndexChanged">
                         <asp:ListItem Value="1">&nbsp;Equipments &nbsp;</asp:ListItem>
@@ -45,83 +45,65 @@
                 &nbsp;
                 &nbsp;
                 <asp:DropDownList ID="SelectUnitDDL" runat="server" Visible="false" OnSelectedIndexChanged="SelectUnitDDL_SelectedIndexChanged" AutoPostBack="true" CssClass="UnitDDL"></asp:DropDownList>
+                &nbsp;
+                &nbsp;
+                <%--<asp:LinkButton ID="AddCrew" runat="server" Visible="false">ADD CREW</asp:LinkButton>--%>
+                <asp:Button ID="AddMember" runat="server" Text="CREW MEMBERS" Visible="false" CssClass="crew-member-button" />
+                &nbsp;
+                &nbsp;
+                  <asp:Button ID="Next" runat="server" Text="DONE" Visible="false" CssClass="done-control-button" />
             </div>
             <div class="staff-selection-pane">
-                <div class="driverListView">
-                <asp:ListView ID="Drivers" runat="server"
-                    OnPagePropertiesChanging="Drivers_PagePropertiesChanging">
-                    <AlternatingItemTemplate>
-                        <tr style="background-color: #E9E9E9; color: black;">
-                                        <td> <%# Container.DataItemIndex + 1%> </td>
-                            <td>
-                                <asp:Label Text='<%# Eval("Name") %>' runat="server" ID="NameLabel" /></td>
-                            <td>
-                                <asp:Label Text='<%# Eval("Phone") %>' runat="server" ID="PhoneLabel" /></td>
-                            <td>
-                                <asp:Label Text='<%# Eval("License") %>' runat="server" ID="LicenseLabel" /></td>
-                            <td>
-                                <asp:CheckBox Checked='<%# Eval("Trailer") %>' ID="CheckBox1" runat="server" Enabled="false"/></td>
-                            <td>
-                                <asp:RadioButton ID="SelectedDriver" runat="server" AutoPostBack="true" OnCheckedChanged="SelectedDriver_CheckedChanged" />
-                            </td>
-                        </tr>
-                    </AlternatingItemTemplate>
-                    <EmptyDataTemplate>
-                        <table runat="server" style="background-color: #FFFFFF; border-collapse: collapse; border-color: #999999; border-style: none; border-width: 1px;">
-                            <tr>
-                                <td>No data was returned.</td>
-                            </tr>
-                        </table>
-                    </EmptyDataTemplate>
-                    <ItemTemplate>
-                        <tr style="background-color: #FFFFFF; color: black;">
-                                        <td> <%# Container.DataItemIndex + 1%> </td>
-                            <td>
-                                <asp:Label Text='<%# Eval("Name") %>' runat="server" ID="NameLabel" /></td>
-                            <td>
-                                <asp:Label Text='<%# Eval("Phone") %>' runat="server" ID="PhoneLabel" /></td>
-                            <td>
-                                <asp:Label Text='<%# Eval("License") %>' runat="server" ID="LicenseLabel" /></td>
-                            <td>
-                                <asp:CheckBox Checked='<%# Eval("Trailer") %>' ID="CheckBox1" runat="server" Enabled="false"/></td>
-                            <td>
-                                <asp:RadioButton ID="SelectedDriver" runat="server" AutoPostBack="true" OnCheckedChanged="SelectedDriver_CheckedChanged" />
-                            </td>
-                        </tr>
-                    </ItemTemplate>
-                    <LayoutTemplate>
-                        <table runat="server">
-                            <tr runat="server">
-                                <td runat="server">
-                                    <table runat="server" id="itemPlaceholderContainer" style="background-color: #FFFFFF; border-collapse: collapse; border-color: #999999; border-style: none; font-weight: normal; border-width: 1px; font-family: Verdana, Arial, Helvetica, sans-serif;" border="1">
-                                        <tr runat="server" style="background-color: #DCDCDC; color: black;">
-                                            <th runat="server" style="width: 5px"></th>
-                                            <th runat="server">Name</th>
-                                            <th runat="server">Phone</th>
-                                            <th runat="server">License</th>
-                                            <th runat="server">Trailer</th>
-                                            <th runat="server">Driver</th>
-                                        </tr>
-                                        <tr runat="server" id="itemPlaceholder"></tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            
-                        </table>
-                    </LayoutTemplate>
-                </asp:ListView>
-                    </div>
-                <div class="pager">
-                <asp:DataPager runat="server" ID="DriverPager" PagedControlID="Drivers" PageSize="8"   style="text-align: center; font-family: Verdana, Arial, Helvetica, sans-serif; color: black"> 
-                    <Fields>
-                        <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="True" ShowLastPageButton="True"></asp:NextPreviousPagerField>
-                    </Fields>
-                </asp:DataPager>
-
+                <div class="selectDriver">
+                    <asp:GridView ID="EmployeeGridView" runat="server"
+                        Visible="false"
+                        AutoGenerateColumns="False"
+                        OnPageIndexChanging="EmployeeGridView_PageIndexChanging"
+                        CssClass="table table-striped table-bordered Cssgrid"
+                        AllowPaging="True">
+                        <Columns>
+                            <asp:TemplateField HeaderText="EmployeeID" SortExpression="EmployeeID" Visible="False">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Bind("EmployeeID") %>' ID="Label1"></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="" SortExpression="">
+                                <ItemTemplate>
+                                    <%# Container.DataItemIndex + 1%>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Name" SortExpression="Name">
+                                <ItemTemplate>
+                                    <div class="align-cell-left">
+                                        <asp:Label runat="server" Text='<%# Bind("Name") %>' ID="Label2"></asp:Label>
+                                    </div>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Phone" SortExpression="Phone">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Bind("Phone") %>' ID="Label3"></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="License" SortExpression="License" >
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Bind("License") %>' ID="Label4"></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Trailer" SortExpression="Trailer">
+                                <ItemTemplate>
+                                    <asp:CheckBox runat="server" Checked='<%# Bind("Trailer") %>' Enabled="false" ID="CheckBox1"></asp:CheckBox>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="" SortExpression="">
+                                <ItemTemplate>
+                                    <asp:RadioButton ID="SelectedDriver" runat="server" AutoPostBack="true" OnCheckedChanged="SelectedDriver_CheckedChanged" OnClick=""/>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                    </asp:GridView>
                 </div>
             </div>
             <div class="crew-selection-pane">
-                
             </div>
         </div>
         <div class="summary">
@@ -133,4 +115,19 @@
             <asp:ControlParameter ControlID="UnitID" PropertyName="Text" Name="unitId" Type="Int32"></asp:ControlParameter>
         </SelectParameters>
     </asp:ObjectDataSource>
+    <script type="text/javascript">
+        var xPos, yPos;
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        prm.add_beginRequest(BeginRequestHandler);
+        prm.add_endRequest(EndRequestHandler);
+        function BeginRequestHandler(sender, args) {
+            xPos = $get('SelectedDriver').scrollLeft;
+            yPos = $get('SelectedDriver').scrollTop;
+        }
+
+        function EndRequestHandler(sender, args) {
+            $get('SelectedDriver').scrollLeft = xPos;
+            $get('SelectedDriver').scrollTop = yPos;
+        }
+    </script>
 </asp:Content>
