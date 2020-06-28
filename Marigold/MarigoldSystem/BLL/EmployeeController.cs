@@ -1,4 +1,5 @@
 ﻿using MarigoldSystem.DAL;
+using MarigoldSystem.Data.POCO_s;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,22 @@ namespace MarigoldSystem.BLL
                               .Where(x => x.EmployeeID == userId)
                               .Select(x => x.Role.EmployeeRoles)
                               .ToString();
+            }
+        }
+
+        public List<Driver> GetEmployees(int yardId)
+        {
+            using (var context = new MarigoldSystemContext())
+            {
+                var employees = (from yard in context.YardEmployees
+                                 where yard.YardID == yardId
+                                 select new Driver
+                                 {
+                                     EmployeeID = yard.Employee.EmployeeID,
+                                     Name = yard.Employee.FirstName + " " + yard.Employee.LastName,
+                                     Phone = yard.Employee.Phone
+                                 }).ToList();
+                return employees;
             }
         }
     }

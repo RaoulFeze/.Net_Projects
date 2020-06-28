@@ -9,7 +9,7 @@
     <uc1:MessageUserControl runat="server" id="MessageUserControl" />
     <asp:Label ID="YardID" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="UserId" runat="server" Text="" Visible="false"></asp:Label>
-    <asp:Label ID="UnitID" runat="server" Text="1" Visible="false"></asp:Label>
+    <asp:Label ID="DriverID" runat="server" Text="" Visible="false"></asp:Label>
     <%-- --------------------------------------------------------------------------------------------------- --%>
     <div class="crew-content-layout">
         <div class="sites-pane">
@@ -48,7 +48,7 @@
                 &nbsp;
                 &nbsp;
                 <%--<asp:LinkButton ID="AddCrew" runat="server" Visible="false">ADD CREW</asp:LinkButton>--%>
-                <asp:Button ID="AddMember" runat="server" Text="CREW MEMBERS" Visible="false" CssClass="crew-member-button" />
+                <asp:Button ID="AddMember" runat="server" Text="CREW MEMBERS" Visible="false" CssClass="crew-member-button" OnClick="AddMember_Click" />
                 &nbsp;
                 &nbsp;
                   <asp:Button ID="Next" runat="server" Text="DONE" Visible="false" CssClass="done-control-button" />
@@ -62,9 +62,9 @@
                         CssClass="table table-striped table-bordered Cssgrid"
                         AllowPaging="True">
                         <Columns>
-                            <asp:TemplateField HeaderText="EmployeeID" SortExpression="EmployeeID" Visible="False">
+                            <asp:TemplateField HeaderText="EmployeeID" SortExpression="EmployeeID" Visible="false">
                                 <ItemTemplate>
-                                    <asp:Label runat="server" Text='<%# Bind("EmployeeID") %>' ID="Label1"></asp:Label>
+                                    <asp:Label runat="server" Text='<%# Bind("EmployeeID") %>' ID="EmployeeID"></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="" SortExpression="">
@@ -94,9 +94,14 @@
                                     <asp:CheckBox runat="server" Checked='<%# Bind("Trailer") %>' Enabled="false" ID="CheckBox1"></asp:CheckBox>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="" SortExpression="">
+                            <asp:TemplateField HeaderText="Driver" SortExpression="">
                                 <ItemTemplate>
-                                    <asp:RadioButton ID="SelectedDriver" runat="server" AutoPostBack="true" OnCheckedChanged="SelectedDriver_CheckedChanged" OnClick=""/>
+                                    <asp:RadioButton ID="SelectedDriver" runat="server" AutoPostBack="true" OnCheckedChanged="SelectedDriver_CheckedChanged"/>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Member" SortExpression="">
+                                <ItemTemplate>
+                                    <asp:CheckBox ID="SelectedMember" runat="server" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -109,12 +114,12 @@
         <div class="summary">
         </div>
     </div>
-    <asp:ObjectDataSource ID="GetTruckDrivers" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetTruckDrivers" TypeName="MarigoldSystem.BLL.FleetController">
+    <%--<asp:ObjectDataSource ID="GetTruckDrivers" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetTruckDrivers" TypeName="MarigoldSystem.BLL.FleetController">
         <SelectParameters>
             <asp:ControlParameter ControlID="YardID" PropertyName="Text" Name="yardId" Type="Int32"></asp:ControlParameter>
             <asp:ControlParameter ControlID="UnitID" PropertyName="Text" Name="unitId" Type="Int32"></asp:ControlParameter>
         </SelectParameters>
-    </asp:ObjectDataSource>
+    </asp:ObjectDataSource>--%>
     <script type="text/javascript">
         var xPos, yPos;
         var prm = Sys.WebForms.PageRequestManager.getInstance();

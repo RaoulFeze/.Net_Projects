@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 #region Additional Namespaces
 using System.Configuration;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using Marigold.Security;
 using MarigoldSystem.BLL;
@@ -97,6 +98,9 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             {
                 EmployeeGridView.PageIndex = 0;
                 EmployeeGridView.Columns[4].Visible = false;
+                EmployeeGridView.Columns[5].Visible = true;
+                EmployeeGridView.Columns[6].Visible = true;
+                EmployeeGridView.Columns[7].Visible = false;
                 EmployeeGridView.Visible = true;
                 RefreshDriverList(1);
             
@@ -108,18 +112,11 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 //DriverPager.SetPageProperties(0, DriverPager.PageSize, true);
                 EmployeeGridView.Visible = true;
                 EmployeeGridView.Columns[4].Visible = true;
+                EmployeeGridView.Columns[5].Visible = true;
+                EmployeeGridView.Columns[6].Visible = true;
+                EmployeeGridView.Columns[7].Visible = false;
                 RefreshDriverList(2);
             }
-        }
-
-        //This Method resets the DataPager
-        protected void Drivers_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
-        {
-            MessageUserControl.TryRun(() =>
-            {
-                //DriverPager.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
-                //RefreshDriverListView();
-            });
         }
 
         //This Method makes the RadioButton fucntional
@@ -132,11 +129,20 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 (row.FindControl("SelectedDriver") as RadioButton).Checked = false;
             }
             selectedButton.Checked = true;
-            AddMember.Visible = true;
+
+            string selected = FleetCategory.SelectedValue;
+            if(selected == "1")
+            {
+                AddMember.Visible = false;
+            }
+            else
+            {
+                AddMember.Visible = true;
+            }
             Next.Visible = true;
         }
 
-        //this Methos refreshes the ListView
+        //this Methos refreshes the Driver List
         protected void RefreshDriverList(int type)
         {
             MessageUserControl.TryRun(() =>
@@ -152,18 +158,97 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
 
         }
 
-        protected void EmployeeGridView_PageIndexChanged(object sender, EventArgs e)
-        {
-          
-        }
-
         protected void EmployeeGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             int type = int.Parse(FleetCategory.SelectedValue);
+
+            foreach(GridViewRow row in EmployeeGridView.Rows)
+            {
+                var chkBox = row.FindControl("SelectedMember") as CheckBox;
+                IDataItemContainer container = (IDataItemContainer)chkBox.NamingContainer;
+                if (chkBox.Checked)
+                {
+                    PersistRowIndex(container.DataItemIndex);
+                }
+                else
+                {
+                    RemoveRowIndex(container.DataItemIndex);
+                }
+            }
             GridView grid = sender as GridView;
             grid.PageIndex = e.NewPageIndex;
             grid.DataBind();
             RefreshDriverList(type);
+            RePopulateCheckBoxes();
+        }
+        #region CheckBox State Persistance
+            protected void PersistRowIndex(int index)
+            {
+                if (!SelectedMembersIndex.Exists(i => i == index))
+                {
+                    SelectedMembersIndex.Add(index);
+                }
+            }
+
+            protected void RemoveRowIndex(int index)
+            {
+                if (SelectedMembersIndex.Exists(i => i == index))
+                {
+                    SelectedMembersIndex.Remove(index);
+                }
+            }
+
+            protected List<Int32> SelectedMembersIndex
+            {
+                get
+                { 
+                    if(ViewState["SELECTED_MEMBERS_INDEX"] == null)
+                    {
+                        ViewState["SELECTED_MEMBERS_INDEX"] = new List<Int32>();
+                    }
+                    return (List<Int32>)ViewState["SELECTED_MEMBERS_INDEX"];
+                }
+            }
+
+            protected void RePopulateCheckBoxes()
+            {
+                foreach(GridViewRow row in EmployeeGridView.Rows)
+                {
+                    var chkBox = row.FindControl("SelectedMember") as CheckBox;
+                    IDataItemContainer container = (IDataItemContainer)chkBox.NamingContainer;
+
+                    if(SelectedMembersIndex != null)
+                    {
+                        if (SelectedMembersIndex.Exists(i => i == container.DataItemIndex))
+                        {
+                            chkBox.Checked = true;
+                        }
+                    }
+                }
+            }
+        #endregion
+
+        protected void AddMember_Click(object sender, EventArgs e)
+        {
+            //Retrieve the selected DriverID and save in a label control
+            foreach (GridViewRow row in EmployeeGridView.Rows)
+            {
+                if((row.FindControl("SelectedDriver") as RadioButton).Checked == true)
+                {
+                    DriverID.Text = (row.FindControl("EmployeeID") as Label).Text;
+                }
+            }
+
+            //Retrieve all employees
+            EmployeeController EmployeeManager = new EmployeeController();
+            List<Driver> employees = EmployeeManager.GetEmployees(int.Parse(YardID.Text));
+            employees.Sort((x, y) => x.Name.CompareTo(y.Name));
+            EmployeeGridView.DataSource = employees;
+            EmployeeGridView.DataBind();
+            EmployeeGridView.Columns[4].Visible = false;
+            EmployeeGridView.Columns[5].Visible = false;
+            EmployeeGridView.Columns[6].Visible = false;
+            EmployeeGridView.Columns[7].Visible = true;
         }
     }
 }
