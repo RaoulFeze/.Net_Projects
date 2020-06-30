@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\BusinessRuleException.cs" />
+    <Compile Include="BLL\CrewController.cs" />
     <Compile Include="BLL\EmployeeController.cs" />
     <Compile Include="BLL\FleetController.cs" />
     <Compile Include="DAL\MarigoldSystemContext.cs" />

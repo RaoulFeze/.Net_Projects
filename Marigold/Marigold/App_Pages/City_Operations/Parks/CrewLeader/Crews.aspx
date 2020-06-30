@@ -10,6 +10,7 @@
     <asp:Label ID="YardID" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="UserId" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="DriverID" runat="server" Text="" Visible="false"></asp:Label>
+    <asp:Label ID="Refresh" runat="server" Text="" Visible="false"></asp:Label>
     <%-- --------------------------------------------------------------------------------------------------- --%>
     <div class="crew-content-layout">
         <div class="sites-pane">
@@ -51,7 +52,7 @@
                 <asp:Button ID="AddMember" runat="server" Text="CREW MEMBERS" Visible="false" CssClass="crew-member-button" OnClick="AddMember_Click" />
                 &nbsp;
                 &nbsp;
-                  <asp:Button ID="Next" runat="server" Text="DONE" Visible="false" CssClass="done-control-button" />
+                  <asp:Button ID="Done" runat="server" Text="DONE" Visible="false" CssClass="done-control-button" OnClick="Done_Click" />
             </div>
             <div class="staff-selection-pane">
                 <div class="selectDriver">
@@ -62,7 +63,7 @@
                         CssClass="table table-striped table-bordered Cssgrid"
                         AllowPaging="True">
                         <Columns>
-                            <asp:TemplateField HeaderText="EmployeeID" SortExpression="EmployeeID" Visible="false">
+                            <asp:TemplateField HeaderText="EmployeeID" SortExpression="EmployeeID" Visible="true">
                                 <ItemTemplate>
                                     <asp:Label runat="server" Text='<%# Bind("EmployeeID") %>' ID="EmployeeID"></asp:Label>
                                 </ItemTemplate>
@@ -109,6 +110,7 @@
                 </div>
             </div>
             <div class="crew-selection-pane">
+                <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
             </div>
         </div>
         <div class="summary">

@@ -36,7 +36,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             }
             else
             {
-                Response.Redirect("~/Security/AccessDenied.aspx");
+                Response.Redirect("~/Login.aspx");
             }
         }
         protected void CheckForException(object sender, ObjectDataSourceStatusEventArgs e)
@@ -57,7 +57,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 EmployeeGridView.DataBind();
                 EmployeeGridView.Visible = false;
                 AddMember.Visible = false;
-                Next.Visible = false;
+                Done.Visible = false;
                 MessageUserControl.TryRun(() =>
                 {
                     List<Equipment> equipments = fleet.GetEquipments(yardId);
@@ -75,7 +75,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 EmployeeGridView.DataBind();
                 EmployeeGridView.Visible = false;
                 AddMember.Visible = false;
-                Next.Visible = false;
+                Done.Visible = false;
                 MessageUserControl.TryRun(() =>
                 {
                     List<Truck> units = fleet.GetUnits(yardId);
@@ -93,6 +93,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected void SelectUnitDDL_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selected = FleetCategory.SelectedValue;
+            Refresh.Text = "Driver";
 
             if (selected == "1")
             {
@@ -139,10 +140,10 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             {
                 AddMember.Visible = true;
             }
-            Next.Visible = true;
+            Done.Visible = true;
         }
 
-        //this Methos refreshes the Driver List
+        //this Methods refreshes the Driver List
         protected void RefreshDriverList(int type)
         {
             MessageUserControl.TryRun(() =>
@@ -160,28 +161,39 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
 
         protected void EmployeeGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            int type = int.Parse(FleetCategory.SelectedValue);
 
-            foreach(GridViewRow row in EmployeeGridView.Rows)
+            if (Refresh.Text == "Driver")
             {
-                var chkBox = row.FindControl("SelectedMember") as CheckBox;
-                IDataItemContainer container = (IDataItemContainer)chkBox.NamingContainer;
-                if (chkBox.Checked)
-                {
-                    PersistRowIndex(container.DataItemIndex);
-                }
-                else
-                {
-                    RemoveRowIndex(container.DataItemIndex);
-                }
+                GridView grid = sender as GridView;
+                grid.PageIndex = e.NewPageIndex;
+                grid.DataBind();
+                int type = int.Parse(FleetCategory.SelectedValue);
+                RefreshDriverList(type);
             }
-            GridView grid = sender as GridView;
-            grid.PageIndex = e.NewPageIndex;
-            grid.DataBind();
-            RefreshDriverList(type);
-            RePopulateCheckBoxes();
+            else if (Refresh.Text == "Member")
+            {
+                foreach (GridViewRow row in EmployeeGridView.Rows)
+                {
+                    var chkBox = row.FindControl("SelectedMember") as CheckBox;
+                    IDataItemContainer container = (IDataItemContainer)chkBox.NamingContainer;
+                    if (chkBox.Checked)
+                    {
+                        PersistRowIndex(container.DataItemIndex);
+                    }
+                    else
+                    {
+                        RemoveRowIndex(container.DataItemIndex);
+                    }
+                }
+                GridView grid = sender as GridView;
+                grid.PageIndex = e.NewPageIndex;
+                grid.DataBind();
+                RefreshCrewMember();
+                RePopulateCheckBoxes();
+
+            }
         }
-        #region CheckBox State Persistance
+            #region CheckBox State Persistance
             protected void PersistRowIndex(int index)
             {
                 if (!SelectedMembersIndex.Exists(i => i == index))
@@ -238,7 +250,14 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     DriverID.Text = (row.FindControl("EmployeeID") as Label).Text;
                 }
             }
+            Refresh.Text = "Member";
+            GridView grid = EmployeeGridView;
+            grid.PageIndex = 0;
+            RefreshCrewMember();
+        }
 
+        protected void RefreshCrewMember()
+        {
             //Retrieve all employees
             EmployeeController EmployeeManager = new EmployeeController();
             List<Driver> employees = EmployeeManager.GetEmployees(int.Parse(YardID.Text));
@@ -249,6 +268,39 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             EmployeeGridView.Columns[5].Visible = false;
             EmployeeGridView.Columns[6].Visible = false;
             EmployeeGridView.Columns[7].Visible = true;
+        }
+
+        protected void Done_Click(object sender, EventArgs e)
+        {
+            //int truckId = int.Parse(SelectUnitDDL.SelectedValue);
+            //int driverId = int.Parse(DriverID.Text);
+            //List<int> memberIds = new List<int>();
+            //string test = "";
+            //foreach(GridViewRow row in EmployeeGridView.Rows)
+            //{
+            //    var chkBox = row.FindControl("SelectedMember") as CheckBox;
+            //    IDataItemContainer container = (IDataItemContainer)chkBox.NamingContainer;
+
+            //    if (SelectedMembersIndex != null)
+            //    {
+            //        if (SelectedMembersIndex.Exists(i => i == container.DataItemIndex))
+            //        {
+            //            chkBox.Checked = true;
+            //            test += ((row.FindControl("EmployeeID") as Label).Text).ToString() + "  ";
+            //        }
+            //    }
+
+
+
+
+
+                //if ((row.FindControl("SelectedMember") as CheckBox).Checked == true)
+                //{
+                //    memberIds.Add(int.Parse((row.FindControl("EmployeeID") as Label).Text));
+                //    test += ((row.FindControl("EmployeeID") as Label).Text).ToString() + "  ";
+                //}
+            //}
+            //Label1.Text = test;
         }
     }
 }

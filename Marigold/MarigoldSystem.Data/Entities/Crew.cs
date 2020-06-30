@@ -23,8 +23,6 @@ namespace MarigoldSystem.Data.Entities
 
         public int TruckID { get; set; }
 
-        public bool? Driver { get; set; }
-
         public bool? FLHA_CompletedBy { get; set; }
 
         public int? KM_Start { get; set; }

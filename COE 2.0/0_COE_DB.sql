@@ -302,7 +302,6 @@ create table Crew
 	CrewID integer identity(1,1) not null constraint pk_Crew primary key clustered,
 	CrewDate datetime not null,
 	TruckID int not null constraint fk_Crew_To_Truck references Truck(TruckID),
-	Driver  bit constraint df_NotDriver default null,
 	FLHA_CompletedBy  bit constraint df_CompletedFLHA default null,
 	KM_Start int null,
 	KM_End int null,
@@ -316,7 +315,8 @@ create table CrewMember
 (
 	CrewMemberID integer identity(1,1) not null constraint pk_CrewMember primary key clustered,
 	EmployeeID int not null constraint fk_CrewMwmber_To_Employee references Employee(EmployeeID),
-	CrewID int not null constraint fk_CrewMember_To_Crew references Crew(CrewID)
+	CrewID int not null constraint fk_CrewMember_To_Crew references Crew(CrewID),
+	Driver  bit constraint df_NotDriver default null
 )
 create nonclustered index IX_CrewMember_EmployeeID
 on CrewMember(EmployeeID)

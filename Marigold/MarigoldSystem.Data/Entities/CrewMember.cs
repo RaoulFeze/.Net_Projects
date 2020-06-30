@@ -15,6 +15,8 @@ namespace MarigoldSystem.Data.Entities
 
         public int CrewID { get; set; }
 
+        public bool? Driver { get; set; }
+
         public virtual Crew Crew { get; set; }
 
         public virtual Employee Employee { get; set; }
