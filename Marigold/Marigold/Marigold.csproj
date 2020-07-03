@@ -229,6 +229,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="CSS_Files\City_Operations\CityOperations.css" />
     <Content Include="CSS_Files\City_Operations\Parks\crewLeader.css" />
+    <Content Include="CSS_Files\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="CSS_Files\City_Operations\glyphicon.css" />
     <Content Include="CSS_Files\Login\Login.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
@@ -267,6 +269,10 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="CSS_Files\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="CSS_Files\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="CSS_Files\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="CSS_Files\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="logos\COE_Logo_100x100.png" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -368,6 +374,7 @@
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Security\AccessDenied.aspx" />
     <Content Include="Site.Master" />
+    <Content Include="UserControls\InfoUserControl.ascx" />
     <Content Include="UserControls\MessageUserControl.ascx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -590,6 +597,13 @@
       <DependentUpon>TeamLeader.master</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="UserControls\InfoUserControl.ascx.cs">
+      <DependentUpon>InfoUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\InfoUserControl.ascx.designer.cs">
+      <DependentUpon>InfoUserControl.ascx</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\MessageUserControl.ascx.cs">
       <DependentUpon>MessageUserControl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -6,7 +6,7 @@ body {
 	
 }
 .body-content {
-	height: 848px;
+	height:93.5vh;
 }
 
 
@@ -41,7 +41,7 @@ body {
 }
 
 footer {
-	height: 90px;
+	height: 10vh;
 	background-color: forestgreen;
 	color: #FFFFFF;
 	text-align: center;
@@ -61,4 +61,8 @@ footer {
 }
 .denied {
 	margin-top: 10%;
+}
+
+.glyphicon-plus{
+	color:forestgreen;
 }

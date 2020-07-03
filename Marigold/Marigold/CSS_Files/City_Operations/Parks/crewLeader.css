@@ -1,5 +1,5 @@
 ﻿.crew-content-layout {
-	margin: 55px 10px 0 10px;
+	margin: 0 10px 0 10px;
 	background-color: #FFFFFF;
 	clear:both;
 }
@@ -52,7 +52,7 @@
 	margin-top:2px;
 }
 
-.staff-selection-pane {
+.crew-selection-pane {
 	height: 32vh;
 	border: 2px solid #000000;
 	margin-bottom: 3.5px;
@@ -62,8 +62,8 @@
 	clear: both;
 }
 
-.driverGriView{
-	
+.selectDriver{
+	margin:5px;
 }
 .Cssgrid {
 	background-color: #FFFFFF;
@@ -73,7 +73,7 @@
 	text-align: left;
 }
 
-.crew-selection-pane {
+.current-crew-pane {
 	height: 48.6vh;
 	background-color: #E8E8E8;
 	border: 2px solid #000000;
@@ -85,8 +85,9 @@
 	margin-top:15px !important;
 }
 .summary {
-	height: 30px;
-	width: inherit;
+	height: 5vh;
+	width: 98vw;
+	margin-left:.5px;
 	background-color: #E8E8E8;
 	border-bottom: 1px solid #000000;
 	border-left: 2px solid #000000;
@@ -94,3 +95,46 @@
 	clear: both;
 }
 
+.crew-member-box {
+	float: left;
+	margin-right: 10px;
+}
+.job-card-box{
+	float:left;
+}
+
+.current-crew-box {
+	margin: 20px 5px 20px 5px;
+	align-content:center;
+	clear: both;
+}
+
+.current-crew-header{
+	text-align:center;
+	clear:both;
+}
+
+.crew-header{
+	float:left;
+	align-content:center;
+}
+.crew-glyphicon-remove {
+	float: left;
+	padding-top:5px;
+	margin-left:20px;
+}
+
+.col-12 {
+	clear: both;
+}
+.UnitDescription {
+	clear: both;
+	text-align:center;
+	margin-bottom:15px;
+}
+
+.info-message{
+	margin: 5px auto 5px auto;
+	padding: 0 15px;
+	height:50px;
+}

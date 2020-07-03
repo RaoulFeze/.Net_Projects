@@ -21,6 +21,7 @@
     <script src="../../JavaScript/CLScript.js"></script>
     <link href="../../CSS_Files/City_Operations/CityOperations.css" rel="stylesheet" />
     <link href="../../CSS_Files/City_Operations/Parks/crewLeader.css" rel="stylesheet" />
+    <link href="../../CSS_Files/City_Operations/glyphicon.css" rel="stylesheet" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>

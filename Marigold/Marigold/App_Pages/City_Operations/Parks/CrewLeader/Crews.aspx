@@ -1,6 +1,8 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/SiteMasters/CityOperations/Parks/CrewLeader.master" AutoEventWireup="true" CodeBehind="Crews.aspx.cs" Inherits="Marigold.App_Pages.City_Operations.Parks.CrewLeader.Crews" Title="Crews" %>
 
 <%@ Register Src="~/UserControls/MessageUserControl.ascx" TagPrefix="uc1" TagName="MessageUserControl" %>
+<%@ Register Src="~/UserControls/InfoUserControl.ascx" TagPrefix="uc1" TagName="InfoUserControl" %>
+
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -9,9 +11,12 @@
     <uc1:MessageUserControl runat="server" id="MessageUserControl" />
     <asp:Label ID="YardID" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="UserId" runat="server" Text="" Visible="false"></asp:Label>
-    <asp:Label ID="DriverID" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="Refresh" runat="server" Text="" Visible="false"></asp:Label>
+    <asp:Label ID="CrewID" runat="server" Text="" Visible="false"></asp:Label>
     <%-- --------------------------------------------------------------------------------------------------- --%>
+    <div class="info-message container">
+        <uc1:InfoUserControl runat="server" ID="InfoUserControl" />
+    </div>
     <div class="crew-content-layout">
         <div class="sites-pane">
             <ul class="nav nav-tabs" role="tablist">
@@ -31,6 +36,7 @@
                         <asp:LinkButton ID="LinkButton5" runat="server" CssClass="nav-link" data-toggle="tab" role="tab">Grass Routes</asp:LinkButton>
                     </li>
                 </ul>
+    <%--<asp:Label ID="DriverID" runat="server" Text="" Visible="true"></asp:Label>--%>
         </div>
         <div class="selection-column">
             <div class="truck-selection-pane">
@@ -54,16 +60,19 @@
                 &nbsp;
                   <asp:Button ID="Done" runat="server" Text="DONE" Visible="false" CssClass="done-control-button" OnClick="Done_Click" />
             </div>
-            <div class="staff-selection-pane">
+            <div class="crew-selection-pane">
                 <div class="selectDriver">
                     <asp:GridView ID="EmployeeGridView" runat="server"
                         Visible="false"
                         AutoGenerateColumns="False"
                         OnPageIndexChanging="EmployeeGridView_PageIndexChanging"
                         CssClass="table table-striped table-bordered Cssgrid"
-                        AllowPaging="True">
+                                        BorderColor="Black"
+                        BorderWidth="1"
+                        AllowPaging="True"
+                        OnRowCommand="EmployeeGridView_RowCommand">
                         <Columns>
-                            <asp:TemplateField HeaderText="EmployeeID" SortExpression="EmployeeID" Visible="true">
+                            <asp:TemplateField HeaderText="EmployeeID" SortExpression="EmployeeID" Visible="false">
                                 <ItemTemplate>
                                     <asp:Label runat="server" Text='<%# Bind("EmployeeID") %>' ID="EmployeeID"></asp:Label>
                                 </ItemTemplate>
@@ -100,17 +109,116 @@
                                     <asp:RadioButton ID="SelectedDriver" runat="server" AutoPostBack="true" OnCheckedChanged="SelectedDriver_CheckedChanged"/>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Member" SortExpression="">
+                            <asp:TemplateField HeaderText="Add" SortExpression="">
                                 <ItemTemplate>
-                                    <asp:CheckBox ID="SelectedMember" runat="server" />
+                                    <asp:LinkButton ID="AddCrewMember" runat="server" CommandArgument='<%# Eval("EmployeeID") %>' CommandName="AddMember">
+                                        <span aria-hidden="true" class="glyphicon glyphicon-plus"></span>
+                                    </asp:LinkButton>
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
                 </div>
             </div>
-            <div class="crew-selection-pane">
-                <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+            <div class="current-crew-pane">
+                <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+                
+                <asp:Repeater ID="AllCurrentCrews" runat="server"
+                    ItemType="MarigoldSystem.Data.DTO_s.CurrentCrews"
+                    OnItemCommand="AllCurrentCrews_ItemCommand">
+                    <ItemTemplate>
+                        <div class="current-crew-box offset-1">
+                            <div class="current-crew-header offset-5">
+                                <h4 class="crew-header">
+                                    <asp:LinkButton ID="SelectCrew" runat="server" CommandArgument='<%#Item.CrewID %>' CommandName="Seletedcrew">
+                                        CREW (<asp:Literal ID="Literal1" runat="server" Text='<%# Container.ItemIndex + 1 %>'/>)
+                                    </asp:LinkButton>
+                                </h4>
+                                <div class="crew-glyphicon-remove">
+                                    <asp:LinkButton ID="RemoveCrew" runat="server" CommandArgument='<%# Item.CrewID %>' CommandName="DeleteCrew">
+                                    <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span> 
+                                    </asp:LinkButton>
+                                </div>
+                               
+                            </div> 
+                            <div class="UnitDescription">
+                          
+                                <%#Item.Description %></div>
+                            <div class="col-12">
+                                <div class="crew-member-box">
+                                    <asp:GridView ID="CrewMemberGridView" runat="server"
+                                        AutoGenerateColumns="false"
+                                        CssClass="table table-striped table-bordered "
+                                        BorderWidth="0"
+                                        BackColor="White"
+                                        GridLines="None"
+                                        DataSource="<%#Item.Crew %>">
+                                        <Columns>
+                                            <asp:TemplateField>
+                                                <ItemTemplate>
+                                                    <%# Container.DataItemIndex + 1%>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Name">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="Name" runat="server" Text='<%# Eval("Name") %>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Phone">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="Name" runat="server" Text='<%# Eval("Phone") %>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField>
+                                                <ItemTemplate>
+                                                    <asp:LinkButton ID="RemoveEmployee" runat="server" CommandArgument='<%# Eval("CrewMemberID") %>' CommandName="DeleteMember">
+                                                <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span>
+                                                    </asp:LinkButton>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                                </div>
+                                <div class="job-card-box">
+                                    <asp:GridView ID="GridView1" runat="server"
+                                        AutoGenerateColumns="false"
+                                        CssClass="table table-striped table-bordered "
+                                        BorderWidth="1"
+                                        BackColor="White"
+                                        GridLines="None"
+                                        DataSource="<%#Item.JobCards %>">
+                                        <Columns>
+                                            <asp:TemplateField>
+                                                <ItemTemplate>
+                                                    <%# Container.DataItemIndex + 1%>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Pin">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="Name" runat="server" Text='<%# Eval("Pin") %>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Address ">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="Name" runat="server" Text='<%# Eval("Address") %>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField>
+                                                <ItemTemplate>
+                                                    <asp:LinkButton ID="RemoveSite" runat="server" CommandArgument='<%# Eval("JobCardID") %>' CommandName="DeleteSite" OnClientClick="return ConfirmRemoveSite()">
+                                                <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span>
+                                                    </asp:LinkButton>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                                </div>
+                            </div>
+                  
+                        </div>
+
+                    </ItemTemplate>
+                </asp:Repeater>
             </div>
         </div>
         <div class="summary">
@@ -122,6 +230,11 @@
             <asp:ControlParameter ControlID="UnitID" PropertyName="Text" Name="unitId" Type="Int32"></asp:ControlParameter>
         </SelectParameters>
     </asp:ObjectDataSource>--%>
+    <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetCurrentCrews" TypeName="MarigoldSystem.BLL.CrewController">
+        <SelectParameters>
+            <asp:ControlParameter ControlID="YardID" PropertyName="Text" Name="yardId" Type="Int32"></asp:ControlParameter>
+        </SelectParameters>
+    </asp:ObjectDataSource>
     <script type="text/javascript">
         var xPos, yPos;
         var prm = Sys.WebForms.PageRequestManager.getInstance();

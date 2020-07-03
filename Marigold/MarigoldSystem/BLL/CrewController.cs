@@ -10,131 +10,141 @@ using MarigoldSystem.DAL;
 using MarigoldSystem.Data.Entities;
 using System.Data.Entity;
 using COECommon.UserControls;
+using MarigoldSystem.Data.DTO_s;
+using MarigoldSystem.Data.POCO_s;
+using System.ComponentModel;
 #endregion
 
 namespace MarigoldSystem.BLL
 {
+    [DataObject]
     public class CrewController
     {
-        //This method create and 
-        public void AddCrew(int unitId, int driverId, List<int> memberIds)
+        //This method Creates a Crew 
+        public void CreateCrew(int unitId, int driverId)
         {
             using(var context = new MarigoldSystemContext())
             {
                 Crew crew = (context.Crews
-                                        .Where(x => x.TruckID == unitId && DbFunctions.TruncateTime(x.CrewDate) == DbFunctions.TruncateTime(DateTime.Now))
+                                        .Where(x => x.TruckID == unitId && DbFunctions.TruncateTime(x.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
                                         .Select(x => x))
                                         .FirstOrDefault();
 
-                List<string> reasons = new List<string>();
+            // Check if the driver is already assigned in a different crew
+                List<int> CrewMemberIDs = (context.CrewMembers
+                                                        .Where(x => DbFunctions.TruncateTime(x.Crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
+                                                        .Select(x => x.EmployeeID))
+                                                        .ToList();
 
-            # region Check the new crew members are not already assigned in a different crew
-                List<int> crewIds = (context.Crews
-                                             .Where(x => x.TruckID == unitId && DbFunctions.TruncateTime(x.CrewDate) == DbFunctions.TruncateTime(DateTime.Now))
-                                              .Select(x => x.CrewID))
-                                              .ToList();
-                var Ids = memberIds;
-                    Ids.Add(driverId);
-
-                if(crewIds != null)
+                if(CrewMemberIDs != null)
                 {
-                    foreach(int id in crewIds)
+                    foreach(int id in CrewMemberIDs)
                     {
-                        foreach(int memid in Ids)
+                        if(id == driverId)
                         {
-                            if((context.CrewMembers.Where(x=>x.CrewID == id && x.CrewMemberID == memid).Select(x=>x)) != null)
-                            {
-                                string name = context.Employees
-                                                            .Where(x => x.EmployeeID == memid)
-                                                            .Select(x => x.FirstName + "" + x.LastName)
-                                                            .FirstOrDefault();
-                                reasons.Add(name +" is already assigned to a different crew");
-                            }
-                        }
-                    }
-                }
-                #endregion
-
-                if (reasons.Count() == 0)
-                {
-                    if (crew == null)
-                    {
-                        //Create a new Crew
-                        crew = new Crew();
-                        crew.TruckID = unitId;
-                        crew.CrewDate = DateTime.Now;
-                        context.Crews.Add(crew);
-
-                        if(memberIds.Count() > 5)
-                        {
-                            throw new Exception("The number crew member exceeds five (5). Please remove " + (memberIds.Count() - 5) + " Crew members");
-                        }
-                        else
-                        {
-                            bool findkDriver = false;
-                            foreach(int id in memberIds)
-                            {
-                                if(id == driverId)
-                                {
-                                    findkDriver = true;
-                                }
-                            }
-
-                            if (findkDriver)
-                            {
-                                string name = context.Employees
-                                                            .Where(x => x.EmployeeID == driverId)
-                                                            .Select(x => x.FirstName + "" + x.LastName)
-                                                            .FirstOrDefault();
-                                throw new Exception(name + " is assigned both as driver and as a different Crew Member. Please select another staff member to be in the crew");
-                            }
-                            else
-                            {
-                                //Add Crew Members
-                                CrewMember member = new CrewMember();
-                                member.EmployeeID = driverId;
-                                member.Driver = true;
-                                crew.CrewMembers.Add(member);
-
-                                foreach (int id in memberIds)
-                                {
-                                    member.EmployeeID = id;
-                                    crew.CrewMembers.Add(member);
-                                }
-                            }
-                           
+                            string name = context.Employees
+                                                        .Where(x => x.EmployeeID == driverId)
+                                                        .Select(x => x.FirstName + " " + x.LastName)
+                                                        .FirstOrDefault();
+                            throw new Exception (name +" is already assigned to a different crew");
                         }
                         
                     }
-                    else
+                }
+            //End check
+
+                if (crew == null)
+                {
+                    //Create a new Crew
+                    crew = new Crew();
+                    crew.TruckID = unitId;
+                    crew.CrewDate = DateTime.Today;
+                    context.Crews.Add(crew);
+
+                    //Add the dirver as the first Crew Member
+                    CrewMember member = new CrewMember();
+                    member.EmployeeID = driverId;
+                    member.Driver = true;
+                    crew.CrewMembers.Add(member);
+                }
+                else
+                {
+                    throw new Exception("The selected truck is already assigned to a different Crew");
+                }
+                context.SaveChanges();
+            }
+        }
+
+        //This Method adds a Crew Member to a given Crew
+        public void AddCrewMember(int crewId, int memberId)
+        {
+            using(var context = new MarigoldSystemContext())
+            {
+                CrewMember newCrewMember = new CrewMember();
+                // Check if the new crew member is  already assigned in a different crew
+                List<int> CrewMemberIDs = (context.CrewMembers
+                                                        .Where(x => DbFunctions.TruncateTime(x.Crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Now))
+                                                        .Select(x => x.EmployeeID))
+                                                        .ToList();
+
+                if (CrewMemberIDs != null)
+                {
+                    foreach (int id in CrewMemberIDs)
                     {
-                        int count = (context.CrewMembers
-                                                    .Where(x => x.CrewID == crew.CrewID)
-                                                    .Select(x => x))
-                                                    .Count();
-                        if (count + memberIds.Count() > 5)
+                        if (id == memberId)
                         {
-                            throw new Exception("The number crew member exceeds five (5). Please remove " + (count + memberIds.Count() - 5) + " Crew members");
-                        }
-                        else
-                        {
-                            foreach (int id in memberIds)
-                            {
-                                CrewMember member = new CrewMember();
-                                member.EmployeeID = id;
-                                crew.CrewMembers.Add(member);
-                            }
+                            string name = context.Employees
+                                                        .Where(x => x.EmployeeID == memberId)
+                                                        .Select(x => x.FirstName + " " + x.LastName)
+                                                        .FirstOrDefault();
+                            throw new Exception(name + " is already assigned to a different crew");
                         }
 
                     }
                 }
-                else
-                {
-                    throw new BusinessRuleException("Create Crew", reasons);
-                }
-
+                //End check
+                newCrewMember.EmployeeID = memberId;
+                context.Crews.Find(crewId).CrewMembers.Add(newCrewMember);
                 context.SaveChanges();
             }
         }
+
+        [DataObjectMethod(DataObjectMethodType.Select,false)]
+        //This method retrieves all Current Crews
+        public List<CurrentCrews> GetCurrentCrews(int yardId)
+        {
+            using (var context = new MarigoldSystemContext())
+            {
+                var crews = (from crew in context.Crews
+                             where crew.Truck.YardID == yardId && DbFunctions.TruncateTime(crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today)
+                             orderby crew.CrewID descending
+                             select new CurrentCrews
+                             {
+                                 CrewID = crew.CrewID,
+                                 Description = crew.Truck.TruckDescription,
+                                 Crew = (from member in context.CrewMembers
+                                         where member.CrewID == crew.CrewID
+                                         orderby member.Employee.FirstName ascending
+                                         select new Member
+                                         {
+                                             CrewMemberId = member.CrewMemberID,
+                                             Name = member.Employee.FirstName + " " + member.Employee.LastName.Substring(0, 1) + "." + " " + (member.Driver == true ? "(D)" : " "),
+                                             Phone = member.Employee.Phone
+                                         }).ToList(),
+                                 JobCards = (from job in context.JobCards
+                                             where job.CrewID == crew.CrewID
+                                             orderby job.Site.Pin ascending
+                                             select new Job
+                                             {
+                                                 JobCardID = job.JobCardID,
+                                                 Pin = job.Site.Pin,
+                                                 Address = job.Site.StreetAddress
+                                             }).ToList()
+                             }).ToList();
+                return crews;
+            }
+        }
+
+        //This Method Remove a Crew Member from a given Crew
     }
 }
