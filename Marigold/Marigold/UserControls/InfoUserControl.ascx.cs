@@ -15,10 +15,12 @@ namespace Marigold.UserControls
         private const string STR_ALERT_SUCCESS = "alert alert-success";
         private const string STR_ALERT_DANGER = "alert alert-danger";
         private const string STR_ALERT_INFO = "alert alert-info";
+        private const string STR_ALERT_WARNING = "alert alert-warning";
 
         private const string STR_ICON_SUCCESS = "glyphicon glyphicon-ok-circle";
         private const string STR_ICON_DANGER = "glyphicon glyphicon-minus-sign";
         private const string STR_ICON_INFO = "glyphicon glyphicon-info-sign";
+        private const string STR_ICON_WARNING = "glyphicon glyphicon-warning-sign";
         #endregion
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -78,6 +80,11 @@ namespace Marigold.UserControls
         public void ShowInfo(string message)
         {
             ShowInfo(message, STR_ICON_INFO, STR_ALERT_PRIMARY);
+        }
+
+        public void ShowWarning(string message)
+        {
+            ShowInfo(message, STR_ICON_WARNING, STR_ALERT_WARNING);
         }
 
         /// <summary>

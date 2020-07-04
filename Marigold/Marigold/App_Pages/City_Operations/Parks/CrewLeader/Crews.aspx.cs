@@ -47,16 +47,21 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             MessageUserControl.HandleDataBoundException(e);
         }
 
-        //This Method sets the Unit DropDownList.
-        //  Resets the Employeegridview to null
-        //  Turns the visibility of the Buttons controls to false
+        /// <summary>
+        /// This event fires when the user select a unit category (Equipment/truck)
+        ///     It resets the EmployeeGirwView to null
+        ///     It turns Off all button controls
+        ///     It populates the list of Units (Equipment/Truck) in the DrompDownList control
+        /// </summary>
+        /// <param name="sender">the sender is a RadioButtonList</param>
+        /// <param name="e"></param>
         protected void FleetCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
             int yardId = int.Parse(YardID.Text);
             FleetController fleet = new FleetController();
 
-            string selected = FleetCategory.SelectedValue;
-            if (selected == "1")
+            string category = (FleetCategory.SelectedItem.Text).Trim();
+            if (category == "Equipments")
             {
                 EmployeeGridView.DataSource = null;
                 EmployeeGridView.DataBind();
@@ -74,7 +79,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     SelectUnitDDL.Items.Insert(0, "Select an Equipment");
                 });
             }
-            else if (selected == "2")
+            else if (category == "Trucks")
             {
                 EmployeeGridView.DataSource = null;
                 EmployeeGridView.DataBind();
@@ -83,7 +88,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 Done.Visible = false;
                 MessageUserControl.TryRun(() =>
                 {
-                    List<Truck> units = fleet.GetUnits(yardId);
+                    List<Truck> units = fleet.GetTrucks(yardId);
                     SelectUnitDDL.DataSource = units;
                     SelectUnitDDL.DataTextField = nameof(Truck.TruckDescription);
                     SelectUnitDDL.DataValueField = nameof(Truck.TruckID);
@@ -94,41 +99,63 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             }
         }
 
-        //This Method Displays the drivers of a given unit (Equipment/Truck)
-        //  Resets the GridView Pager
-        //  Sets the Label control for refreshing the EmployeeGridView to "Driver"
+        /// <summary>
+        /// This event fires when the user select a unit from the DropDownList control.
+        ///     It resets the EmployeeGridView Pager
+        ///     It sets Label control for refreshing the EmployeeGridView to "Driver".
+        ///     It turns On/Off all the Necessary/Unnecessary columns
+        ///     It refreshses the EmployeeGridView
+        /// </summary>
+        /// <param name="sender">The Sender is a DropDownList control</param>
+        /// <param name="e"></param>
         protected void SelectUnitDDL_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string selected = FleetCategory.SelectedValue;
+            string category = (FleetCategory.SelectedItem.Text).Trim();
             Refresh.Text = "Driver";
+            FleetController fleetManager = new FleetController();
+            int unitId = int.Parse(SelectUnitDDL.SelectedValue);
+            string unitDesc = SelectUnitDDL.SelectedItem.Text;
 
-            if (selected == "1")
+            if (fleetManager.FoundUnit(unitId, category))
             {
-                EmployeeGridView.PageIndex = 0;
-                EmployeeGridView.Columns[4].Visible = false;
-                EmployeeGridView.Columns[5].Visible = true;
-                EmployeeGridView.Columns[6].Visible = true;
-                EmployeeGridView.Columns[7].Visible = false;
-                EmployeeGridView.Visible = true;
-                RefreshDriverList(1);
-            
-
+                InfoUserControl.ShowWarning(unitDesc + " is already assigned to a different crew. If you want to update the Crew assigned to this unit, " +
+                    "Select the crew in the pane below");
             }
-            else if(selected == "2")
+            else
             {
-                EmployeeGridView.PageIndex = 0;
-                //DriverPager.SetPageProperties(0, DriverPager.PageSize, true);
-                EmployeeGridView.Visible = true;
-                EmployeeGridView.Columns[4].Visible = true;
-                EmployeeGridView.Columns[5].Visible = true;
-                EmployeeGridView.Columns[6].Visible = true;
-                EmployeeGridView.Columns[7].Visible = false;
-                RefreshDriverList(2);
+                if (category == "Equipments")
+                {
+                    EmployeeGridView.PageIndex = 0;
+                    EmployeeGridView.Columns[4].Visible = false;
+                    EmployeeGridView.Columns[5].Visible = true;
+                    EmployeeGridView.Columns[6].Visible = true;
+                    EmployeeGridView.Columns[7].Visible = false;
+                    EmployeeGridView.Visible = true;
+                    RefreshDriverList(1);
+
+
+                }
+                else if (category == "Trucks")
+                {
+                    EmployeeGridView.PageIndex = 0;
+                    EmployeeGridView.Visible = true;
+                    EmployeeGridView.Columns[4].Visible = true;
+                    EmployeeGridView.Columns[5].Visible = true;
+                    EmployeeGridView.Columns[6].Visible = true;
+                    EmployeeGridView.Columns[7].Visible = false;
+                    RefreshDriverList(2);
+                }
             }
         }
 
-        //This Method makes the RadioButton fucntional
-        //  Sets the Crew Member button control On/Off based on the unit Selected
+
+        /// <summary>
+        /// This events fires when the user selects a driver
+        ///     It makes RadioButtons mutually exclusive
+        ///     It turns On/Off the visibility of the Button controls 
+        /// </summary>
+        /// <param name="sender">The Sender is a GridView control</param>
+        /// <param name="e"></param>
         protected void SelectedDriver_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton selectedButton = new RadioButton();
@@ -139,8 +166,8 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             }
             selectedButton.Checked = true;
 
-            string selected = FleetCategory.SelectedValue;
-            if(selected == "1")
+            string category = (FleetCategory.SelectedItem.Text).Trim();
+            if (category == "Equipments")
             {
                 AddMember.Visible = false;
             }
@@ -151,10 +178,16 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             Done.Visible = true;
         }
 
-        //this Methods refreshes the Driver List
+        /// <summary>
+        /// This Method Populates/Refreshes the list of drivers
+        ///     There are two types of drivers: 
+        ///         1. Truck  Drivers
+        ///         2. Equipment Drivers
+        /// </summary>
+        /// <param name="type">The type specifies the list of drivers to be returned</param>
         protected void RefreshDriverList(int type)
         {
-            MessageUserControl.TryRun(() =>
+            InfoUserControl.TryRun(() =>
             {
                 int unitId = int.Parse(SelectUnitDDL.SelectedValue);
                 int yardId = int.Parse(YardID.Text);
@@ -167,8 +200,13 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
 
         }
 
-        //This method refreshes The EmployeeGirview after a paging occured
-        //  based on whether the user is selecting the Driver or the Crew members
+        /// <summary>
+        /// This event fires when the user pages the GridView
+        ///     It sets the Pager index to the next one
+        ///     It refreshes the dirvers list (EmployeeGridView)
+        /// </summary>
+        /// <param name="sender">the Sender is a GridView control</param>
+        /// <param name="e"></param>
         protected void EmployeeGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
 
@@ -250,12 +288,18 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             }
         #endregion
 
-        //This method creates a new cew and add the Driver as the first crew member
-        //  Refreshes the current crews pane
+        /// <summary>
+        /// This event fires when when the user presses on the CREW MEMBER button
+        ///     It retrives the driver ID
+        ///     It calls the method that creates a New Crew
+        ///     It populates/refreshes all current crews
+        /// </summary>
+        /// <param name="sender">The sender is a button control</param>
+        /// <param name="e"></param>
         protected void AddMember_Click(object sender, EventArgs e)
         {
             int driverId = 0;
-            //Retrieve the selected DriverID and save in a label control
+            //Retrieve the selected DriverID 
             foreach (GridViewRow row in EmployeeGridView.Rows)
             {
                 if((row.FindControl("SelectedDriver") as RadioButton).Checked == true)
@@ -264,19 +308,29 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 }
             }
 
-            CrewController crewManager = new CrewController();
-            InfoUserControl.TryRun(() =>
+            //Checks that a driver is selecetd. then proceed
+            if(driverId == 0)
             {
-                crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId);
-                Refresh.Text = "Member";
-                EmployeeGridView.PageIndex = 0;
-                RefreshCrewMember();
-            }, "Successfully added");
-            RefreshCurrentCrews();
+                InfoUserControl.ShowInfo("Please select a driver");
+            }
+            else
+            {
+                CrewController crewManager = new CrewController();
+                InfoUserControl.TryRun(() =>
+                {
+                    crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId);
+                    Refresh.Text = "Member";
+                    EmployeeGridView.PageIndex = 0;
+                    RefreshCrewMember();
+                });
+                RefreshCurrentCrews();
+            }
         }
 
-        //This method populates the list of all employees for crew member selection
-        // Turns off all unnecessary column in the EmployeeGridView
+        /// <summary>
+        /// This method Populates/refreshes the list all employee for selction
+        ///     It turns On/Off all necessary/unnecessary column(s) on the EmployeeGridView
+        /// </summary>
         protected void RefreshCrewMember()
         {
             MessageUserControl.TryRun(() =>
@@ -294,7 +348,10 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             });
         }
 
-        //This method populates the currents crews and their job cards
+        /// <summary>
+        /// This methods Populates/Refreshes the list of all Current Crews
+        ///     It also returns the ID of the last crew created and set on a Label control
+        /// </summary>
         protected void RefreshCurrentCrews()
         {
             InfoUserControl.TryRun(() =>
@@ -302,56 +359,79 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 CrewController crewManager = new CrewController();
                 List<CurrentCrews> crews = crewManager.GetCurrentCrews(int.Parse(YardID.Text));
                 crews.Sort((x, y) => y.CrewID.CompareTo(x.CrewID));
-                int lenght = crews.Count;
                 CrewID.Text = (crews[0].CrewID).ToString();
                 AllCurrentCrews.DataSource = crews;
                 AllCurrentCrews.DataBind();
             });
         }
-        //This Methods 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Done_Click(object sender, EventArgs e)
         {
-            //int truckId = int.Parse(SelectUnitDDL.SelectedValue);
-            //int driverId = int.Parse(DriverID.Text);
-            //List<int> memberIds = new List<int>();
-            //string test = "";
-            //foreach(GridViewRow row in EmployeeGridView.Rows)
-            //{
-            //    var chkBox = row.FindControl("SelectedMember") as CheckBox;
-            //    IDataItemContainer container = (IDataItemContainer)chkBox.NamingContainer;
 
-            //    if (SelectedMembersIndex != null)
-            //    {
-            //        if (SelectedMembersIndex.Exists(i => i == container.DataItemIndex))
-            //        {
-            //            chkBox.Checked = true;
-            //            test += ((row.FindControl("EmployeeID") as Label).Text).ToString() + "  ";
-            //        }
-            //    }
-
-
-
-
-
-                //if ((row.FindControl("SelectedMember") as CheckBox).Checked == true)
-                //{
-                //    memberIds.Add(int.Parse((row.FindControl("EmployeeID") as Label).Text));
-                //    test += ((row.FindControl("EmployeeID") as Label).Text).ToString() + "  ";
-                //}
-            //}
-            //Label1.Text = test;
         }
      
-
+        /// <summary>
+        /// This event add a new member to a given crew 
+        ///     It calls the method that adds a new crew member to a crew
+        ///     It refreshes the list of current crews
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void EmployeeGridView_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            //Add a Crew Member to the curent Crew
-            //Label1.Text = (e.CommandArgument).ToString();
+            if(e.CommandName == "AddMember")
+            {
+                InfoUserControl.TryRun(() =>
+                {
+                    CrewController crewManager = new CrewController();
+                    crewManager.AddCrewMember(int.Parse(CrewID.Text), int.Parse(e.CommandArgument.ToString()));
+                    RefreshCurrentCrews();
+                });
+            }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         protected void AllCurrentCrews_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
+            string caller = e.CommandName;
+            switch (caller)
+            {
+                case "SelectedCrew":
+                    CrewID.Text = e.CommandArgument.ToString();
+                    string crew = "";
+                    InfoUserControl.TryRun(() =>
+                    {
+                        FleetController fleet = new FleetController();
+                         crew = fleet.GetUnitDescription(int.Parse(CrewID.Text));
+                    });
+                    InfoUserControl.ShowInfo("You are updating crew " + crew + "");
+                    
+                    RefreshCurrentCrews();
+                    break;
 
+                case "RemoveMember":
+                    InfoUserControl.TryRun(() =>
+                    {
+                        CrewController crewManager = new CrewController();
+                        crewManager.RemoveCrewMember(int.Parse(e.CommandArgument.ToString()), int.Parse(CrewID.Text));
+                    }, "The Employee was renoved successfully from the Crew");
+                    RefreshCurrentCrews();
+                    break;
+
+                case "DeleteJobCard":
+
+                    RefreshCurrentCrews();
+                    break;
+            }
         }
     }
 }

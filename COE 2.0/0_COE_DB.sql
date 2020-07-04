@@ -301,15 +301,18 @@ create table Crew
 (
 	CrewID integer identity(1,1) not null constraint pk_Crew primary key clustered,
 	CrewDate datetime not null,
-	TruckID int not null constraint fk_Crew_To_Truck references Truck(TruckID),
+	TruckID int null constraint fk_Crew_To_Truck references Truck(TruckID),
+	EquipmentID int null constraint FK_Crew_to_Equipment references Equipment(EquipmentID),
 	FLHA_CompletedBy  bit constraint df_CompletedFLHA default null,
 	KM_Start int null,
 	KM_End int null,
 	AdditionalComments varchar(100) null,
 	constraint ck_KM_End_GreaterThan_KM_Start check (KM_End >= KM_Start)
 )
-create nonclustered index IX_Crew_UnitID
+create nonclustered index IX_Crew_TruckID
 on Crew(TruckID)
+create nonclustered index IX_Crew_EquipmentID
+on Crew(EquipmentID)
 
 create table CrewMember
 (

@@ -86,6 +86,11 @@ namespace MarigoldSystem.BLL
                                                         .Where(x => DbFunctions.TruncateTime(x.Crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Now))
                                                         .Select(x => x.EmployeeID))
                                                         .ToList();
+                int count = context.Crews.Find(crewId).CrewMembers.Count();
+                if(count == 5)
+                {
+                    throw new Exception("A crew cannot have more than five (5) crew members");
+                }
 
                 if (CrewMemberIDs != null)
                 {
@@ -109,7 +114,6 @@ namespace MarigoldSystem.BLL
             }
         }
 
-        [DataObjectMethod(DataObjectMethodType.Select,false)]
         //This method retrieves all Current Crews
         public List<CurrentCrews> GetCurrentCrews(int yardId)
         {
@@ -146,5 +150,14 @@ namespace MarigoldSystem.BLL
         }
 
         //This Method Remove a Crew Member from a given Crew
+        public void RemoveCrewMember(int memberId, int crewId)
+        {
+            using(var context = new MarigoldSystemContext())
+            {
+                CrewMember member = context.CrewMembers.Find(memberId);
+                context.CrewMembers.Remove(member);
+                context.SaveChanges();
+            }
+        }
     }
 }

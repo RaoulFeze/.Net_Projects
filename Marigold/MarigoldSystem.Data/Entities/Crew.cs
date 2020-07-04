@@ -21,7 +21,9 @@ namespace MarigoldSystem.Data.Entities
 
         public DateTime CrewDate { get; set; }
 
-        public int TruckID { get; set; }
+        public int? TruckID { get; set; }
+
+        public int? EquipmentID { get; set; }
 
         public bool? FLHA_CompletedBy { get; set; }
 
@@ -31,6 +33,8 @@ namespace MarigoldSystem.Data.Entities
 
         [StringLength(100)]
         public string AdditionalComments { get; set; }
+
+        public virtual Equipment Equipment { get; set; }
 
         public virtual Truck Truck { get; set; }
 

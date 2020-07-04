@@ -7,7 +7,6 @@ using MarigoldSystem.Data.Entities;
 
 namespace MarigoldSystem.DAL
 {
-
     public partial class MarigoldSystemContext : DbContext
     {
         public MarigoldSystemContext()
@@ -285,11 +284,6 @@ namespace MarigoldSystem.DAL
             modelBuilder.Entity<Truck>()
                 .Property(e => e.TruckDescription)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<Truck>()
-                .HasMany(e => e.Crews)
-                .WithRequired(e => e.Truck)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<TruckCategory>()
                 .Property(e => e.Description)

@@ -4,6 +4,7 @@ using MarigoldSystem.Data.POCO_s;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
@@ -16,7 +17,7 @@ namespace MarigoldSystem.BLL
     [DataObject]
     public class FleetController
     {
-        public List<Truck> GetUnits(int yardId)
+        public List<Truck> GetTrucks(int yardId)
         {
             using(var context = new MarigoldSystemContext())
             {
@@ -100,6 +101,61 @@ namespace MarigoldSystem.BLL
                 }
             }
 
+        }
+        
+        public bool FoundUnit(int unitId, string category)
+        {
+            using(var context = new MarigoldSystemContext())
+            {
+                switch (category)
+                {
+                    case "Equipments":
+                        Crew crew = context.Crews
+                                                .Where(x => DbFunctions.TruncateTime(x.CrewDate) == DbFunctions.TruncateTime(DateTime.Today) && x.EquipmentID == unitId)
+                                                .Select(x => x)
+                                                .FirstOrDefault();
+                        if (crew != null)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        break;
+                    case "Trucks":
+                        Crew crews = context.Crews
+                                                .Where(x => DbFunctions.TruncateTime(x.CrewDate) == DbFunctions.TruncateTime(DateTime.Today) && x.TruckID == unitId)
+                                                .Select(x => x)
+                                                .FirstOrDefault();
+                        if (crews != null)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        break;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public string GetUnitDescription(int crewId)
+        {
+            using (var context = new MarigoldSystemContext())
+            {
+                if(context.Crews.Find(crewId).EquipmentID != null)
+                {
+                    return context.Crews.Find(crewId).Equipment.Description;
+                }
+                else
+                {
+                    return context.Crews.Find(crewId).Truck.TruckDescription;
+                }
+            }
         }
     }
 }

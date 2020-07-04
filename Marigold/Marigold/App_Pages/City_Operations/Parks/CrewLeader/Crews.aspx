@@ -36,7 +36,6 @@
                         <asp:LinkButton ID="LinkButton5" runat="server" CssClass="nav-link" data-toggle="tab" role="tab">Grass Routes</asp:LinkButton>
                     </li>
                 </ul>
-    <%--<asp:Label ID="DriverID" runat="server" Text="" Visible="true"></asp:Label>--%>
         </div>
         <div class="selection-column">
             <div class="truck-selection-pane">
@@ -54,7 +53,6 @@
                 <asp:DropDownList ID="SelectUnitDDL" runat="server" Visible="false" OnSelectedIndexChanged="SelectUnitDDL_SelectedIndexChanged" AutoPostBack="true" CssClass="UnitDDL"></asp:DropDownList>
                 &nbsp;
                 &nbsp;
-                <%--<asp:LinkButton ID="AddCrew" runat="server" Visible="false">ADD CREW</asp:LinkButton>--%>
                 <asp:Button ID="AddMember" runat="server" Text="CREW MEMBERS" Visible="false" CssClass="crew-member-button" OnClick="AddMember_Click" />
                 &nbsp;
                 &nbsp;
@@ -67,7 +65,7 @@
                         AutoGenerateColumns="False"
                         OnPageIndexChanging="EmployeeGridView_PageIndexChanging"
                         CssClass="table table-striped table-bordered Cssgrid"
-                                        BorderColor="Black"
+                        BorderColor="Black"
                         BorderWidth="1"
                         AllowPaging="True"
                         OnRowCommand="EmployeeGridView_RowCommand">
@@ -130,8 +128,8 @@
                         <div class="current-crew-box offset-1">
                             <div class="current-crew-header offset-5">
                                 <h4 class="crew-header">
-                                    <asp:LinkButton ID="SelectCrew" runat="server" CommandArgument='<%#Item.CrewID %>' CommandName="Seletedcrew">
-                                        CREW (<asp:Literal ID="Literal1" runat="server" Text='<%# Container.ItemIndex + 1 %>'/>)
+                                    <asp:LinkButton ID="SelectCrew" runat="server" CommandArgument='<%#Item.CrewID %>' CommandName="SelectedCrew">
+                                        CREW:  <%#Item.Description %>
                                     </asp:LinkButton>
                                 </h4>
                                 <div class="crew-glyphicon-remove">
@@ -139,11 +137,7 @@
                                     <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span> 
                                     </asp:LinkButton>
                                 </div>
-                               
                             </div> 
-                            <div class="UnitDescription">
-                          
-                                <%#Item.Description %></div>
                             <div class="col-12">
                                 <div class="crew-member-box">
                                     <asp:GridView ID="CrewMemberGridView" runat="server"
@@ -166,12 +160,12 @@
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Phone">
                                                 <ItemTemplate>
-                                                    <asp:Label ID="Name" runat="server" Text='<%# Eval("Phone") %>'></asp:Label>
+                                                    <asp:Label ID="Phone" runat="server" Text='<%# Eval("Phone") %>'></asp:Label>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField>
                                                 <ItemTemplate>
-                                                    <asp:LinkButton ID="RemoveEmployee" runat="server" CommandArgument='<%# Eval("CrewMemberID") %>' CommandName="DeleteMember">
+                                                    <asp:LinkButton ID="RemoveEmployee" runat="server" CommandArgument='<%# Eval("CrewMemberID") %>' CommandName="RemoveMember">
                                                 <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span>
                                                     </asp:LinkButton>
                                                 </ItemTemplate>
@@ -205,7 +199,7 @@
                                             </asp:TemplateField>
                                             <asp:TemplateField>
                                                 <ItemTemplate>
-                                                    <asp:LinkButton ID="RemoveSite" runat="server" CommandArgument='<%# Eval("JobCardID") %>' CommandName="DeleteSite" OnClientClick="return ConfirmRemoveSite()">
+                                                    <asp:LinkButton ID="RemoveSite" runat="server" CommandArgument='<%# Eval("JobCardID") %>' CommandName="DeleteJobCard" OnClientClick="return ConfirmRemoveSite()">
                                                 <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span>
                                                     </asp:LinkButton>
                                                 </ItemTemplate>
