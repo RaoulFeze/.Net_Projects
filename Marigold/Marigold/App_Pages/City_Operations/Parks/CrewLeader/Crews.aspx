@@ -13,29 +13,153 @@
     <asp:Label ID="UserId" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="Refresh" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="CrewID" runat="server" Text="" Visible="false"></asp:Label>
+    <asp:Label ID="SiteTypeID" runat="server" Text="1" Visible="false"></asp:Label>
     <%-- --------------------------------------------------------------------------------------------------- --%>
     <div class="info-message container">
         <uc1:InfoUserControl runat="server" ID="InfoUserControl" />
     </div>
     <div class="crew-content-layout">
         <div class="sites-pane">
-            <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item">
-                        <asp:LinkButton ID="LinkButton1" runat="server" CssClass="nav-link"  data-toggle="tab" role="tab">A Routes</asp:LinkButton>
-                    </li>
-                    <li class="nav-item">
-                        <asp:LinkButton ID="LinkButton2" runat="server" CssClass="nav-link active" data-toggle="tab" role="tab">B Routes</asp:LinkButton>
-                    </li>
-                    <li class="nav-item">
-                        <asp:LinkButton ID="LinkButton3" runat="server" CssClass="nav-link" data-toggle="tab" role="tab">Watering Routes</asp:LinkButton>
-                    </li>
-                    <li class="nav-item">
-                        <asp:LinkButton ID="LinkButton4" runat="server" CssClass="nav-link" data-toggle="tab" role="tab">Planting Routes</asp:LinkButton>
-                    </li>
-                    <li class="nav-item">
-                        <asp:LinkButton ID="LinkButton5" runat="server" CssClass="nav-link" data-toggle="tab" role="tab">Grass Routes</asp:LinkButton>
-                    </li>
-                </ul>
+            <ul class="nav nav-tabs " role="tablist">
+                <li class="nav-item">
+                    <asp:LinkButton ID="ARoute" runat="server" CssClass="nav-link tab-menu" data-toggle="tab" role="tab">A Routes</asp:LinkButton>
+                </li>
+                <li class="nav-item">
+                    <asp:LinkButton ID="BRoute" runat="server" CssClass="nav-link tab-menu" data-toggle="tab" role="tab">B Routes</asp:LinkButton>
+                </li>
+                <li class="nav-item">
+                    <asp:LinkButton ID="WRoute" runat="server" CssClass="nav-link tab-menu" data-toggle="tab" role="tab">Watering Routes</asp:LinkButton>
+                </li>
+                <li class="nav-item">
+                    <asp:LinkButton ID="PRoute" runat="server" CssClass="nav-link tab-menu" data-toggle="tab" role="tab">Planting Routes</asp:LinkButton>
+                </li>
+                <li class="nav-item">
+                    <asp:LinkButton ID="GRoute" runat="server" CssClass="nav-link tab-menu" data-toggle="tab" role="tab">Grass Routes</asp:LinkButton>
+                </li>
+            </ul>
+            <div class="route">
+                <div class="table table-striped table-bordered Cssgrid">
+                <asp:ListView ID="RouteListView" runat="server" 
+                 Visible ="true"
+                    DataSourceID="ObjectDataSource1">
+                    <AlternatingItemTemplate>
+                        
+                        <tr style="">
+                            <td>
+                                 <%# Container.DataItemIndex + 1%> </td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Pin") %>' runat="server" ID="PinLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Community") %>' runat="server" ID="CommunityLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Description") %>' runat="server" ID="DescriptionLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Address") %>' runat="server" ID="AddressLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Area") %>' runat="server" ID="AreaLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Count") %>' runat="server" ID="CountLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("LastDate", "{0:MMM-d}") %>' runat="server" ID="LastDateLabel" /></td>
+                            <td>  
+                                <asp:DropDownList ID="SelectTask" runat="server" DataSourceID="TaskODS" DataTextField="Description" DataValueField="TaskID"></asp:DropDownList></td>
+                            <td>
+                                <asp:LinkButton ID="AddSite" runat="server" CommandArgument='<%# Eval("SiteID") %>' CommandName="AddSite">
+                                        <span aria-hidden="true" class="glyphicon glyphicon-plus"></span>
+                                    </asp:LinkButton>
+
+                            </td>
+                        </tr>
+                    </AlternatingItemTemplate>
+                    <EmptyDataTemplate>
+                        <table runat="server" style="">
+                            <tr>
+                                <td>No data was returned.</td>
+                            </tr>
+                        </table>
+                    </EmptyDataTemplate>
+                    <ItemTemplate>
+                        <tr style="">
+                            <td>
+                                 <%# Container.DataItemIndex + 1%> </td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Pin") %>' runat="server" ID="PinLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Community") %>' runat="server" ID="CommunityLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Description") %>' runat="server" ID="DescriptionLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Address") %>' runat="server" ID="AddressLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Area") %>' runat="server" ID="AreaLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("Count") %>' runat="server" ID="CountLabel" /></td>
+                            <td>
+                                <asp:Label Text='<%# Eval("LastDate", "{0:MMM-d}") %>' runat="server" ID="LastDateLabel" /></td>
+                            <td>  
+                                <asp:DropDownList ID="SelectTask" runat="server" DataSourceID="TaskODS" DataTextField="Description" DataValueField="TaskID"></asp:DropDownList></td>
+                            <td>
+                                <asp:LinkButton ID="AddSite" runat="server" CommandArgument='<%# Eval("SiteID") %>' CommandName="AddSite">
+                                        <span aria-hidden="true" class="glyphicon glyphicon-plus"></span>
+                                    </asp:LinkButton>
+
+                            </td>
+                        </tr>
+                    </ItemTemplate>
+                    <LayoutTemplate>
+                        <table runat="server">
+                             <tr runat="server">
+                                <td runat="server" style="text-align:center">
+                                    <div class="ml-auto">
+                                        <asp:Button ID="Button2" runat="server" Text="Finish" />
+                                    </div>
+                                    <asp:DataPager runat="server" ID="DataPager2" PageSize="20">
+                                        <Fields>
+                                            <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="True" ShowLastPageButton="True"></asp:NextPreviousPagerField>
+                                        </Fields>
+                                    </asp:DataPager>
+                                </td>
+                            </tr>
+                            <tr runat="server">
+                                <td runat="server">
+                                    <table runat="server" id="itemPlaceholderContainer" style="" border="0">
+                                        <tr runat="server" style="">
+                                            <th runat="server"></th>
+                                            <th runat="server">Pin</th>
+                                            <th runat="server">Community</th>
+                                            <th runat="server">Description</th>
+                                            <th runat="server">Address</th>
+                                            <th runat="server">Area</th>
+                                            <th runat="server">Count</th>
+                                            <th runat="server">L.D.W</th>
+                                            <th runat="server">Task</th>
+                                            <th runat="server">Add</th>
+                                        </tr>
+                                        <tr runat="server" id="itemPlaceholder"></tr>
+                                    </table>
+
+                                </td>
+                            </tr>
+                            <tr runat="server">
+                                <td runat="server" style="text-align:center">
+                                    <div class="ml-auto">
+                                        <asp:Button ID="Button1" runat="server" Text="Finish" />
+                                    </div>
+                                    <asp:DataPager runat="server" ID="DataPager3" PageSize="20">
+                                        <Fields>
+                                            <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="True" ShowNextPageButton="False" ShowPreviousPageButton="False"></asp:NextPreviousPagerField>
+                                            <asp:NumericPagerField></asp:NumericPagerField>
+                                            <asp:NextPreviousPagerField ButtonType="Button" ShowLastPageButton="True" ShowNextPageButton="False" ShowPreviousPageButton="False"></asp:NextPreviousPagerField>
+                                        </Fields>
+                                    </asp:DataPager>
+                                </td>
+                            </tr>
+                        </table>
+                    </LayoutTemplate>
+
+                </asp:ListView>
+                    </div>
+            </div>
         </div>
         <div class="selection-column">
             <div class="truck-selection-pane">
@@ -53,10 +177,11 @@
                 <asp:DropDownList ID="SelectUnitDDL" runat="server" Visible="false" OnSelectedIndexChanged="SelectUnitDDL_SelectedIndexChanged" AutoPostBack="true" CssClass="UnitDDL"></asp:DropDownList>
                 &nbsp;
                 &nbsp;
-                <asp:Button ID="AddMember" runat="server" Text="CREW MEMBERS" Visible="false" CssClass="crew-member-button" OnClick="AddMember_Click" />
-                &nbsp;
-                &nbsp;
-                  <asp:Button ID="Done" runat="server" Text="DONE" Visible="false" CssClass="done-control-button" OnClick="Done_Click" />
+                <asp:Button ID="CreateCrew" runat="server" Text="Create a New Crew" Visible="false" CssClass="crew-member-button" OnClick="CreateCrew_Click" />
+                <div class="ml-auto">
+                    <asp:Button ID="Cancel" runat="server" Text="Cancel" CssClass="cancel-crew-button" Visible="false" OnClick="Cancel_Click" />
+                    <asp:Button ID="Done" runat="server" Text="Done" Visible="false" CssClass="done-control-button" OnClick="Done_Click" />
+                </div>
             </div>
             <div class="crew-selection-pane">
                 <div class="selectDriver">
@@ -92,7 +217,7 @@
                                     <asp:Label runat="server" Text='<%# Bind("Phone") %>' ID="Label3"></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="License" SortExpression="License" >
+                            <asp:TemplateField HeaderText="License" SortExpression="License">
                                 <ItemTemplate>
                                     <asp:Label runat="server" Text='<%# Bind("License") %>' ID="Label4"></asp:Label>
                                 </ItemTemplate>
@@ -104,7 +229,7 @@
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Driver" SortExpression="">
                                 <ItemTemplate>
-                                    <asp:RadioButton ID="SelectedDriver" runat="server" AutoPostBack="true" OnCheckedChanged="SelectedDriver_CheckedChanged"/>
+                                    <asp:RadioButton ID="SelectedDriver" runat="server" AutoPostBack="true" OnCheckedChanged="SelectedDriver_CheckedChanged" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Add" SortExpression="">
@@ -120,7 +245,7 @@
             </div>
             <div class="current-crew-pane">
                 <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
-                
+
                 <asp:Repeater ID="AllCurrentCrews" runat="server"
                     ItemType="MarigoldSystem.Data.DTO_s.CurrentCrews"
                     OnItemCommand="AllCurrentCrews_ItemCommand">
@@ -137,7 +262,7 @@
                                     <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span> 
                                     </asp:LinkButton>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="col-12">
                                 <div class="crew-member-box">
                                     <asp:GridView ID="CrewMemberGridView" runat="server"
@@ -174,7 +299,7 @@
                                     </asp:GridView>
                                 </div>
                                 <div class="job-card-box">
-                                    <asp:GridView ID="GridView1" runat="server"
+                                    <asp:GridView ID="JobCardGridView" runat="server"
                                         AutoGenerateColumns="false"
                                         CssClass="table table-striped table-bordered "
                                         BorderWidth="1"
@@ -208,7 +333,7 @@
                                     </asp:GridView>
                                 </div>
                             </div>
-                  
+
                         </div>
 
                     </ItemTemplate>
@@ -218,17 +343,13 @@
         <div class="summary">
         </div>
     </div>
-    <%--<asp:ObjectDataSource ID="GetTruckDrivers" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetTruckDrivers" TypeName="MarigoldSystem.BLL.FleetController">
+    <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetRouteSummaries" TypeName="MarigoldSystem.BLL.RouteController">
         <SelectParameters>
             <asp:ControlParameter ControlID="YardID" PropertyName="Text" Name="yardId" Type="Int32"></asp:ControlParameter>
-            <asp:ControlParameter ControlID="UnitID" PropertyName="Text" Name="unitId" Type="Int32"></asp:ControlParameter>
-        </SelectParameters>
-    </asp:ObjectDataSource>--%>
-    <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetCurrentCrews" TypeName="MarigoldSystem.BLL.CrewController">
-        <SelectParameters>
-            <asp:ControlParameter ControlID="YardID" PropertyName="Text" Name="yardId" Type="Int32"></asp:ControlParameter>
+            <asp:ControlParameter ControlID="SiteTypeID" PropertyName="Text" Name="siteTypeId" Type="Int32"></asp:ControlParameter>
         </SelectParameters>
     </asp:ObjectDataSource>
+    <asp:ObjectDataSource ID="TaskODS" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetTasks" TypeName="MarigoldSystem.BLL.RouteController"></asp:ObjectDataSource>
     <script type="text/javascript">
         var xPos, yPos;
         var prm = Sys.WebForms.PageRequestManager.getInstance();

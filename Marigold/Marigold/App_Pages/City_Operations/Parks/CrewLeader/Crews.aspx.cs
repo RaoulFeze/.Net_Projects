@@ -33,6 +33,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     UserId.Text = (security.GetCurrentUserId(Context.User.Identity.GetUserName())).ToString();
                     EmployeeController employee = new EmployeeController();
                     YardID.Text = employee.GetYardID(int.Parse(UserId.Text)).ToString();
+                    SiteTypeID.Text = "1";
                 });
 
                 RefreshCurrentCrews();
@@ -66,13 +67,15 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 EmployeeGridView.DataSource = null;
                 EmployeeGridView.DataBind();
                 EmployeeGridView.Visible = false;
-                AddMember.Visible = false;
+                CreateCrew.Visible = false;
                 Done.Visible = false;
+                Cancel.Visible = true;
+                CrewID.Text = "";
                 MessageUserControl.TryRun(() =>
                 {
                     List<Equipment> equipments = fleet.GetEquipments(yardId);
                     SelectUnitDDL.DataSource = equipments;
-                    SelectUnitDDL.DataTextField = nameof(Equipment.EquipmentNumber);
+                    SelectUnitDDL.DataTextField = nameof(Equipment.Description);
                     SelectUnitDDL.DataValueField = nameof(Equipment.EquipmentID);
                     SelectUnitDDL.Visible = true;
                     SelectUnitDDL.DataBind();
@@ -84,8 +87,10 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 EmployeeGridView.DataSource = null;
                 EmployeeGridView.DataBind();
                 EmployeeGridView.Visible = false;
-                AddMember.Visible = false;
+                CreateCrew.Visible = false;
                 Done.Visible = false;
+                Cancel.Visible = true;
+                CrewID.Text = "";
                 MessageUserControl.TryRun(() =>
                 {
                     List<Truck> units = fleet.GetTrucks(yardId);
@@ -110,42 +115,56 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         /// <param name="e"></param>
         protected void SelectUnitDDL_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string category = (FleetCategory.SelectedItem.Text).Trim();
-            Refresh.Text = "Driver";
-            FleetController fleetManager = new FleetController();
-            int unitId = int.Parse(SelectUnitDDL.SelectedValue);
-            string unitDesc = SelectUnitDDL.SelectedItem.Text;
-
-            if (fleetManager.FoundUnit(unitId, category))
+            if(SelectUnitDDL.SelectedIndex == 0)
             {
-                InfoUserControl.ShowWarning(unitDesc + " is already assigned to a different crew. If you want to update the Crew assigned to this unit, " +
-                    "Select the crew in the pane below");
+                InfoUserControl.ShowWarning("Please select a Unit before proceeding!");
+                Done.Visible = false;
+                CreateCrew.Visible = false;
+                EmployeeGridView.Visible = false;
+                Cancel.Visible = false;
             }
             else
             {
-                if (category == "Equipments")
+                string category = (FleetCategory.SelectedItem.Text).Trim();
+                Refresh.Text = "Driver";
+                FleetController fleetManager = new FleetController();
+                int unitId = int.Parse(SelectUnitDDL.SelectedValue);
+                string unitDesc = SelectUnitDDL.SelectedItem.Text;
+
+                if (fleetManager.FoundUnit(unitId, category))
                 {
-                    EmployeeGridView.PageIndex = 0;
-                    EmployeeGridView.Columns[4].Visible = false;
-                    EmployeeGridView.Columns[5].Visible = true;
-                    EmployeeGridView.Columns[6].Visible = true;
-                    EmployeeGridView.Columns[7].Visible = false;
-                    EmployeeGridView.Visible = true;
-                    RefreshDriverList(1);
-
-
+                    InfoUserControl.ShowWarning(unitDesc + " is already assigned to a different crew. If you want to update the Crew assigned to this unit, " +
+                        "Select the crew in the pane below");
                 }
-                else if (category == "Trucks")
+                else
                 {
-                    EmployeeGridView.PageIndex = 0;
-                    EmployeeGridView.Visible = true;
-                    EmployeeGridView.Columns[4].Visible = true;
-                    EmployeeGridView.Columns[5].Visible = true;
-                    EmployeeGridView.Columns[6].Visible = true;
-                    EmployeeGridView.Columns[7].Visible = false;
-                    RefreshDriverList(2);
+                    if (category == "Equipments")
+                    {
+                        EmployeeGridView.PageIndex = 0;
+                        EmployeeGridView.Columns[4].Visible = false;
+                        EmployeeGridView.Columns[5].Visible = true;
+                        EmployeeGridView.Columns[6].Visible = true;
+                        EmployeeGridView.Columns[7].Visible = false;
+                        EmployeeGridView.Visible = true;
+                        Cancel.Visible = true;
+                        RefreshDriverList(1);
+
+
+                    }
+                    else if (category == "Trucks")
+                    {
+                        EmployeeGridView.PageIndex = 0;
+                        EmployeeGridView.Visible = true;
+                        EmployeeGridView.Columns[4].Visible = true;
+                        EmployeeGridView.Columns[5].Visible = true;
+                        EmployeeGridView.Columns[6].Visible = true;
+                        EmployeeGridView.Columns[7].Visible = false;
+                        Cancel.Visible = true;
+                        RefreshDriverList(2);
+                    }
                 }
             }
+           
         }
 
 
@@ -169,11 +188,13 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             string category = (FleetCategory.SelectedItem.Text).Trim();
             if (category == "Equipments")
             {
-                AddMember.Visible = false;
+                CreateCrew.Visible = false;
+                Cancel.Visible = true;
             }
             else
             {
-                AddMember.Visible = true;
+                CreateCrew.Visible = true;
+                Cancel.Visible = true;
             }
             Done.Visible = true;
         }
@@ -220,85 +241,25 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             }
             else if (Refresh.Text == "Member")
             {
-                //foreach (GridViewRow row in EmployeeGridView.Rows)
-                //{
-                //    var chkBox = row.FindControl("SelectedMember") as CheckBox;
-                //    IDataItemContainer container = (IDataItemContainer)chkBox.NamingContainer;
-                //    if (chkBox.Checked)
-                //    {
-                //        PersistRowIndex(container.DataItemIndex);
-                //    }
-                //    else
-                //    {
-                //        RemoveRowIndex(container.DataItemIndex);
-                //    }
-                //}
                 GridView grid = sender as GridView;
                 grid.PageIndex = e.NewPageIndex;
                 grid.DataBind();
                 RefreshCrewMember();
-                //RePopulateCheckBoxes();
-
             }
         }
-            #region CheckBox State Persistance
-            protected void PersistRowIndex(int index)
-            {
-                if (!SelectedMembersIndex.Exists(i => i == index))
-                {
-                    SelectedMembersIndex.Add(index);
-                }
-            }
-
-            protected void RemoveRowIndex(int index)
-            {
-                if (SelectedMembersIndex.Exists(i => i == index))
-                {
-                    SelectedMembersIndex.Remove(index);
-                }
-            }
-
-            protected List<Int32> SelectedMembersIndex
-            {
-                get
-                { 
-                    if(ViewState["SELECTED_MEMBERS_INDEX"] == null)
-                    {
-                        ViewState["SELECTED_MEMBERS_INDEX"] = new List<Int32>();
-                    }
-                    return (List<Int32>)ViewState["SELECTED_MEMBERS_INDEX"];
-                }
-            }
-
-            protected void RePopulateCheckBoxes()
-            {
-                foreach(GridViewRow row in EmployeeGridView.Rows)
-                {
-                    var chkBox = row.FindControl("SelectedMember") as CheckBox;
-                    IDataItemContainer container = (IDataItemContainer)chkBox.NamingContainer;
-
-                    if(SelectedMembersIndex != null)
-                    {
-                        if (SelectedMembersIndex.Exists(i => i == container.DataItemIndex))
-                        {
-                            chkBox.Checked = true;
-                        }
-                    }
-                }
-            }
-        #endregion
 
         /// <summary>
-        /// This event fires when when the user presses on the CREW MEMBER button
+        /// This event fires when when the user presses on the Create a Crew button
         ///     It retrives the driver ID
         ///     It calls the method that creates a New Crew
         ///     It populates/refreshes all current crews
         /// </summary>
         /// <param name="sender">The sender is a button control</param>
         /// <param name="e"></param>
-        protected void AddMember_Click(object sender, EventArgs e)
+        protected void CreateCrew_Click(object sender, EventArgs e)
         {
             int driverId = 0;
+            string category = (FleetCategory.SelectedItem.Text).Trim();
             //Retrieve the selected DriverID 
             foreach (GridViewRow row in EmployeeGridView.Rows)
             {
@@ -318,12 +279,16 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 CrewController crewManager = new CrewController();
                 InfoUserControl.TryRun(() =>
                 {
-                    crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId);
+                    crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId, category);
                     Refresh.Text = "Member";
                     EmployeeGridView.PageIndex = 0;
+                    Cancel.Visible = true;
+                    CreateCrew.Visible = false;
                     RefreshCrewMember();
+                    RefreshCurrentCrews();
+                    InfoUserControl.ShowInfo("Do you want to add Crew Members?");
                 });
-                RefreshCurrentCrews();
+
             }
         }
 
@@ -359,20 +324,76 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 CrewController crewManager = new CrewController();
                 List<CurrentCrews> crews = crewManager.GetCurrentCrews(int.Parse(YardID.Text));
                 crews.Sort((x, y) => y.CrewID.CompareTo(x.CrewID));
-                CrewID.Text = (crews[0].CrewID).ToString();
+                CrewID.Text = crews.Count <= 0 ? "": (crews[0].CrewID).ToString();
                 AllCurrentCrews.DataSource = crews;
                 AllCurrentCrews.DataBind();
             });
         }
         
         /// <summary>
-        /// 
+        /// This methood fires when the user press on the Done button
+        ///     It tunrs Off all controls used to make up crews
+        ///     If the user is creating an Equipment crew, It creates
+        ///         the crew only with a driver
+        ///     If the user is creating a Truck crew, It cleats all controla
+        ///     It populates the list of Routes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         protected void Done_Click(object sender, EventArgs e)
         {
+            string category = (FleetCategory.SelectedItem.Text).Trim();
 
+            switch (category)
+            {
+                case "Equipments":
+                    int driverId = 0;
+                    //Retrieve the selected DriverID 
+                    foreach (GridViewRow row in EmployeeGridView.Rows)
+                    {
+                        if ((row.FindControl("SelectedDriver") as RadioButton).Checked == true)
+                        {
+                            driverId = int.Parse((row.FindControl("EmployeeID") as Label).Text);
+                        }
+                    }
+
+                    //Checks that a driver is selecetd. then proceed
+                    if (driverId == 0)
+                    {
+                        InfoUserControl.ShowInfo("Please select a driver");
+                    }
+                    else
+                    {
+                        CrewController crewManager = new CrewController();
+                        InfoUserControl.TryRun(() =>
+                        {
+                            crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId, category);
+                            EmployeeGridView.Visible = false;
+                            RefreshCurrentCrews();
+                            SelectUnitDDL.Visible = false;
+                            FleetCategory.ClearSelection();
+                            Done.Visible = false;
+                            Cancel.Visible = false;
+
+                            //Display Routes
+                            PopulateRoutes();
+                        });
+                       
+
+                    }
+                    break;
+                case "Trucks":
+                    EmployeeGridView.Visible = false;
+                    SelectUnitDDL.Visible = false;
+                    FleetCategory.ClearSelection();
+                    Done.Visible = false;
+                    CreateCrew.Visible = false;
+                    Cancel.Visible = false;
+
+                    //Display Routes
+                    PopulateRoutes();
+                    break;
+            }
         }
      
         /// <summary>
@@ -431,7 +452,70 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
 
                     RefreshCurrentCrews();
                     break;
+
+                case "DeleteCrew":
+                    //InfoUserControl.TryRun(() =>
+                    //{
+
+                    //}, "Delete was successful!");
+                    MessageUserControl.TryRun(() =>
+                    {
+
+                        CrewController crewManager = new CrewController();
+                        crewManager.DeleteCrew(int.Parse(e.CommandArgument.ToString()));
+                    });
+                    RefreshCurrentCrews();
+                    break;
             }
         }
+
+        /// <summary>
+        /// this method populates/refreshes Routes
+        /// </summary>
+        protected void PopulateRoutes()
+        {
+            int siteTypeId = int.Parse(SiteTypeID.Text);
+            int yardId = int.Parse(YardID.Text);
+
+            InfoUserControl.TryRun(() =>
+            {
+                RouteController routeManager = new RouteController();
+                List<RouteSummary> routes = routeManager.GetRouteSummaries(yardId, siteTypeId);
+                //RouteGridView.DataSource = routes;
+                //RouteGridView.DataBind();
+            });
+        }
+
+        /// <summary>
+        /// This event fires when the user click on the Cancel Button
+        ///     It turns off all the controls to make up Crews
+        ///     It deletes the crew that is currently being formed
+        ///     It refreshes the Current Crews List
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void Cancel_Click(object sender, EventArgs e)
+        {
+            EmployeeGridView.Visible = false;
+            SelectUnitDDL.Visible = false;
+            FleetCategory.ClearSelection();
+            Done.Visible = false;
+            Cancel.Visible = false;
+            CreateCrew.Visible = false;
+
+            //Deletes the crew in formation.
+            InfoUserControl.TryRun(() =>
+            {
+                int crewId = int.Parse(CrewID.Text);
+                if (crewId != 0)
+                {
+                    CrewController crewManager = new CrewController();
+                    crewManager.DeleteCrew(crewId);
+                    CrewID.Text = "";
+                    RefreshCurrentCrews();
+                }
+            });
+        }
+
     }
 }
