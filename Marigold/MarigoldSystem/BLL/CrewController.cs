@@ -220,5 +220,71 @@ namespace MarigoldSystem.BLL
                 context.SaveChanges();
             }
         }
+
+        /// <summary>
+        /// This method add a JobCard to a crew
+        ///     It verifies the same site is not assigned twice to the same crew
+        ///     It notifies the user when a Jobcard is assigned to more than one crew
+        ///     It adds a Jobcard to a crew.
+        /// </summary>
+        /// <param name="crewId"></param>
+        /// <param name="siteId"></param>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        public string AddJobCard(int crewId, int siteId, int taskId)
+        {
+            string message = "";
+            using(var context = new MarigoldSystemContext())
+            {
+                JobCard jobCard = context.JobCards
+                                            .Where(x => x.CrewID == crewId && x.SiteID == siteId)
+                                            .Select(x => x)
+                                            .FirstOrDefault();
+                if(jobCard != null)
+                {
+                    //Check if the same site is not already assigned to the current crew
+                    throw new Exception("This site is already assigned to the current Crew");
+                }
+                else
+                {
+                    List<JobCard> jobCards = context.JobCards
+                                                        .Where(x => x.SiteID == siteId && DbFunctions.TruncateTime(x.Crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
+                                                        .Select(x => x)
+                                                        .ToList();
+                   
+                    //Notifies the users that existing crew(s) are also assigned to work on the same site.
+                    if(jobCards != null)
+                    {
+                        foreach(JobCard job in jobCards)
+                        {
+                            message += job.Crew.Truck.TruckDescription + ", ";
+                        }
+                    }
+
+                    //Create the new JobCard
+                    jobCard = new JobCard();
+                    jobCard.CrewID = crewId;
+                    jobCard.SiteID = siteId;
+                    jobCard.TaskID = taskId;
+                    context.JobCards.Add(jobCard);
+                    context.SaveChanges();
+                }
+                return message;
+            }
+        }
+
+        /// <summary>
+        /// This method deletes a jobCard
+        /// </summary>
+        /// <param name="jobCardId"></param>
+        public void DeleteJobCard(int jobCardId)
+        {
+            using(var context = new MarigoldSystemContext())
+            {
+                JobCard jobCard = context.JobCards.Find(jobCardId);
+                context.JobCards.Remove(jobCard);
+                context.SaveChanges();
+            }
+        }
     }
 }

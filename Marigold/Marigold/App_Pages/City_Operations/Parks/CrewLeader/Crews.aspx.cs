@@ -33,7 +33,6 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     UserId.Text = (security.GetCurrentUserId(Context.User.Identity.GetUserName())).ToString();
                     EmployeeController employee = new EmployeeController();
                     YardID.Text = employee.GetYardID(int.Parse(UserId.Text)).ToString();
-                    SiteTypeID.Text = "1";
                 });
 
                 RefreshCurrentCrews();
@@ -279,14 +278,17 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 CrewController crewManager = new CrewController();
                 InfoUserControl.TryRun(() =>
                 {
-                    crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId, category);
+                    crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId, category); 
                     Refresh.Text = "Member";
                     EmployeeGridView.PageIndex = 0;
                     Cancel.Visible = true;
                     CreateCrew.Visible = false;
                     RefreshCrewMember();
                     RefreshCurrentCrews();
-                    InfoUserControl.ShowInfo("Do you want to add Crew Members?");
+                    InfoUserControl.ShowInfo("Add Crew Members");
+                    List<CurrentCrews> crews = crewManager.GetCurrentCrews(int.Parse(YardID.Text));
+                    crews.Sort((x, y) => y.CrewID.CompareTo(x.CrewID));
+                    CrewID.Text = crews.Count <= 0 ? "" : (crews[0].CrewID).ToString();
                 });
 
             }
@@ -310,6 +312,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 EmployeeGridView.Columns[5].Visible = false;
                 EmployeeGridView.Columns[6].Visible = false;
                 EmployeeGridView.Columns[7].Visible = true;
+                EmployeeGridView.Visible = true;
             });
         }
 
@@ -324,7 +327,6 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 CrewController crewManager = new CrewController();
                 List<CurrentCrews> crews = crewManager.GetCurrentCrews(int.Parse(YardID.Text));
                 crews.Sort((x, y) => y.CrewID.CompareTo(x.CrewID));
-                CrewID.Text = crews.Count <= 0 ? "": (crews[0].CrewID).ToString();
                 AllCurrentCrews.DataSource = crews;
                 AllCurrentCrews.DataBind();
             });
@@ -374,9 +376,10 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                             FleetCategory.ClearSelection();
                             Done.Visible = false;
                             Cancel.Visible = false;
+                            List<CurrentCrews> crews = crewManager.GetCurrentCrews(int.Parse(YardID.Text));
+                            crews.Sort((x, y) => y.CrewID.CompareTo(x.CrewID));
+                            CrewID.Text = crews.Count <= 0 ? "" : (crews[0].CrewID).ToString();
 
-                            //Display Routes
-                            PopulateRoutes();
                         });
                        
 
@@ -390,8 +393,6 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     CreateCrew.Visible = false;
                     Cancel.Visible = false;
 
-                    //Display Routes
-                    PopulateRoutes();
                     break;
             }
         }
@@ -435,8 +436,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                          crew = fleet.GetUnitDescription(int.Parse(CrewID.Text));
                     });
                     InfoUserControl.ShowInfo("You are updating crew " + crew + "");
-                    
-                    RefreshCurrentCrews();
+                    RefreshCrewMember();
                     break;
 
                 case "RemoveMember":
@@ -444,46 +444,28 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     {
                         CrewController crewManager = new CrewController();
                         crewManager.RemoveCrewMember(int.Parse(e.CommandArgument.ToString()), int.Parse(CrewID.Text));
-                    }, "The Employee was renoved successfully from the Crew");
-                    RefreshCurrentCrews();
+                        RefreshCurrentCrews();
+                    });
                     break;
 
                 case "DeleteJobCard":
-
-                    RefreshCurrentCrews();
+                    InfoUserControl.TryRun(() =>
+                    {
+                        CrewController crewManager = new CrewController();
+                        crewManager.DeleteJobCard(int.Parse(e.CommandArgument.ToString()));
+                        RefreshCurrentCrews();
+                    });
                     break;
 
                 case "DeleteCrew":
-                    //InfoUserControl.TryRun(() =>
-                    //{
-
-                    //}, "Delete was successful!");
                     MessageUserControl.TryRun(() =>
                     {
-
                         CrewController crewManager = new CrewController();
                         crewManager.DeleteCrew(int.Parse(e.CommandArgument.ToString()));
+                        RefreshCurrentCrews();
                     });
-                    RefreshCurrentCrews();
                     break;
             }
-        }
-
-        /// <summary>
-        /// this method populates/refreshes Routes
-        /// </summary>
-        protected void PopulateRoutes()
-        {
-            int siteTypeId = int.Parse(SiteTypeID.Text);
-            int yardId = int.Parse(YardID.Text);
-
-            InfoUserControl.TryRun(() =>
-            {
-                RouteController routeManager = new RouteController();
-                List<RouteSummary> routes = routeManager.GetRouteSummaries(yardId, siteTypeId);
-                //RouteGridView.DataSource = routes;
-                //RouteGridView.DataBind();
-            });
         }
 
         /// <summary>
@@ -506,9 +488,9 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             //Deletes the crew in formation.
             InfoUserControl.TryRun(() =>
             {
-                int crewId = int.Parse(CrewID.Text);
-                if (crewId != 0)
+                if (!string.IsNullOrEmpty(CrewID.Text))
                 {
+                    int crewId = int.Parse(CrewID.Text);
                     CrewController crewManager = new CrewController();
                     crewManager.DeleteCrew(crewId);
                     CrewID.Text = "";
@@ -517,5 +499,71 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             });
         }
 
+        protected void ARoute_Click(object sender, EventArgs e)
+        {
+            SiteTypeID.Text = "1";
+            DataPager topPager = (DataPager)RouteListView.FindControl("TopDataPager");
+            DataPager bottomPager = (DataPager)RouteListView.FindControl("BottomDataPager");
+            topPager.SetPageProperties(0, topPager.PageSize, true);
+            bottomPager.SetPageProperties(0, bottomPager.PageSize, true);
+            RouteListView.Visible = true;
+        }
+
+        protected void BRoute_Click(object sender, EventArgs e)
+        {
+            SiteTypeID.Text = "2";
+            DataPager topPager = (DataPager)RouteListView.FindControl("TopDataPager");
+            DataPager bottomPager = (DataPager)RouteListView.FindControl("BottomDataPager");
+            topPager.SetPageProperties(0, topPager.PageSize, true);
+            bottomPager.SetPageProperties(0, bottomPager.PageSize, true);
+            RouteListView.Visible = true;
+        }
+
+        protected void WRoute_Click(object sender, EventArgs e)
+        {
+            foreach(ListViewItem item in RouteListView.Items)
+            {
+
+            }
+        }
+
+        protected void PRoute_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void GRoute_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void RouteListView_ItemCommand(object sender, ListViewCommandEventArgs e)
+        {
+            string message = "";
+
+            //Get hold of the row that fired the event
+            ListViewDataItem item = RouteListView.Items[e.Item.DisplayIndex];
+            DropDownList list = item.FindControl("SelectTask") as DropDownList;
+
+            InfoUserControl.TryRun(() =>
+            {
+                if (string.IsNullOrEmpty(CrewID.Text))
+                {
+                    InfoUserControl.ShowWarning("You must first create or select a Crew before adding a job site!");
+                }
+                else
+                {
+
+                    CrewController crewManager = new CrewController();
+                    message = crewManager.AddJobCard(int.Parse(CrewID.Text), int.Parse(e.CommandArgument.ToString()), int.Parse(list.SelectedValue));
+                    RefreshCurrentCrews();
+                }
+            });
+
+            if (!string.IsNullOrEmpty(message))
+            {
+                InfoUserControl.ShowInfo("The following Crew(s) are already assigned to this same Site:  " + message);
+            }
+        }
     }
 }
