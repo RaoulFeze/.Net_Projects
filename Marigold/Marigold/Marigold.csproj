@@ -218,6 +218,7 @@
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
     <Content Include="Account\VerifyPhoneNumber.aspx" />
     <Content Include="App_Pages\City_Operations\Parks\CrewLeader\Crews.aspx" />
+    <Content Include="App_Pages\City_Operations\Parks\CrewLeader\Routes.aspx" />
     <Content Include="App_Pages\City_Operations\Parks\TeamLeader\DefaultTL.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -500,6 +501,13 @@
     </Compile>
     <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Crews.aspx.designer.cs">
       <DependentUpon>Crews.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Routes.aspx.cs">
+      <DependentUpon>Routes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Routes.aspx.designer.cs">
+      <DependentUpon>Routes.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Pages\City_Operations\Parks\TeamLeader\DefaultTL.aspx.cs">
       <DependentUpon>DefaultTL.aspx</DependentUpon>

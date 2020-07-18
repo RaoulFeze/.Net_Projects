@@ -122,7 +122,7 @@ namespace MarigoldSystem.BLL
                         {
                             return false;
                         }
-                        break;
+                        //break;
                     case "Trucks":
                         Crew crews = context.Crews
                                                 .Where(x => DbFunctions.TruncateTime(x.CrewDate) == DbFunctions.TruncateTime(DateTime.Today) && x.TruckID == unitId)
@@ -136,7 +136,7 @@ namespace MarigoldSystem.BLL
                         {
                             return false;
                         }
-                        break;
+                        //break;
                     default:
                         return false;
                 }

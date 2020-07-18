@@ -78,6 +78,15 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected global::Marigold.UserControls.InfoUserControl InfoUserControl;
 
         /// <summary>
+        /// SiteMenu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl SiteMenu;
+
+        /// <summary>
         /// ARoute control.
         /// </summary>
         /// <remarks>

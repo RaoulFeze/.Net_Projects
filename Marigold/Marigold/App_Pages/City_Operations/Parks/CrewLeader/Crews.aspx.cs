@@ -36,6 +36,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 });
 
                 RefreshCurrentCrews();
+                
             }
             else
             {
@@ -345,6 +346,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected void Done_Click(object sender, EventArgs e)
         {
             string category = (FleetCategory.SelectedItem.Text).Trim();
+            SiteMenu.Visible = true;
 
             switch (category)
             {
@@ -430,6 +432,8 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 case "SelectedCrew":
                     CrewID.Text = e.CommandArgument.ToString();
                     string crew = "";
+                    SiteMenu.Visible = true;
+                    Done.Visible = true;
                     InfoUserControl.TryRun(() =>
                     {
                         FleetController fleet = new FleetController();
@@ -564,6 +568,12 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             {
                 InfoUserControl.ShowInfo("The following Crew(s) are already assigned to this same Site:  " + message);
             }
+        }
+
+        protected void Finish_Button_Click(object sender, EventArgs e)
+        {
+
+            SiteMenu.Visible = false;
         }
     }
 }

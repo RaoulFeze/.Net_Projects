@@ -97,7 +97,6 @@
             </div>
         </nav>
 
-        <div class="content">
             <div class="body-content">
                 <asp:ContentPlaceHolder ID="MainContent" runat="server">
                 </asp:ContentPlaceHolder>
@@ -109,7 +108,6 @@
                     <p>City Operation: Parks and Roads Services</p>
                 </div>
             </footer>
-        </div>
     </form>
 </body>
 </html>

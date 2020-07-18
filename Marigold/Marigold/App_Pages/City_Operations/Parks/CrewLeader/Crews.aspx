@@ -20,10 +20,10 @@
     </div>
     <div class="crew-content-layout">
         <div class="sites-pane">
-            <div class="menu-control">
+            <div class="menu-control" id="SiteMenu" runat="server" visible="false">
                 <ul class="nav nav-tabs " role="tablist">
                     <li class="nav-item">
-                        <asp:LinkButton ID="ARoute" runat="server" CssClass="nav-link tab-menu active" OnClick="ARoute_Click">A Routes</asp:LinkButton>
+                        <asp:LinkButton ID="ARoute" runat="server" CssClass="nav-link tab-menu" OnClick="ARoute_Click">A Routes</asp:LinkButton>
                     </li>
                     <li class="nav-item">
                         <asp:LinkButton ID="BRoute" runat="server" CssClass="nav-link tab-menu" OnClick="BRoute_Click">B Routes</asp:LinkButton>
@@ -40,8 +40,8 @@
                 </ul>
             </div>
             
-            <div class="route">
-                <div class="table table-striped table-bordered Cssgrid container-fluid">
+            <div class="routes container-fluid">
+                <div class="table table-striped table-bordered">
                     <asp:ListView ID="RouteListView" runat="server"
                         Visible="false"
                         DataSourceID="ObjectDataSource1"
@@ -146,7 +146,7 @@
                                 <tr runat="server">
                                     <td runat="server" style="text-align: center">
                                         <div class="ml-auto">
-                                            <asp:Button ID="Button1" runat="server" Text="Finish" />
+                                            <asp:Button ID="Finish_Button" runat="server" Text="Finish" OnClick="Finish_Button_Click"/>
                                         </div>
                                         <asp:DataPager runat="server" ID="BottomDataPager" PageSize="20">
                                             <Fields>
@@ -192,7 +192,7 @@
                         Visible="false"
                         AutoGenerateColumns="False"
                         OnPageIndexChanging="EmployeeGridView_PageIndexChanging"
-                        CssClass="table table-striped table-bordered Cssgrid"
+                        CssClass="table table-striped table-bordered table-hover Cssgrid"
                         BorderColor="Black"
                         BorderWidth="1"
                         AllowPaging="True"
@@ -264,12 +264,12 @@
                                     </asp:LinkButton>
                                 </div>
                             </div>
-                            <div class="table table-striped table-bordered container-xl">
+                            <div class="">
                                 <div class="crew-jobcard">
                                     <div class="crew-member-box ">
                                         <asp:GridView ID="CrewMemberGridView" runat="server"
                                             AutoGenerateColumns="false"
-                                            CssClass=""
+                                            CssClass="table table-striped table-bordered container"
                                             BorderWidth="0"
                                             BackColor="White"
                                             GridLines="None"
@@ -303,7 +303,7 @@
                                     <div class="job-card-box">
                                         <asp:GridView ID="JobCardGridView" runat="server"
                                             AutoGenerateColumns="false"
-                                            CssClass=""
+                                            CssClass="table table-striped table-bordered container"
                                             BorderWidth="1"
                                             BackColor="White"
                                             GridLines="None"

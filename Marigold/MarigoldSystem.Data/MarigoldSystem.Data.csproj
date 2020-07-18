@@ -89,6 +89,7 @@
     <Compile Include="Entities\YardEmployee.cs" />
     <Compile Include="POCO%27s\Job.cs" />
     <Compile Include="POCO%27s\Member.cs" />
+    <Compile Include="POCO%27s\RouteStatus.cs" />
     <Compile Include="POCO%27s\RouteSummary.cs" />
     <Compile Include="POCO%27s\TruckDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

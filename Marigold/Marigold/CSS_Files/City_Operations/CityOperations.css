@@ -3,10 +3,14 @@ body {
 	padding: 0px;
 	margin: 0px;
 	background-color: #FFFFFF;
-	
+	font-size: 15px;
+	position: relative;
+	padding-bottom: 10vh;
+	min-height:100vh;
 }
+
 .body-content {
-	height:93.5vh;
+	min-height: calc(100vh -10vh - 61.5px);
 }
 
 
@@ -46,8 +50,8 @@ footer {
 	color: #FFFFFF;
 	text-align: center;
 	width: 100%;
-	left: 0;
-	bottom: 0;
+	position:absolute;
+	bottom:0;
 	border: 0.5px solid #000000;
 }
 
