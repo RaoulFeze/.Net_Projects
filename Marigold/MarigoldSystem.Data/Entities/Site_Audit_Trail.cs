@@ -17,7 +17,7 @@ namespace MarigoldSystem.Data.Entities
         [StringLength(50)]
         public string ColumnAffected { get; set; }
 
-        public int ChangedBy { get; set; }
+        public int ChangedByEmployee { get; set; }
 
         public DateTime ChangedDate { get; set; }
 
@@ -26,6 +26,8 @@ namespace MarigoldSystem.Data.Entities
 
         [StringLength(100)]
         public string NewValue { get; set; }
+
+        public virtual Employee Employee { get; set; }
 
         public virtual Site Site { get; set; }
     }

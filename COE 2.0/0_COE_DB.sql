@@ -30,6 +30,8 @@
 
 --Drop Table Truck
 
+--Drop Table Community
+
 --Drop Table Site
 
 --Drop table OperatorPermit
@@ -48,7 +50,6 @@
 
 --Drop table Task
 
---Drop Table Community
 
 --Drop Table HazardCategory
 
@@ -103,12 +104,6 @@ create table HazardCategory
 (
 	HazardCategoryID integer identity(1,1) not null constraint pk_HazardCategory primary key clustered,
 	HazardCategoryName varchar(100) not null
-)
-
-create table Community
-(
-	CommunityID integer identity(1,1) not null constraint pk_Community primary key clustered,
-	Name varchar(50) not null
 )
 
 create table Task
@@ -184,6 +179,13 @@ create table Yard
 	YardName varchar(20) not null
 )
 
+create table Community
+(
+	CommunityID integer identity(1,1) not null constraint pk_Community primary key clustered,
+	YardID int null constraint FK_Community_Yard references Yard(YardID),
+	Name varchar(50) not null
+)
+
 create table YardEmployee
 (
 	YardEmeployeeID integer identity(1,1) not null constraint PK_YardEmployee primary key clustered,
@@ -255,7 +257,6 @@ create table Site
 (
 	SiteID integer identity(1,1) not null constraint pk_Site primary key clustered,
 	SiteTypeID int null constraint FK_Site_to_SiteType references SiteType(SitetYpeID),
-	YardID int null constraint fk_Site_To_yard references Yard(YardID),
 	CommunityID int null constraint fk_Site_To_Community references Community(CommunityID),
 	Pin int not null,
 	Description varchar(200) not null,
@@ -266,8 +267,6 @@ create table Site
 	Watering bit constraint df_WateringSite default 0,
 	Planting bit constraint df_PlantingSite default 0
 )
-create nonclustered index IX_Site_YardID
-on Site(YardID)
 create nonclustered index IX_Site_to_SiteTypeID
 on Site(SiteTypeID)
 create nonclustered index IX_Site_CommunityID
@@ -381,7 +380,7 @@ create table Site_Audit_Trail
 	AuditTrailID Integer identity(1,1) not null constraint PK_Site_Audit_Trail primary key clustered,
 	SiteID int not null constraint FK_Site_Audit_Trail_to_Site references Site(SiteID),
 	ColumnAffected varchar(50) not null,
-	ChangedBy int not null,
+	ChangedByEmployee int not null constraint FK_SiteAudit_Employee references Employee(EmployeeID),
 	ChangedDate datetime not null,
 	OldValue varchar(100) null,
 	NewValue varchar(100) null
@@ -389,4 +388,4 @@ create table Site_Audit_Trail
 create nonclustered index IX_Site_Audit_Trail_SiteID
 on Site_Audit_Trail(SiteID)
 create nonclustered index IX_Site_Audit_Trail_ChangedBy
-on Site_Audit_Trail(ChangedBy)
+on Site_Audit_Trail(ChangedByEmployee)

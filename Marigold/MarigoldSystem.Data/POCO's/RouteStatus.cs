@@ -8,8 +8,11 @@ namespace MarigoldSystem.Data.POCO_s
 {
 	public class RouteStatus
 	{
+		public int SiteID { get; set; }
 
 		public int Pin { get; set; }
+
+		public int? SiteTypeID { get; set; }
 
 		public string Community { get; set; }
 

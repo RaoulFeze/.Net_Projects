@@ -20,8 +20,6 @@ namespace MarigoldSystem.Data.Entities
 
         public int? SiteTypeID { get; set; }
 
-        public int? YardID { get; set; }
-
         public int? CommunityID { get; set; }
 
         public int Pin { get; set; }
@@ -53,7 +51,5 @@ namespace MarigoldSystem.Data.Entities
         public virtual ICollection<Site_Audit_Trail> Site_Audit_Trail { get; set; }
 
         public virtual SiteType SiteType { get; set; }
-
-        public virtual Yard Yard { get; set; }
     }
 }

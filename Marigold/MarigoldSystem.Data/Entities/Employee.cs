@@ -18,6 +18,7 @@ namespace MarigoldSystem.Data.Entities
             EmployeeRoles = new HashSet<EmployeeRole>();
             EmployeeStandings = new HashSet<EmployeeStanding>();
             OperatorPermits = new HashSet<OperatorPermit>();
+            Site_Audit_Trail = new HashSet<Site_Audit_Trail>();
             TrailerOperators = new HashSet<TrailerOperator>();
             YardEmployees = new HashSet<YardEmployee>();
         }
@@ -56,6 +57,9 @@ namespace MarigoldSystem.Data.Entities
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OperatorPermit> OperatorPermits { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Site_Audit_Trail> Site_Audit_Trail { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TrailerOperator> TrailerOperators { get; set; }

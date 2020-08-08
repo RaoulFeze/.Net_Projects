@@ -133,6 +133,12 @@ namespace MarigoldSystem.DAL
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Employee>()
+                .HasMany(e => e.Site_Audit_Trail)
+                .WithRequired(e => e.Employee)
+                .HasForeignKey(e => e.ChangedByEmployee)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Employee>()
                 .HasMany(e => e.YardEmployees)
                 .WithRequired(e => e.Employee)
                 .WillCascadeOnDelete(false);

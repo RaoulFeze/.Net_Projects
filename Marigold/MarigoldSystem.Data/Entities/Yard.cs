@@ -12,8 +12,8 @@ namespace MarigoldSystem.Data.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Yard()
         {
+            Communities = new HashSet<Community>();
             Equipments = new HashSet<Equipment>();
-            Sites = new HashSet<Site>();
             Tools = new HashSet<Tool>();
             Trucks = new HashSet<Truck>();
             YardEmployees = new HashSet<YardEmployee>();
@@ -27,13 +27,13 @@ namespace MarigoldSystem.Data.Entities
         [StringLength(20)]
         public string YardName { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Community> Communities { get; set; }
+
         public virtual District District { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Equipment> Equipments { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Site> Sites { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tool> Tools { get; set; }
