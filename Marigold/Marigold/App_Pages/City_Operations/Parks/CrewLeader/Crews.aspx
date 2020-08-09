@@ -114,7 +114,7 @@
                                 <tr runat="server">
                                     <td runat="server" style="text-align: center">
                                         <div class="ml-auto">
-                                            <asp:Button ID="Button2" runat="server" Text="Finish" />
+                                            <asp:Button ID="Button2" runat="server" Text="Finish" CommandName="Finish"/>
                                         </div>
                                         <asp:DataPager runat="server" ID="TopDataPager" PageSize="20">
                                             <Fields>
@@ -146,7 +146,7 @@
                                 <tr runat="server">
                                     <td runat="server" style="text-align: center">
                                         <div class="ml-auto">
-                                            <asp:Button ID="Finish_Button" runat="server" Text="Finish" OnClick="Finish_Button_Click"/>
+                                            <asp:Button ID="Finish_Button" runat="server" Text="Finish"  CommandName="Finish"/>
                                         </div>
                                         <asp:DataPager runat="server" ID="BottomDataPager" PageSize="20">
                                             <Fields>

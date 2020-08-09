@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -192,6 +193,7 @@ namespace MarigoldSystem.BLL
         }
 
         //returns the list of community
+        [DataObjectMethod(DataObjectMethodType.Select,false)]
         public List<Community> Get_Communities()
         {
             using(var context = new MarigoldSystemContext())
@@ -850,17 +852,32 @@ namespace MarigoldSystem.BLL
         //Updates Sites
         //public void UpdateSite(int siteId, int communityId, int siteTypeId, string description, string address, int area)
         //{
-        //    using(var context = new MarigoldSystemContext())
+        //    using (var context = new MarigoldSystemContext())
         //    {
         //        Site site = context.Sites.Find(siteId);
 
-        //        if(site == null)
+        //        if (site == null)
         //        {
         //            throw new Exception("The site you are trying to update does not exist anymore");
         //        }
         //        else
         //        {
 
+        //            if(site.Description != description)
+        //            {
+        //                site.Description = description;
+        //                context.Entry(site).Property(x => x.Description).IsModified = true;
+        //            }
+        //            if(site.StreetAddress != address)
+        //            {
+        //                site.StreetAddress = address;
+        //                context.Entry(site).Property(x => x.StreetAddress).IsModified = true;
+        //            }
+        //            if(site.Area != area)
+        //            {
+        //                site.Area = area;
+        //                context.Entry(site).Property(x => x.Area).IsModified = true;
+        //            }
         //        }
         //        //context.Entry(site).State = System.Data.Entity.EntityState.Modified;
         //        //context.SaveChanges();

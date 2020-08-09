@@ -253,11 +253,12 @@ namespace MarigoldSystem.BLL
                                                         .ToList();
                    
                     //Notifies the users that existing crew(s) are also assigned to work on the same site.
-                    if(jobCards != null)
+                    if(jobCards.Count > 0)
                     {
                         foreach(JobCard job in jobCards)
                         {
-                            message += job.Crew.Truck.TruckDescription + ", ";
+                            string unit = job.Crew.EquipmentID == null ? job.Crew.Truck.TruckDescription : job.Crew.Equipment.Description;
+                            message += unit + ", ";
                         }
                     }
 

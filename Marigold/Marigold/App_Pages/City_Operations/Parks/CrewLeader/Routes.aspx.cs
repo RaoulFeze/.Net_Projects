@@ -354,7 +354,12 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             GridViewRow row = sender as GridViewRow;
             row = RoutesGridView.Rows[e.RowIndex];
             int siteTypeId = int.Parse(SiteTypeID.Text);
-            
+
+            int siteId = int.Parse((row.FindControl("SiteID") as Label).Text);
+            int pin = int.Parse((row.FindControl("Pin") as Label).Text);
+            string description = (row.FindControl("Description") as TextBox).Text;
+            string address = (row.FindControl("Address") as TextBox).Text;
+            int area = int.Parse((row.FindControl("Area") as TextBox).Text);
 
             if (siteTypeId == 1 || siteTypeId == 2 || siteTypeId == 4 || siteTypeId == 5)
             {
@@ -364,12 +369,6 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             {
 
             }
-            int siteId = int.Parse((row.FindControl("SiteID") as Label).Text);
-            int pin = int.Parse((row.FindControl("Pin") as Label).Text);
-            //string communiy = (row.FindControl("Community") as TextBox).Text;
-            string description = (row.FindControl("Description") as TextBox).Text;
-            string address = (row.FindControl("Address") as TextBox).Text;
-            int area = int.Parse((row.FindControl("Area") as TextBox).Text);
 
 
             InfoUserControl.TryRun(() =>

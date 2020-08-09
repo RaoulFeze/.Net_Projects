@@ -95,41 +95,26 @@
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Description" SortExpression="Description">
-                    <EditItemTemplate>
-                        <asp:TextBox runat="server" Text='<%# Eval("Description") %>' ID="Description"></asp:TextBox>
-                    </EditItemTemplate>
                     <ItemTemplate>
                         <asp:Label runat="server" Text='<%# Bind("Description") %>' ID="Label3"></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Address" SortExpression="Address">
-                    <EditItemTemplate>
-                        <asp:TextBox runat="server" Text='<%# Eval("Address") %>' ID="Address"></asp:TextBox>
-                    </EditItemTemplate>
                     <ItemTemplate>
                         <asp:Label runat="server" Text='<%# Bind("Address") %>' ID="Label4"></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Area" SortExpression="Area">
-                    <EditItemTemplate>
-                        <asp:TextBox runat="server" Text='<%# Eval("Area") %>' ID="Area"></asp:TextBox>
-                    </EditItemTemplate>
                     <ItemTemplate>
                         <asp:Label runat="server" Text='<%# Bind("Area") %>' ID="Label5"></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Count" SortExpression="Count">
-                    <EditItemTemplate>
-                        <asp:TextBox runat="server" Text='<%# Eval("Count") %>' ID="TextBox6"></asp:TextBox>
-                    </EditItemTemplate>
                     <ItemTemplate>
                         <asp:Label runat="server" Text='<%# Bind("Count") %>' ID="Label6"></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Notes" SortExpression="Notes">
-                    <EditItemTemplate>
-                        <asp:TextBox runat="server" Text='<%# Eval("Notes") %>' ID="TextBox7"></asp:TextBox>
-                    </EditItemTemplate>
                     <ItemTemplate>
                         <asp:Label runat="server" Text='<%# Bind("Notes") %>' ID="Label7"></asp:Label>
                     </ItemTemplate>
@@ -189,7 +174,6 @@
                         <asp:Label runat="server" Text='<%# Bind("Watering", "{0:MMM-dd-yyyy}") %>' ID="Watering"></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:CommandField ShowEditButton="True" ButtonType="Button"></asp:CommandField>
             </Columns>
                 <PagerSettings FirstPageText="First" PreviousPageText="Previous" PageButtonCount="5"  NextPageText="Next" LastPageText="Last" Position="Top" Mode="NumericFirstLast" />
                 <PagerStyle VerticalAlign="Bottom" HorizontalAlign="Center" />

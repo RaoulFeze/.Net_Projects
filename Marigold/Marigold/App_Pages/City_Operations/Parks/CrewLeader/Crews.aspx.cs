@@ -27,13 +27,13 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     Response.Redirect("~/Login.aspx");
                 }
 
-                InfoUserControl.TryRun(() =>
-                {
+                //InfoUserControl.TryRun(() =>
+                //{
                     SecurityController security = new SecurityController();
                     UserId.Text = (security.GetCurrentUserId(Context.User.Identity.GetUserName())).ToString();
                     EmployeeController employee = new EmployeeController();
                     YardID.Text = employee.GetYardID(int.Parse(UserId.Text)).ToString();
-                });
+                //});
 
                 RefreshCurrentCrews();
                 
@@ -345,13 +345,14 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         /// <param name="e"></param>
         protected void Done_Click(object sender, EventArgs e)
         {
-            string category = (FleetCategory.SelectedItem.Text).Trim();
+            string category = (FleetCategory.SelectedIndex < 0) ? "" : FleetCategory.SelectedItem.Text.Trim();
             SiteMenu.Visible = true;
+
+            int driverId = 0;
 
             switch (category)
             {
                 case "Equipments":
-                    int driverId = 0;
                     //Retrieve the selected DriverID 
                     foreach (GridViewRow row in EmployeeGridView.Rows)
                     {
@@ -387,14 +388,54 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
 
                     }
                     break;
-                case "Trucks":
-                    EmployeeGridView.Visible = false;
-                    SelectUnitDDL.Visible = false;
-                    FleetCategory.ClearSelection();
-                    Done.Visible = false;
-                    CreateCrew.Visible = false;
-                    Cancel.Visible = false;
 
+                case "Trucks":
+
+                    //Retrieve the selected DriverID 
+                    foreach (GridViewRow row in EmployeeGridView.Rows)
+                    {
+                        if ((row.FindControl("SelectedDriver") as RadioButton).Checked == true)
+                        {
+                            driverId = int.Parse((row.FindControl("EmployeeID") as Label).Text);
+                        }
+                    }
+
+                    //Checks that a driver is selecetd. then proceed
+                    if (driverId == 0)
+                    {
+                        InfoUserControl.ShowInfo("Please select a driver");
+                    }
+                    else
+                    {
+                        CrewController crewManager = new CrewController();
+                        InfoUserControl.TryRun(() =>
+                        {
+                            crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId, category);
+                            //Refresh.Text = "Member";
+                            //EmployeeGridView.PageIndex = 0;
+                            //Cancel.Visible = true;
+                            //CreateCrew.Visible = false;
+                            RefreshCrewMember();
+                            RefreshCurrentCrews();
+                            //InfoUserControl.ShowInfo("Add Crew Members");
+                            List<CurrentCrews> crews = crewManager.GetCurrentCrews(int.Parse(YardID.Text));
+                            crews.Sort((x, y) => y.CrewID.CompareTo(x.CrewID));
+                            CrewID.Text = crews.Count <= 0 ? "" : (crews[0].CrewID).ToString();
+
+                            EmployeeGridView.Visible = false;
+                            SelectUnitDDL.Visible = false;
+                            FleetCategory.ClearSelection();
+                            Done.Visible = false;
+                            CreateCrew.Visible = false;
+                            Cancel.Visible = false;
+                        });
+                    }
+
+                    break;
+
+                case "":
+                    EmployeeGridView.Visible = false;
+                    Done.Visible = false;
                     break;
             }
         }
@@ -544,36 +585,43 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected void RouteListView_ItemCommand(object sender, ListViewCommandEventArgs e)
         {
             string message = "";
+            string command = e.CommandName;
 
-            //Get hold of the row that fired the event
-            ListViewDataItem item = RouteListView.Items[e.Item.DisplayIndex];
-            DropDownList list = item.FindControl("SelectTask") as DropDownList;
-
-            InfoUserControl.TryRun(() =>
+            switch (command)
             {
-                if (string.IsNullOrEmpty(CrewID.Text))
-                {
-                    InfoUserControl.ShowWarning("You must first create or select a Crew before adding a job site!");
-                }
-                else
-                {
+                case "AddSite":
+                    //Get hold of the row that fired the event
+                    ListViewDataItem item = RouteListView.Items[e.Item.DisplayIndex];
+                    DropDownList list = item.FindControl("SelectTask") as DropDownList;
 
-                    CrewController crewManager = new CrewController();
-                    message = crewManager.AddJobCard(int.Parse(CrewID.Text), int.Parse(e.CommandArgument.ToString()), int.Parse(list.SelectedValue));
-                    RefreshCurrentCrews();
-                }
-            });
+                    InfoUserControl.TryRun(() =>
+                    {
+                        if (string.IsNullOrEmpty(CrewID.Text))
+                        {
+                            InfoUserControl.ShowWarning("You must first create or select a Crew before adding a job site!");
+                        }
+                        else
+                        {
 
-            if (!string.IsNullOrEmpty(message))
-            {
-                InfoUserControl.ShowInfo("The following Crew(s) are already assigned to this same Site:  " + message);
+                            CrewController crewManager = new CrewController();
+                            message = crewManager.AddJobCard(int.Parse(CrewID.Text), int.Parse(e.CommandArgument.ToString()), int.Parse(list.SelectedValue));
+                            RefreshCurrentCrews();
+                        }
+                    });
+
+                    if (!string.IsNullOrEmpty(message))
+                    {
+                        InfoUserControl.ShowInfo("The following Crew(s) are already assigned to this same Site:  " + message);
+                    }
+                    break;
+
+                case "Finish":
+                    SiteMenu.Visible = false;
+                    RouteListView.Visible = false;
+                    break;
             }
+            
         }
 
-        protected void Finish_Button_Click(object sender, EventArgs e)
-        {
-
-            SiteMenu.Visible = false;
-        }
     }
 }

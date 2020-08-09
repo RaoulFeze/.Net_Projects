@@ -1,4 +1,4 @@
---Create DATABASE COE_DB
+--Drop DATABASE COE_DB
 
 --Drop table TrailerOperator
 
