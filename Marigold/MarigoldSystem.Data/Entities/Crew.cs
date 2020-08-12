@@ -13,7 +13,7 @@ namespace MarigoldSystem.Data.Entities
         public Crew()
         {
             CrewMembers = new HashSet<CrewMember>();
-            JobCards = new HashSet<JobCard>();
+            JobCardCrews = new HashSet<JobCardCrew>();
             ToolsChecklists = new HashSet<ToolsChecklist>();
         }
 
@@ -42,7 +42,7 @@ namespace MarigoldSystem.Data.Entities
         public virtual ICollection<CrewMember> CrewMembers { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<JobCard> JobCards { get; set; }
+        public virtual ICollection<JobCardCrew> JobCardCrews { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ToolsChecklist> ToolsChecklists { get; set; }

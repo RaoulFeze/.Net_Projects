@@ -39,8 +39,62 @@
                     </li>
                 </ul>
             </div>
-            
+            <asp:ObjectDataSource ID="JobCardStatusODS" runat="server"
+                OldValuesParameterFormatString="original_{0}"
+                SelectMethod="Get_JobCardStatus" TypeName="MarigoldSystem.BLL.CrewController">
+            </asp:ObjectDataSource>
             <div class="routes container-fluid">
+                <asp:GridView ID="JobCardStatusGridView" runat="server" 
+                    AutoGenerateColumns="False" 
+                    OnRowCancelingEdit="JobCardStatusGridView_RowCancelingEdit"
+                    OnRowEditing="JobCardStatusGridView_RowEditing"
+                    OnRowUpdating="JobCardStatusGridView_RowUpdating">
+                    <Columns>
+                        <asp:TemplateField HeaderText="JobCardID" SortExpression="JobCardID" Visible="false">
+                            <EditItemTemplate>
+                                <asp:TextBox runat="server" Text='<%# Bind("JobCardID") %>' ID="JobCardID" ></asp:TextBox>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label runat="server" Text='<%# Bind("JobCardID") %>' ID="Label1"></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Pin" SortExpression="Pin">
+                            <ItemTemplate>
+                                <asp:Label runat="server" Text='<%# Bind("Pin") %>' ID="Label2"></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Community" SortExpression="Community">
+                            <ItemTemplate>
+                                <asp:Label runat="server" Text='<%# Bind("Community") %>' ID="Label3"></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Description" SortExpression="Description">
+                            <ItemTemplate>
+                                <asp:Label runat="server" Text='<%# Bind("Description") %>' ID="Label4"></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Address" SortExpression="Address">
+                            <ItemTemplate>
+                                <asp:Label runat="server" Text='<%# Bind("Address") %>' ID="Label5"></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="AssignedDate" SortExpression="AssignedDate">
+                            <ItemTemplate>
+                                <asp:Label runat="server" Text='<%# Bind("AssignedDate", "{0:yy-MMM-dd}") %>' ID="Label6"></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="CompletedDate" SortExpression="CompletedDate">
+                            <EditItemTemplate>
+                                <asp:TextBox runat="server" Text='<%# Eval("CompletedDate") %>' ID="CompletedDate"></asp:TextBox>
+                                <asp:Calendar ID="CloseDateCalendar" runat="server" OnSelectionChanged="CloseDateCalendar_SelectionChanged" OnDayRender="CloseDateCalendar_DayRender" ></asp:Calendar>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label runat="server" Text='<%# Bind("CompletedDate", "{0:MMM-dd}") %>' ID="Label7"></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:CommandField ShowEditButton="True" EditText="Close JobCard"></asp:CommandField>
+                    </Columns>
+                </asp:GridView>
                 <div class="table table-striped table-bordered">
                     <asp:ListView ID="RouteListView" runat="server"
                         Visible="false"
@@ -307,7 +361,7 @@
                                             BorderWidth="1"
                                             BackColor="White"
                                             GridLines="None"
-                                            DataSource="<%#Item.JobCards %>">
+                                            DataSource="<%#Item.CardCrew %>">
                                             <Columns>
                                                 <asp:TemplateField>
                                                     <ItemTemplate>
@@ -326,7 +380,7 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
                                                     <ItemTemplate>
-                                                        <asp:LinkButton ID="RemoveSite" runat="server" CommandArgument='<%# Eval("JobCardID") %>' CommandName="DeleteJobCard" OnClientClick="return ConfirmRemoveSite()">
+                                                        <asp:LinkButton ID="RemoveSite" runat="server" CommandArgument='<%# Eval("JobCardCrewID") %>' CommandName="DeleteJobCard" OnClientClick="return ConfirmRemoveSite()">
                                                 <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span>
                                                         </asp:LinkButton>
                                                     </ItemTemplate>

@@ -69,6 +69,7 @@
     <Compile Include="Entities\Hazard.cs" />
     <Compile Include="Entities\HazardCategory.cs" />
     <Compile Include="Entities\JobCard.cs" />
+    <Compile Include="Entities\JobCardCrew.cs" />
     <Compile Include="Entities\LicenseClass.cs" />
     <Compile Include="Entities\OperatorPermit.cs" />
     <Compile Include="Entities\Role.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="Entities\SiteType.cs" />
     <Compile Include="Entities\Site_Audit_Trail.cs" />
     <Compile Include="Entities\Standing.cs" />
-    <Compile Include="Entities\sysdiagram.cs" />
     <Compile Include="Entities\Task.cs" />
     <Compile Include="Entities\Tool.cs" />
     <Compile Include="Entities\ToolsChecklist.cs" />
@@ -88,6 +88,7 @@
     <Compile Include="Entities\Yard.cs" />
     <Compile Include="Entities\YardEmployee.cs" />
     <Compile Include="POCO%27s\Job.cs" />
+    <Compile Include="POCO%27s\JobCardStatus.cs" />
     <Compile Include="POCO%27s\Member.cs" />
     <Compile Include="POCO%27s\RouteStatus.cs" />
     <Compile Include="POCO%27s\RouteSummary.cs" />

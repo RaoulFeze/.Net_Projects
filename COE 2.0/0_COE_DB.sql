@@ -1,4 +1,4 @@
---Drop DATABASE COE_DB
+--CREATE DATABASE COE_DB
 
 --Drop table TrailerOperator
 
@@ -18,6 +18,8 @@
 
 --Drop Table ToolsCheckList
 
+-- Drop Table JobCardCrew
+
 --Drop Table JobCard
 
 --Drop Table CrewMember
@@ -30,9 +32,10 @@
 
 --Drop Table Truck
 
+--Drop Table Site
+
 --Drop Table Community
 
---Drop Table Site
 
 --Drop table OperatorPermit
 
@@ -49,7 +52,6 @@
 --Drop table Standing
 
 --Drop table Task
-
 
 --Drop Table HazardCategory
 
@@ -328,7 +330,6 @@ create table JobCard
 	JobCardID Integer identity(1,1) not null constraint pk_JobCard primary key clustered,
 	SiteID int not null constraint fk_SiteHistory_to_Site references Site(SiteID),
 	TaskID int not null constraint kf_JobCard_To_Task references Task(TaskID),
-	CrewID int not null constraint fk_JobCard_To_Crew references Crew(CrewID),
 	TimeOnSite time null,
     TimeOffSite time null,
 	ActionRequired varchar(100) null,
@@ -338,6 +339,17 @@ create nonclustered index IX_JobCard_SiteID
 on JobCard(SiteID)
 create nonclustered index IX_JobCard_TaskID
 on JobCard(TaskID)
+
+create table JobCardCrew
+(
+	JobCardCrewID integer identity(1,1) not null  constraint PK_JobCardCrew primary key clustered,
+	CrewID int not null constraint fk_JobCardCrew_To_Crew references Crew(CrewID),
+	JobCardID int not null constraint FK_JobCardCrew_to_JobCard references JobCard(JobCardID)
+)
+create nonclustered index IX_JobCardCrew_CrewID
+on JobCardCrew(CrewID)
+create nonclustered index IX_JobCardCrew_JobCardID
+on JobCardCrew(JobCardID)
 
 create table ToolsChecklist
 (

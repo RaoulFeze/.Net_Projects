@@ -1,4 +1,3 @@
-
 using System;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,6 +28,7 @@ namespace MarigoldSystem.DAL
         public virtual DbSet<Hazard> Hazards { get; set; }
         public virtual DbSet<HazardCategory> HazardCategories { get; set; }
         public virtual DbSet<JobCard> JobCards { get; set; }
+        public virtual DbSet<JobCardCrew> JobCardCrews { get; set; }
         public virtual DbSet<LicenseClass> LicenseClasses { get; set; }
         public virtual DbSet<OperatorPermit> OperatorPermits { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
@@ -37,7 +37,6 @@ namespace MarigoldSystem.DAL
         public virtual DbSet<SiteHazard> SiteHazards { get; set; }
         public virtual DbSet<SiteType> SiteTypes { get; set; }
         public virtual DbSet<Standing> Standings { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Tool> Tools { get; set; }
         public virtual DbSet<ToolsChecklist> ToolsChecklists { get; set; }
@@ -68,7 +67,7 @@ namespace MarigoldSystem.DAL
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Crew>()
-                .HasMany(e => e.JobCards)
+                .HasMany(e => e.JobCardCrews)
                 .WithRequired(e => e.Crew)
                 .WillCascadeOnDelete(false);
 
@@ -188,6 +187,11 @@ namespace MarigoldSystem.DAL
             modelBuilder.Entity<JobCard>()
                 .Property(e => e.ActionRequired)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<JobCard>()
+                .HasMany(e => e.JobCardCrews)
+                .WithRequired(e => e.JobCard)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<JobCard>()
                 .HasMany(e => e.SiteHazards)

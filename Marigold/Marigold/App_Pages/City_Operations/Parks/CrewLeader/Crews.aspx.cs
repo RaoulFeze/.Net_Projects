@@ -27,21 +27,36 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     Response.Redirect("~/Login.aspx");
                 }
 
-                //InfoUserControl.TryRun(() =>
-                //{
+                InfoUserControl.TryRun(() =>
+                {
                     SecurityController security = new SecurityController();
                     UserId.Text = (security.GetCurrentUserId(Context.User.Identity.GetUserName())).ToString();
                     EmployeeController employee = new EmployeeController();
                     YardID.Text = employee.GetYardID(int.Parse(UserId.Text)).ToString();
-                //});
 
-                RefreshCurrentCrews();
+                    if (!IsPostBack)
+                    {
+                        PopulateRouteStatus();
+                    }
+                });
+
+            RefreshCurrentCrews();
                 
             }
             else
             {
                 Response.Redirect("~/Login.aspx");
             }
+        }
+        public void PopulateRouteStatus()
+        {
+            InfoUserControl.TryRun(() =>
+            {
+                CrewController crewManager = new CrewController();
+                List<JobCardStatus> cardStatus = crewManager.Get_JobCardStatus();
+                JobCardStatusGridView.DataSource = cardStatus;
+                JobCardStatusGridView.DataBind();
+            });
         }
         protected void CheckForException(object sender, ObjectDataSourceStatusEventArgs e)
         {
@@ -497,7 +512,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     InfoUserControl.TryRun(() =>
                     {
                         CrewController crewManager = new CrewController();
-                        crewManager.DeleteJobCard(int.Parse(e.CommandArgument.ToString()));
+                        crewManager.DeleteJobCardCrew(int.Parse(e.CommandArgument.ToString()));
                         RefreshCurrentCrews();
                     });
                     break;
@@ -623,5 +638,44 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             
         }
 
+        protected void CloseDateCalendar_SelectionChanged(object sender, EventArgs e)
+        {
+            Calendar calendar = sender as Calendar;
+            TextBox completedDate = ((GridViewRow)calendar.Parent.Parent).FindControl("CompletedDate") as TextBox;
+            completedDate.Text = calendar.SelectedDate.ToShortDateString();
+        }
+
+        protected void CloseDateCalendar_DayRender(object sender, DayRenderEventArgs e)
+        {
+            if (e.Day.IsOtherMonth)
+            {
+                e.Day.IsSelectable = false;
+                e.Cell.BackColor = System.Drawing.Color.DarkGray;
+            }
+        }
+
+        protected void JobCardStatusGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            int jobCardId = int.Parse((JobCardStatusGridView.Rows[e.RowIndex].FindControl("JobCardID") as TextBox).Text);
+            string completedDate = (JobCardStatusGridView.Rows[e.RowIndex].FindControl("CompletedData") as TextBox).Text;
+
+            CrewController crewManager = new CrewController();
+            crewManager.UpdateJobCard(jobCardId, completedDate);
+
+            JobCardStatusGridView.EditIndex = -1;
+            PopulateRouteStatus();
+        }
+
+        protected void JobCardStatusGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            JobCardStatusGridView.EditIndex = -1;
+            JobCardStatusGridView.DataBind();
+        }
+
+        protected void JobCardStatusGridView_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            JobCardStatusGridView.EditIndex = e.NewEditIndex;
+            PopulateRouteStatus();
+        }
     }
 }

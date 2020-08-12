@@ -12,6 +12,7 @@ namespace MarigoldSystem.Data.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public JobCard()
         {
+            JobCardCrews = new HashSet<JobCardCrew>();
             SiteHazards = new HashSet<SiteHazard>();
         }
 
@@ -20,8 +21,6 @@ namespace MarigoldSystem.Data.Entities
         public int SiteID { get; set; }
 
         public int TaskID { get; set; }
-
-        public int CrewID { get; set; }
 
         public TimeSpan? TimeOnSite { get; set; }
 
@@ -32,7 +31,8 @@ namespace MarigoldSystem.Data.Entities
 
         public DateTime? ClosedDate { get; set; }
 
-        public virtual Crew Crew { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JobCardCrew> JobCardCrews { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SiteHazard> SiteHazards { get; set; }

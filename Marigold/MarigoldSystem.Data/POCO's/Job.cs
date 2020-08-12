@@ -8,7 +8,7 @@ namespace MarigoldSystem.Data.POCO_s
 {
     public class Job
     {
-        public int JobCardID { get; set; }
+        public int JobCardCrewID { get; set; }
         public int Pin { get; set; }
         public string Address { get; set; }
     }

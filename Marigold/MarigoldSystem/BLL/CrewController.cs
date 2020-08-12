@@ -23,7 +23,7 @@ namespace MarigoldSystem.BLL
         //This method Creates a Crew 
         public void CreateCrew(int unitId, int driverId, string category)
         {
-            using(var context = new MarigoldSystemContext())
+            using (var context = new MarigoldSystemContext())
             {
                 // Check if the driver is already assigned in a different crew
                 List<int> CrewMemberIDs = (context.CrewMembers
@@ -65,7 +65,7 @@ namespace MarigoldSystem.BLL
                         break;
                 }
 
-           
+
                 if (crew == null)
                 {
                     //Create a new Crew
@@ -74,7 +74,7 @@ namespace MarigoldSystem.BLL
                     {
                         crew.EquipmentID = unitId;
                     }
-                    else  if (category == "Trucks")
+                    else if (category == "Trucks")
                     {
                         crew.TruckID = unitId;
                     }
@@ -98,7 +98,7 @@ namespace MarigoldSystem.BLL
         //This Method adds a Crew Member to a given Crew
         public void AddCrewMember(int crewId, int memberId)
         {
-            using(var context = new MarigoldSystemContext())
+            using (var context = new MarigoldSystemContext())
             {
                 CrewMember newCrewMember = new CrewMember();
                 // Check if the new crew member is  already assigned in a different crew
@@ -107,7 +107,7 @@ namespace MarigoldSystem.BLL
                                                         .Select(x => x.EmployeeID))
                                                         .ToList();
                 int count = context.Crews.Find(crewId).CrewMembers.Count();
-                if(count == 5)
+                if (count == 5)
                 {
                     throw new Exception("A crew cannot have more than five (5) crew members");
                 }
@@ -145,7 +145,7 @@ namespace MarigoldSystem.BLL
                              select new CurrentCrews
                              {
                                  CrewID = crew.CrewID,
-                                 Description = crew.Truck.TruckID.Equals(null)? crew.Equipment.Description : crew.Truck.TruckDescription,
+                                 Description = crew.Truck.TruckID.Equals(null) ? crew.Equipment.Description : crew.Truck.TruckDescription,
                                  Crew = (from member in context.CrewMembers
                                          where member.CrewID == crew.CrewID
                                          orderby member.Employee.FirstName ascending
@@ -155,14 +155,14 @@ namespace MarigoldSystem.BLL
                                              Name = member.Employee.FirstName + " " + member.Employee.LastName.Substring(0, 1) + "." + " " + (member.Driver == true ? "(D)" : " "),
                                              Phone = member.Employee.Phone
                                          }).ToList(),
-                                 JobCards = (from job in context.JobCards
+                                 CardCrew = (from job in context.JobCardCrews
                                              where job.CrewID == crew.CrewID
-                                             orderby job.Site.Pin ascending
+                                             orderby job.JobCard.Site.Pin
                                              select new Job
                                              {
-                                                 JobCardID = job.JobCardID,
-                                                 Pin = job.Site.Pin,
-                                                 Address = job.Site.StreetAddress
+                                                 JobCardCrewID = job.JobCardCrewID,
+                                                 Pin = job.JobCard.Site.Pin,
+                                                 Address = job.JobCard.Site.StreetAddress
                                              }).ToList()
                              }).ToList();
                 return crews;
@@ -172,7 +172,7 @@ namespace MarigoldSystem.BLL
         //This Method Remove a Crew Member from a given Crew
         public void RemoveCrewMember(int memberId, int crewId)
         {
-            using(var context = new MarigoldSystemContext())
+            using (var context = new MarigoldSystemContext())
             {
                 CrewMember member = context.CrewMembers.Find(memberId);
                 context.CrewMembers.Remove(member);
@@ -194,12 +194,12 @@ namespace MarigoldSystem.BLL
                 Crew crew = context.Crews.Find(crewId);
                 if (crew == null)
                 {
-                    throw new Exception("This Crew is no longer in the database");
+                    throw new Exception("This Crew  no longer exists");
                 }
                 else
                 {
                     List<CrewMember> crewMembers = crew.CrewMembers.Select(x => x).ToList();
-                    List<JobCard> JobCards = crew.JobCards.Select(x => x).ToList();
+                    List<JobCardCrew> jobCardCrews = crew.JobCardCrews.Select(x => x).ToList();
                     if (crewMembers.Count() > 0)
                     {
                         foreach (CrewMember cm in crewMembers)
@@ -208,11 +208,25 @@ namespace MarigoldSystem.BLL
                         }
                     }
 
-                    if (JobCards.Count() > 0 )
+                    if (jobCardCrews.Count() > 0)
                     {
-                        foreach (JobCard jobCard in JobCards)
+                        foreach (JobCardCrew jobCardCrew in jobCardCrews)
                         {
-                            context.JobCards.Remove(jobCard);
+                            int jobCardId = jobCardCrew.JobCardID;
+                            int count = context.JobCardCrews
+                                                        .Where(x => x.JobCardID == jobCardId)
+                                                        .Select(x => x)
+                                                        .Count();
+                            if (count > 1)
+                            {
+                                context.JobCardCrews.Remove(jobCardCrew);
+                            }
+                            else
+                            {
+                                JobCard jobCard = context.JobCards.Find(jobCardId);
+                                context.JobCardCrews.Remove(jobCardCrew);
+                                context.JobCards.Remove(jobCard);
+                            }
                         }
                     }
                 }
@@ -234,40 +248,49 @@ namespace MarigoldSystem.BLL
         public string AddJobCard(int crewId, int siteId, int taskId)
         {
             string message = "";
-            using(var context = new MarigoldSystemContext())
+            using (var context = new MarigoldSystemContext())
             {
-                JobCard jobCard = context.JobCards
-                                            .Where(x => x.CrewID == crewId && x.SiteID == siteId)
+                JobCardCrew jobCardCrew = context.JobCardCrews
+                                            .Where(x => x.CrewID == crewId && x.JobCard.SiteID == siteId)
                                             .Select(x => x)
                                             .FirstOrDefault();
-                if(jobCard != null)
+                if (jobCardCrew != null)
                 {
                     //Check if the same site is not already assigned to the current crew
                     throw new Exception("This site is already assigned to the current Crew");
                 }
                 else
                 {
-                    List<JobCard> jobCards = context.JobCards
-                                                        .Where(x => x.SiteID == siteId && DbFunctions.TruncateTime(x.Crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
+                    List<JobCardCrew> jobCardCrews = context.JobCardCrews
+                                                        .Where(x => x.JobCard.SiteID == siteId && DbFunctions.TruncateTime(x.Crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
                                                         .Select(x => x)
                                                         .ToList();
-                   
+
                     //Notifies the users that existing crew(s) are also assigned to work on the same site.
-                    if(jobCards.Count > 0)
+                    if (jobCardCrews.Count > 0)
                     {
-                        foreach(JobCard job in jobCards)
+                        foreach (JobCardCrew job in jobCardCrews)
                         {
                             string unit = job.Crew.EquipmentID == null ? job.Crew.Truck.TruckDescription : job.Crew.Equipment.Description;
                             message += unit + ", ";
                         }
+                        jobCardCrew = new JobCardCrew();
+                        jobCardCrew.CrewID = crewId;
+                        jobCardCrew.JobCardID = jobCardCrews[0].JobCardID;
+                        context.JobCardCrews.Add(jobCardCrew);
                     }
+                    else
+                    {
+                        JobCard jobCard = new JobCard();
+                        jobCard.SiteID = siteId;
+                        jobCard.TaskID = taskId;
+                        context.JobCards.Add(jobCard);
 
-                    //Create the new JobCard
-                    jobCard = new JobCard();
-                    jobCard.CrewID = crewId;
-                    jobCard.SiteID = siteId;
-                    jobCard.TaskID = taskId;
-                    context.JobCards.Add(jobCard);
+                        jobCardCrew = new JobCardCrew();
+                        jobCardCrew.CrewID = crewId;
+
+                        jobCard.JobCardCrews.Add(jobCardCrew);
+                    };
                     context.SaveChanges();
                 }
                 return message;
@@ -278,12 +301,59 @@ namespace MarigoldSystem.BLL
         /// This method deletes a jobCard
         /// </summary>
         /// <param name="jobCardId"></param>
-        public void DeleteJobCard(int jobCardId)
+        public void DeleteJobCardCrew(int jobCardCrewId)
+        {
+            using (var context = new MarigoldSystemContext())
+            {
+                JobCardCrew jobCardCrew = context.JobCardCrews.Find(jobCardCrewId);
+                int count = context.JobCardCrews
+                                            .Where(x => x.JobCardID == jobCardCrew.JobCardID)
+                                            .Select(x => x)
+                                            .Count();
+                if (count > 1)
+                {
+                    context.JobCardCrews.Remove(jobCardCrew);
+                }
+                else
+                {
+                    int jobCardId = jobCardCrew.JobCardID;
+                    JobCard jobCard = context.JobCards.Find(jobCardId);
+                    context.JobCardCrews.Remove(jobCardCrew);
+                    context.JobCards.Remove(jobCard);
+                }
+                context.SaveChanges();
+            }
+        }
+
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public List<JobCardStatus> Get_JobCardStatus()
+        {
+            using (var context = new MarigoldSystemContext())
+            {
+                return context.JobCards
+                                .Where(x => x.ClosedDate == null)
+                                .Select(job => new JobCardStatus
+                                {
+                                    JobCardID = job.JobCardID,
+                                    Pin = job.Site.Pin,
+                                    Community = job.Site.Community.Name,
+                                    Description = job.Site.Description,
+                                    Address = job.Site.StreetAddress,
+                                    AssignedDate = job.JobCardCrews.FirstOrDefault().Crew.CrewDate,
+                                    CompletedDate = job.ClosedDate
+                                }).ToList();
+            }
+        }
+
+        [DataObjectMethod(DataObjectMethodType.Update, false)]
+        public void UpdateJobCard(int jobCardId, string completedDate)
         {
             using(var context = new MarigoldSystemContext())
             {
                 JobCard jobCard = context.JobCards.Find(jobCardId);
-                context.JobCards.Remove(jobCard);
+                jobCard.ClosedDate = DateTime.Parse(completedDate);
+                context.Entry(jobCard).Property(x => x.ClosedDate).IsModified = true;
+                context.Entry(jobCard).State = System.Data.Entity.EntityState.Modified;
                 context.SaveChanges();
             }
         }

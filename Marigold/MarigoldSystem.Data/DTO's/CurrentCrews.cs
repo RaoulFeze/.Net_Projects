@@ -1,4 +1,5 @@
-﻿using MarigoldSystem.Data.POCO_s;
+﻿using MarigoldSystem.Data.Entities;
+using MarigoldSystem.Data.POCO_s;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace MarigoldSystem.Data.DTO_s
 		public int CrewID { get; set; }
 		public string Description { get; set; }
 		public List<Member> Crew { get; set; }
-		public List<Job> JobCards { get; set; }
+		public List<Job> CardCrew { get; set; }
 	}
 }
