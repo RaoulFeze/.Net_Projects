@@ -50,7 +50,53 @@
 	margin-left: auto;
 }
 /***************************CREW PAGE*******************************/
-.crew-content-layout {
+:root{
+	--paneColor: #E8E8E8;
+	--tabSelected:#COCOCO;
+	--borderColor: #000000;
+}
+.crew-wrapper {
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-template-rows:84vh 3.5vh;
+	grid-template-areas:
+		"p p p p p r r r r r r r"
+		"s s s s s s s s s s s s";
+	grid-column-gap:5px;
+}
+.crew-pane{
+	grid-area:p;
+	display:grid;
+	grid-template-columns:1fr;
+	grid-template-rows:4vh 29vh 50vh;
+	grid-row-gap:5px;
+}
+.filter-search {
+	display:flex;
+	border: 2px solid var(--borderColor);
+	background-color: var(--paneColor);
+}
+.selection-pane {
+	border: 2px solid var(--borderColor);
+	background-color: var(--paneColor);
+}
+.current-crews {
+	border: 2px solid var(--borderColor);
+	border-bottom: 1px solid var(--borderColor);
+	background-color: var(--paneColor);
+}
+.jobcard-routes {
+	grid-area: r;
+	border: 2px solid var(--borderColor);
+	border-bottom: 1px solid var(--borderColor);
+	background-color: var(--paneColor);
+}
+.summary {
+	grid-area: s;
+	border: 1px solid var(--borderColor);
+	background-color: var(--paneColor);
+}
+/*.crew-content-layout {
 	margin: 0 10px 0 10px;
 	background-color: #FFFFFF;
 	clear: both;
@@ -81,14 +127,14 @@ margin-top: 10px;
 color: #000000;
 background-color: #F8F8F8;
 }
-.site-listview {
+.site-listview {*/
 	/*width:initial;*/
-	margin-right:auto;
+	/*margin-right:auto;
 	margin-left:auto;
 }
-.routes{
+.routes{*/
 	/*margin: 0 auto 15px auto;*/
-	background-color:#FFFFFF;
+	/*background-color:#FFFFFF;
 }
 
 .table .table-striped .table-bordered {
@@ -231,7 +277,7 @@ background-color: #F8F8F8;
 .col-12 {
 	padding-top:20px;
 	clear: both;
-}
+}*/
 
 .info-message {
 	margin: 5px auto 5px auto;
