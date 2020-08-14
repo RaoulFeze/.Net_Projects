@@ -140,7 +140,7 @@ namespace MarigoldSystem.BLL
             using (var context = new MarigoldSystemContext())
             {
                 var crews = (from crew in context.Crews
-                             where (crew.Truck.YardID == yardId || crew.Equipment.YardID == yardId) && DbFunctions.TruncateTime(crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today)
+                             where (crew.Truck.YardID == yardId || crew.Equipment.YardID == yardId && DbFunctions.TruncateTime(crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
                              orderby crew.CrewID descending
                              select new CurrentCrews
                              {

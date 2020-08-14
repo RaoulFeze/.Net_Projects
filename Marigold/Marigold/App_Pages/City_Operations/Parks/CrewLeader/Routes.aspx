@@ -17,30 +17,35 @@
     </div>
     <div class="route-status">
  <div class="search-area">
-    <div class="search-box container">
-        <div class="search-label">
-        <asp:Label ID="Label8" runat="server" Text="Search"></asp:Label></div>
-        <div class="search-category">
-        <asp:DropDownList ID="SearchCategory" runat="server"></asp:DropDownList></div>
-        <div class="search-criteria">
-        <asp:TextBox ID="SearchCriteria" runat="server"></asp:TextBox></div>
-        <div class="task-option">
-        <asp:RadioButtonList ID="TaskOption" runat="server"
-             RepeatDirection="Horizontal"
-             CellPadding="5">
-             <asp:ListItem Value ="1">&nbsp;SBM</asp:ListItem>
-             <asp:ListItem Value ="2">&nbsp;Grass</asp:ListItem>
-             <asp:ListItem Value ="3">&nbsp;Watering</asp:ListItem>
-             <asp:ListItem Value ="4">&nbsp;Planting</asp:ListItem>
-        </asp:RadioButtonList></div>
-        <div class="season-ddl">
-        <asp:DropDownList ID="SeasonDDL" runat="server"></asp:DropDownList></div>
-        
-        <div class="go-clear-search">
-            <asp:Button ID="SearchButton" runat="server" Text="Search" OnClick="SearchButton_Click" />&nbsp;&nbsp;&nbsp;
-            <asp:Button ID="ClearSearch" runat="server" Text="Clear" OnClick="ClearSearch_Click"/>
-        </div>
-    </div>
+     <div class="search-box container">
+         <div class="search-label">
+             <asp:Label ID="Label8" runat="server" Text="Search"></asp:Label>
+         </div>
+         <div class="search-category">
+             <asp:DropDownList ID="SearchCategory" runat="server"></asp:DropDownList>
+         </div>
+         <div class="search-criteria">
+             <asp:TextBox ID="SearchCriteria" runat="server"></asp:TextBox>
+         </div>
+         <div class="task-option">
+             <asp:RadioButtonList ID="TaskOption" runat="server"
+                 RepeatDirection="Horizontal"
+                 CellPadding="5">
+                 <asp:ListItem Value="1">&nbsp;SBM</asp:ListItem>
+                 <asp:ListItem Value="2">&nbsp;Grass</asp:ListItem>
+                 <asp:ListItem Value="3">&nbsp;Watering</asp:ListItem>
+                 <asp:ListItem Value="4">&nbsp;Planting</asp:ListItem>
+             </asp:RadioButtonList>
+         </div>
+         <div class="season-ddl">
+             <asp:DropDownList ID="SeasonDDL" runat="server"></asp:DropDownList>
+         </div>
+
+         <div class="go-clear-search">
+             <asp:Button ID="SearchButton" runat="server" Text="Search" OnClick="SearchButton_Click" />&nbsp;&nbsp;&nbsp;
+            <asp:Button ID="ClearSearch" runat="server" Text="Clear" OnClick="ClearSearch_Click" />
+         </div>
+     </div>
      </div>
         <div class="route-status-menu">
             <asp:Menu ID="RouteMenu" runat="server"

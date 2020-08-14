@@ -1,4 +1,14 @@
-﻿/**************************ROUTE PAGE******************************/
+﻿.info-message {
+	margin: 5px auto 5px auto;
+	padding: 0 15px;
+	height: 50px;
+}
+
+.glyphicon-remove {
+	color: red;
+}
+
+/**************************ROUTE PAGE******************************/
 .search-criteria input {
 	border: 1px solid black;
 	padding:0 0 0 5px;
@@ -52,8 +62,10 @@
 /***************************CREW PAGE*******************************/
 :root{
 	--paneColor: #E8E8E8;
-	--tabSelected:#COCOCO;
+	--tabSelected:#F2F2F2;
 	--borderColor: #000000;
+	--fontSize:1.1em;
+	--tabDefault:4B4B4B;
 }
 .crew-wrapper {
 	display: grid;
@@ -62,38 +74,151 @@
 	grid-template-areas:
 		"p p p p p r r r r r r r"
 		"s s s s s s s s s s s s";
-	grid-column-gap:5px;
+	grid-column-gap:0.195vw;
+	margin: 0 0.39vw;
 }
 .crew-pane{
 	grid-area:p;
 	display:grid;
 	grid-template-columns:1fr;
 	grid-template-rows:4vh 29vh 50vh;
-	grid-row-gap:5px;
+	grid-row-gap:0.5vh;
 }
+/*********SEARCH BAR ELEMENTS****************/
 .filter-search {
-	display:flex;
+	display: flex;
 	border: 2px solid var(--borderColor);
 	background-color: var(--paneColor);
+	align-items: center;
+	padding: 0 10px;
 }
+/**/.fleet-category {
+		font-size: var(--fontSize);
+	}
+/**/.UnitDDL {
+		border-radius: 5px;
+		border: 1px solid var(--borderColor);
+		font-size: var(--fontSize);
+		padding: 2px;
+	}
+/**/.btn-crew-member {
+		border-radius: 2.5px;
+		border: 1px solid #000000;
+		font-size: var(--fontSize);
+	}
+/**/.btn-done {
+		border-radius: 2.5px;
+		border: 1px solid var(--borderColor);
+		background-color: forestgreen;
+		color: #FFFFFF;
+		font-size: var(--fontSize);
+	}
+/**/.btn-cancel {
+		border-radius: 2.5px;
+		border: 1px solid var(--borderColor);
+		background-color: #E80000;
+		color: #FFFFFF;
+		font-size: var(--fontSize);
+	}
+/*********END SEARCH BAR ELEMENTS****************/
+
+/*******CREW SELECTION ELEMENTS******************/
 .selection-pane {
 	border: 2px solid var(--borderColor);
 	background-color: var(--paneColor);
+	overflow:auto;
 }
+/**/.select-employee {
+	background-color: #FFFFFF;
+	width: 95%;
+	margin: 10px auto;
+	}
+/*******END CREW SELECTION ELEMENTS******************/
+
+/******************CURRENT CREWS**********************/
 .current-crews {
 	border: 2px solid var(--borderColor);
 	border-bottom: 1px solid var(--borderColor);
 	background-color: var(--paneColor);
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows:1fr auto;
+	grid-column-gap:5px;
+	padding:15px;
+	overflow:auto;
 }
+/**/.crew-header{
+		grid-column:1/-1;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		margin-top:5px;
+    }
+/**//**/.crew-linkbutton{
+			margin:0 5px;
+	    }
+/**/.crew-members{
+		grid-column:1;
+		margin-bottom:10px;
+	}
+/**/.job-cards{
+		grid-column:2/-1;
+		margin-bottom:10px;
+	}
+/******************END CURRENT CREWS**********************/
+/******************JOBCARDS AND ROUTES********************/
 .jobcard-routes {
 	grid-area: r;
 	border: 2px solid var(--borderColor);
 	border-bottom: 1px solid var(--borderColor);
 	background-color: var(--paneColor);
+	overflow: auto;
 }
+*/**/#JobcardTitle {
+		text-align: center;
+	}
+	.menu-control{
+		display:block;
+		padding:10px 0 0 50px;
+		font-size:var(--fontSize);
+		border-bottom:1px solid var(--borderColor);
+	}
+	.nav-tab{
+		border:1px solid var(--borderColor);
+		border-top-left-radius:5px;
+		border-top-right-radius:5px;
+		background-color:var(--tabDefault);
+		border-bottom:0;
+	}
+.activeTab {
+	background-color: darkred;
+}
+	.menu-control > ul{
+		list-style:none;
+		display:inline-flex;
+	}
+	/**/ .jobcard-routes > h3 {
+		text-align: center;
+		margin: 10px 0;
+	}
+/**/ .jobsite-lv {
+		background-color: #FFFFFF;
+		margin: 0 auto 10px auto;
+		}
+/**//**/.btn-finish{
+			float:right;
+		}
+/**/.close-jobcards {
+		background-color: #FFFFFF;
+		width: 95%;
+		margin: 10px auto;
+	}
+/******************END JOBCARDS AND ROUTES********************/
 .summary {
 	grid-area: s;
 	border: 1px solid var(--borderColor);
+	border-left: 2px solid var(--borderColor);
+	border-right: 2px solid var(--borderColor);
 	background-color: var(--paneColor);
 }
 /*.crew-content-layout {
@@ -279,9 +404,4 @@ background-color: #F8F8F8;
 	clear: both;
 }*/
 
-.info-message {
-	margin: 5px auto 5px auto;
-	padding: 0 15px;
-	height:50px;
-}
 

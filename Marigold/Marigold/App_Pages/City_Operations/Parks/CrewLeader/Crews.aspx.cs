@@ -48,6 +48,9 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 Response.Redirect("~/Login.aspx");
             }
         }
+        /// <summary>
+        /// This method populates JobCards
+        /// </summary>
         public void PopulateRouteStatus()
         {
             InfoUserControl.TryRun(() =>
@@ -56,6 +59,8 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 List<JobCardStatus> cardStatus = crewManager.Get_JobCardStatus();
                 JobCardStatusGridView.DataSource = cardStatus;
                 JobCardStatusGridView.DataBind();
+                JobCardStatusGridView.Visible = true;
+                JobcardTitle.Visible = true;
             });
         }
         protected void CheckForException(object sender, ObjectDataSourceStatusEventArgs e)
@@ -362,6 +367,9 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         {
             string category = (FleetCategory.SelectedIndex < 0) ? "" : FleetCategory.SelectedItem.Text.Trim();
             SiteMenu.Visible = true;
+            JobCardStatusGridView.Visible = false;
+            JobcardTitle.Visible = false;
+
 
             int driverId = 0;
 
@@ -490,6 +498,8 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     string crew = "";
                     SiteMenu.Visible = true;
                     Done.Visible = true;
+                    JobCardStatusGridView.Visible = false;
+                    JobcardTitle.Visible = false;
                     InfoUserControl.TryRun(() =>
                     {
                         FleetController fleet = new FleetController();
@@ -597,6 +607,15 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
 
         }
 
+        /// <summary>
+        /// This event fires when the user add a job site to a crew or click on the Finish button
+        ///     When adding a job site to a crew, it first verifies that a crew is selected
+        ///         Then add the Job site 
+        ///     When user click on the Finish button, it turns off the site menu and the Routes
+        ///     It turns on the Job Cards GridView
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void RouteListView_ItemCommand(object sender, ListViewCommandEventArgs e)
         {
             string message = "";
@@ -633,11 +652,17 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 case "Finish":
                     SiteMenu.Visible = false;
                     RouteListView.Visible = false;
+                    PopulateRouteStatus();
                     break;
             }
             
         }
 
+        /// <summary>
+        /// This event fires when the user select a date from the calendar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void CloseDateCalendar_SelectionChanged(object sender, EventArgs e)
         {
             Calendar calendar = sender as Calendar;
@@ -645,6 +670,13 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             completedDate.Text = calendar.SelectedDate.ToShortDateString();
         }
 
+        /// <summary>
+        /// This event fires when the calendar is displayed in the GriView
+        ///     It disable the days that do not belong to the cuurrent month
+        ///         displayed in the calendar and change the backColor.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void CloseDateCalendar_DayRender(object sender, DayRenderEventArgs e)
         {
             if (e.Day.IsOtherMonth)
@@ -654,10 +686,15 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             }
         }
 
+        /// <summary>
+        /// This event fires when the user closes (updates the completed Date of) a Job Card
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void JobCardStatusGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             int jobCardId = int.Parse((JobCardStatusGridView.Rows[e.RowIndex].FindControl("JobCardID") as TextBox).Text);
-            string completedDate = (JobCardStatusGridView.Rows[e.RowIndex].FindControl("CompletedData") as TextBox).Text;
+            string completedDate = (JobCardStatusGridView.Rows[e.RowIndex].FindControl("CompletedDate") as TextBox).Text;
 
             CrewController crewManager = new CrewController();
             crewManager.UpdateJobCard(jobCardId, completedDate);
@@ -666,12 +703,24 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             PopulateRouteStatus();
         }
 
+        /// <summary>
+        /// This event fires when the user cancel the Editing of a Job Card
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void JobCardStatusGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
         {
             JobCardStatusGridView.EditIndex = -1;
             JobCardStatusGridView.DataBind();
+            PopulateRouteStatus();
         }
 
+        /// <summary>
+        /// This event fires when the user click on Edit in the GridView
+        ///     It enables the user to set the completed Date in a Job Card
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void JobCardStatusGridView_RowEditing(object sender, GridViewEditEventArgs e)
         {
             JobCardStatusGridView.EditIndex = e.NewEditIndex;

@@ -8,6 +8,10 @@ body {
 	padding-bottom: 10vh;
 	min-height:100vh;
 }
+h1, h2, h3, h4, ul{
+	margin:0;
+	padding:0;
+}
 
 .body-content {
 	min-height: calc(100vh -10vh - 61.5px);
