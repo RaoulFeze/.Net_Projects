@@ -141,6 +141,33 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected global::System.Web.UI.WebControls.Repeater AllCurrentCrews;
 
         /// <summary>
+        /// UnitReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label UnitReport;
+
+        /// <summary>
+        /// UnitReoprtGV control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView UnitReoprtGV;
+
+        /// <summary>
+        /// UnitReportODS control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ObjectDataSource UnitReportODS;
+
+        /// <summary>
         /// JobcardTitle control.
         /// </summary>
         /// <remarks>
@@ -177,6 +204,15 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected global::System.Web.UI.WebControls.LinkButton BRoute;
 
         /// <summary>
+        /// GRoute control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton GRoute;
+
+        /// <summary>
         /// WRoute control.
         /// </summary>
         /// <remarks>
@@ -193,15 +229,6 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton PRoute;
-
-        /// <summary>
-        /// GRoute control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton GRoute;
 
         /// <summary>
         /// JobCardStatusGridView control.
@@ -231,12 +258,12 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected global::System.Web.UI.WebControls.ObjectDataSource TaskODS;
 
         /// <summary>
-        /// ObjectDataSource1 control.
+        /// Routes_Summary control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSource1;
+        protected global::System.Web.UI.WebControls.ObjectDataSource Routes_Summary;
     }
 }

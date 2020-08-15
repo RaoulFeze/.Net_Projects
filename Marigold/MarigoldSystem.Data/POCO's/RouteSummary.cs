@@ -16,5 +16,7 @@ namespace MarigoldSystem.Data.POCO_s
 		public int Area { get; set; }
 		public int Count { get; set; }
 		public DateTime? LastDate { get; set; }
+		public DateTime? Planting { get; set; }
+		public DateTime? Uprooting { get; set; }
 	}
 }

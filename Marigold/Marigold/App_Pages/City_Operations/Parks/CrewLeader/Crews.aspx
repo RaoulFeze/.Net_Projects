@@ -189,6 +189,62 @@
         </div>
         <div class="jobcard-routes">
             <h3>
+                <asp:Label ID="UnitReport" runat="server" Text="Unit Reports"></asp:Label>
+            </h3>
+            <asp:GridView ID="UnitReoprtGV" runat="server" 
+                AutoGenerateColumns="False" 
+                DataSourceID="UnitReportODS" 
+                CssClass="table table-striped table-bordered container close-jobcards"
+                AllowPaging="True">
+                <Columns>
+                    <asp:TemplateField  ItemStyle-HorizontalAlign="Center">
+                        <ItemTemplate>
+                            <%# Container.DataItemIndex + 1%>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="CrewID" SortExpression="CrewID" Visible="False">
+                        <ItemTemplate>
+                            <asp:Label runat="server" Text='<%# Bind("CrewID") %>' ID="CrewID"></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField >
+                    <asp:TemplateField HeaderText="Date" SortExpression="Date"  ItemStyle-HorizontalAlign="Center">
+                        <ItemTemplate>
+                            <asp:Label runat="server" Text='<%# Bind("Date", "{0:yyyy-MMM-dd}") %>' ID="Date"></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Unit" SortExpression="Unit">
+                        <ItemTemplate>
+                            <asp:Label runat="server" Text='<%# Bind("Unit") %>' ID="Unit"></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="KM_Start" SortExpression="KM_Start">
+                        <ItemTemplate>
+                            <asp:TextBox runat="server" Text='<%# Bind("KM_Start") %>' ID="KM_Start"></asp:TextBox>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="KM_End" SortExpression="KM_End">
+                        <ItemTemplate>
+                            <asp:TextBox runat="server" Text='<%# Bind("KM_End") %>' ID="KM_End"></asp:TextBox>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Comment" SortExpression="Comment">
+                        <ItemTemplate>
+                            <asp:TextBox runat="server" Text='<%# Bind("Comment") %>' ID="Comment"></asp:TextBox>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                </Columns>
+            </asp:GridView>
+            
+            
+            <asp:ObjectDataSource ID="UnitReportODS" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetUnitReports" TypeName="MarigoldSystem.BLL.CrewController">
+                <SelectParameters>
+                    <asp:ControlParameter ControlID="YardID" PropertyName="Text" Name="yardId" Type="Int32"></asp:ControlParameter>
+                </SelectParameters>
+            </asp:ObjectDataSource>
+
+
+            <h3>
                 <asp:Label ID="JobcardTitle" runat="server" Text="Active Job Cards"></asp:Label>
             </h3>
             <div class="menu-control" id="SiteMenu" runat="server" visible="false">
@@ -200,13 +256,13 @@
                         <asp:LinkButton ID="BRoute" runat="server" CssClass="nav-link tab-menu" OnClick="BRoute_Click">B Routes</asp:LinkButton>
                     </li>
                     <li class="nav-tab" onclick="activeTab(event)">
+                        <asp:LinkButton ID="GRoute" runat="server" CssClass="nav-link tab-menu" OnClick="GRoute_Click">Grass Routes</asp:LinkButton>
+                    </li>
+                    <li class="nav-tab" onclick="activeTab(event)">
                         <asp:LinkButton ID="WRoute" runat="server" CssClass="nav-link tab-menu" OnClick="WRoute_Click">Watering Routes</asp:LinkButton>
                     </li>
                     <li class="nav-tab" onclick="activeTab(event)">
                         <asp:LinkButton ID="PRoute" runat="server" CssClass="nav-link tab-menu" OnClick="PRoute_Click">Planting Routes</asp:LinkButton>
-                    </li>
-                    <li class="nav-tab" onclick="activeTab(event)">
-                        <asp:LinkButton ID="GRoute" runat="server" CssClass="nav-link tab-menu" OnClick="GRoute_Click">Grass Routes</asp:LinkButton>
                     </li>
                 </ul>
             </div>
@@ -217,7 +273,7 @@
                     OnRowEditing="JobCardStatusGridView_RowEditing"
                     OnRowUpdating="JobCardStatusGridView_RowUpdating">
                  <Columns>
-                     <asp:TemplateField>
+                     <asp:TemplateField  ItemStyle-HorizontalAlign="Center">
                          <ItemTemplate>
                              <%# Container.DataItemIndex + 1%>
                          </ItemTemplate>
@@ -230,7 +286,7 @@
                              <asp:Label runat="server" Text='<%# Bind("JobCardID") %>' ID="Label1" Visible="false"></asp:Label>
                          </ItemTemplate>
                      </asp:TemplateField>
-                     <asp:TemplateField HeaderText="Pin" SortExpression="Pin">
+                     <asp:TemplateField HeaderText="Pin" SortExpression="Pin"  ItemStyle-HorizontalAlign="Center">
                          <ItemTemplate>
                              <asp:Label runat="server" Text='<%# Bind("Pin") %>' ID="Label2"></asp:Label>
                          </ItemTemplate>
@@ -250,7 +306,7 @@
                              <asp:Label runat="server" Text='<%# Bind("Address") %>' ID="Label5"></asp:Label>
                          </ItemTemplate>
                      </asp:TemplateField>
-                     <asp:TemplateField HeaderText="AssignedDate" SortExpression="Assigned Date">
+                     <asp:TemplateField HeaderText="AssignedDate" SortExpression="Assigned Date"  ItemStyle-HorizontalAlign="Center">
                          <ItemTemplate>
                              <asp:Label runat="server" Text='<%# Bind("AssignedDate", "{0:yy-MMM-dd}") %>' ID="Label6"></asp:Label>
                          </ItemTemplate>
@@ -275,7 +331,7 @@
             <div class="table table-striped table-bordered jobsite-lv">
                     <asp:ListView ID="RouteListView" runat="server"
                         Visible="false"
-                        DataSourceID="ObjectDataSource1"
+                        DataSourceID="Routes_Summary"
                         OnItemCommand="RouteListView_ItemCommand">
                         <AlternatingItemTemplate>
                             <tr>
@@ -396,8 +452,12 @@
         </div>
         <div class="summary"></div>
     </div>
-    <asp:ObjectDataSource ID="TaskODS" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetTasks" TypeName="MarigoldSystem.BLL.RouteController"></asp:ObjectDataSource>
-     <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetRouteSummaries" TypeName="MarigoldSystem.BLL.RouteController">
+    <asp:ObjectDataSource ID="TaskODS" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetTasks" TypeName="MarigoldSystem.BLL.RouteController">
+        <SelectParameters>
+            <asp:ControlParameter ControlID="SiteTypeID" PropertyName="Text" Name="siteTypeId" Type="Int32"></asp:ControlParameter>
+        </SelectParameters>
+    </asp:ObjectDataSource>
+     <asp:ObjectDataSource ID="Routes_Summary" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetRouteSummaries" TypeName="MarigoldSystem.BLL.RouteController">
         <SelectParameters>
             <asp:ControlParameter ControlID="YardID" PropertyName="Text" Name="yardId" Type="Int32"></asp:ControlParameter>
             <asp:ControlParameter ControlID="SiteTypeID" PropertyName="Text" Name="siteTypeId" Type="Int32"></asp:ControlParameter>

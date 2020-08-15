@@ -93,6 +93,7 @@
     <Compile Include="POCO%27s\RouteStatus.cs" />
     <Compile Include="POCO%27s\RouteSummary.cs" />
     <Compile Include="POCO%27s\TruckDriver.cs" />
+    <Compile Include="POCO%27s\UnitReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

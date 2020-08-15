@@ -140,7 +140,7 @@ namespace MarigoldSystem.BLL
             using (var context = new MarigoldSystemContext())
             {
                 var crews = (from crew in context.Crews
-                             where (crew.Truck.YardID == yardId || crew.Equipment.YardID == yardId && DbFunctions.TruncateTime(crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
+                             where ((crew.Truck.YardID == yardId || crew.Equipment.YardID == yardId) && DbFunctions.TruncateTime(crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
                              orderby crew.CrewID descending
                              select new CurrentCrews
                              {
@@ -156,7 +156,7 @@ namespace MarigoldSystem.BLL
                                              Phone = member.Employee.Phone
                                          }).ToList(),
                                  CardCrew = (from job in context.JobCardCrews
-                                             where job.CrewID == crew.CrewID
+                                             where job.CrewID == crew.CrewID && job.JobCard.ClosedDate == null
                                              orderby job.JobCard.Site.Pin
                                              select new Job
                                              {
@@ -355,6 +355,25 @@ namespace MarigoldSystem.BLL
                 context.Entry(jobCard).Property(x => x.ClosedDate).IsModified = true;
                 context.Entry(jobCard).State = System.Data.Entity.EntityState.Modified;
                 context.SaveChanges();
+            }
+        }
+
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public List<UnitReport> GetUnitReports(int yardId)
+        {
+            using(var context = new MarigoldSystemContext())
+            {
+                return context.Crews
+                                .Where(x => (x.KM_Start == null || x.KM_End == null) && (x.Truck.YardID == yardId || x.Equipment.YardID == yardId))
+                                .Select(x => new UnitReport
+                                {
+                                    CrewID = x.CrewID,
+                                    Date = DbFunctions.TruncateTime(x.CrewDate),
+                                    Unit = x.TruckID == null ? x.Equipment.Description : x.Truck.TruckDescription,
+                                    KM_Start = x.KM_Start,
+                                    KM_End = x.KM_End,
+                                    Comment = x.AdditionalComments
+                                }).ToList();
             }
         }
     }

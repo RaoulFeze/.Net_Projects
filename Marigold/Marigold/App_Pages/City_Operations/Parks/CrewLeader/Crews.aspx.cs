@@ -571,42 +571,38 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
 
         protected void ARoute_Click(object sender, EventArgs e)
         {
-            SiteTypeID.Text = "1";
-            DataPager topPager = (DataPager)RouteListView.FindControl("TopDataPager");
-            DataPager bottomPager = (DataPager)RouteListView.FindControl("BottomDataPager");
-            topPager.SetPageProperties(0, topPager.PageSize, true);
-            bottomPager.SetPageProperties(0, bottomPager.PageSize, true);
-            RouteListView.Visible = true;
+            ResetDataPager("1");
         }
 
         protected void BRoute_Click(object sender, EventArgs e)
         {
-            SiteTypeID.Text = "2";
+            ResetDataPager("2");
+        }
+
+        protected void GRoute_Click(object sender, EventArgs e)
+        {
+            ResetDataPager("3");
+        }
+
+        protected void WRoute_Click(object sender, EventArgs e)
+        {
+            ResetDataPager("4");
+        }
+
+        protected void PRoute_Click(object sender, EventArgs e)
+        {
+            ResetDataPager("5");
+        }
+
+        protected void ResetDataPager(string siteTypeID)
+        {
+            SiteTypeID.Text = siteTypeID;
             DataPager topPager = (DataPager)RouteListView.FindControl("TopDataPager");
             DataPager bottomPager = (DataPager)RouteListView.FindControl("BottomDataPager");
             topPager.SetPageProperties(0, topPager.PageSize, true);
             bottomPager.SetPageProperties(0, bottomPager.PageSize, true);
             RouteListView.Visible = true;
         }
-
-        protected void WRoute_Click(object sender, EventArgs e)
-        {
-            foreach(ListViewItem item in RouteListView.Items)
-            {
-
-            }
-        }
-
-        protected void PRoute_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void GRoute_Click(object sender, EventArgs e)
-        {
-
-        }
-
         /// <summary>
         /// This event fires when the user add a job site to a crew or click on the Finish button
         ///     When adding a job site to a crew, it first verifies that a crew is selected

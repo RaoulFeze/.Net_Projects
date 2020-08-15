@@ -19,29 +19,115 @@ namespace MarigoldSystem.BLL
         {
             using (var context = new MarigoldSystemContext())
             {
-                var routeSummary = (from site in context.Sites
-                                    where site.SiteTypeID == siteTypeId && site.Community.YardID == yardId
-                                    orderby site.Community.Name
-                                    select new RouteSummary
-                                    {
-                                        SiteID = site.SiteID,
-                                        Pin = site.Pin,
-                                        Community = site.Community.Name,
-                                        Description = site.Description,
-                                        Address = site.StreetAddress,
-                                        Area = site.Area,
-                                        Count = site.JobCards.Where(x => ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).Select(x => x).Count(),
-                                        LastDate = site.JobCards.Where(x => ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).OrderByDescending(x => x.ClosedDate).Select(x => x.ClosedDate).FirstOrDefault()
-                                    }).ToList();
-                return routeSummary;
+                if(siteTypeId == 1 || siteTypeId == 2)
+                {
+                    return (from site in context.Sites
+                                                    where site.SiteTypeID == siteTypeId && site.Community.YardID == yardId
+                                                    orderby site.Community.Name
+                                                    select new RouteSummary
+                                                    {
+                                                        SiteID = site.SiteID,
+                                                        Pin = site.Pin,
+                                                        Community = site.Community.Name,
+                                                        Description = site.Description,
+                                                        Address = site.StreetAddress,
+                                                        Area = site.Area,
+                                                        Count = site.JobCards.Where(x => ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).Select(x => x).Count(),
+                                                        LastDate = site.JobCards.Where(x => ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).OrderByDescending(x => x.ClosedDate).Select(x => x.ClosedDate).FirstOrDefault()
+                                                    }).ToList();
+                }
+                else if(siteTypeId == 3)
+                {
+                    return (from site in context.Sites
+                            where site.Grass > 0 && site.Community.YardID == yardId
+                            orderby site.Community.Name
+                            select new RouteSummary
+                            {
+                                SiteID = site.SiteID,
+                                Pin = site.Pin,
+                                Community = site.Community.Name,
+                                Description = site.Description,
+                                Address = site.StreetAddress,
+                                Area = site.Area,
+                                Count = site.JobCards.Where(x => x.TaskID == 7 && ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).Select(x => x).Count(),
+                                LastDate = site.JobCards.Where(x => x.TaskID == 7 && ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).OrderByDescending(x => x.ClosedDate).Select(x => x.ClosedDate).FirstOrDefault()
+                            }).ToList();
+                }
+                else if(siteTypeId == 4)
+                {
+                    return (from site in context.Sites
+                            where site.Watering == true && site.Community.YardID == yardId
+                            orderby site.Community.Name
+                            select new RouteSummary
+                            {
+                                SiteID = site.SiteID,
+                                Pin = site.Pin,
+                                Community = site.Community.Name,
+                                Description = site.Description,
+                                Address = site.StreetAddress,
+                                Area = site.Area,
+                                Count = site.JobCards.Where(x => x.TaskID == 6 && ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).Select(x => x).Count(),
+                                LastDate = site.JobCards.Where(x => x.TaskID == 6 && ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).OrderByDescending(x => x.ClosedDate).Select(x => x.ClosedDate).FirstOrDefault()
+                            }).ToList();
+                }
+                else if(siteTypeId == 5)
+                {
+                    return (from site in context.Sites
+                            where site.Planting == true && site.Community.YardID == yardId
+                            orderby site.Community.Name
+                            select new RouteSummary
+                            {
+                                SiteID = site.SiteID,
+                                Pin = site.Pin,
+                                Community = site.Community.Name,
+                                Description = site.Description,
+                                Address = site.StreetAddress,
+                                Area = site.Area,
+                                Count = site.JobCards.Where(x => (x.TaskID == 2 || x.TaskID == 3) && ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).Select(x => x).Count(),
+                                Planting = site.JobCards.Where(x => x.TaskID == 2  && ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).OrderByDescending(x => x.ClosedDate).Select(x => x.ClosedDate).FirstOrDefault(),
+                                Uprooting = site.JobCards.Where(x =>  x.TaskID == 3 && ((DateTime)x.ClosedDate).Year == DateTime.Now.Year).OrderByDescending(x => x.ClosedDate).Select(x => x.ClosedDate).FirstOrDefault()
+                            }).ToList();
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
-        public List<Data.Entities.Task> GetTasks()
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public List<Data.Entities.Task> GetTasks(int siteTypeId)
         {
             using (var context = new MarigoldSystemContext())
             {
-                return context.Tasks.ToList();
+                if (siteTypeId == 1 || siteTypeId == 2)
+                {
+                    return context.Tasks
+                                    .Where(x => x.TaskID == 1 || x.TaskID == 4 || x.TaskID == 5)
+                                    .Select(x => x).ToList();
+                }
+                else if (siteTypeId == 3)
+                {
+                    return context.Tasks
+                                    .Where(x => x.TaskID == 7)
+                                    .Select(x => x).ToList();
+                }
+                else if (siteTypeId == 4)
+                {
+                    return context.Tasks
+                                    .Where(x => x.TaskID == 6)
+                                    .Select(x => x).ToList();
+                }
+                else if (siteTypeId == 5)
+                {
+                    return context.Tasks
+                                    .Where(x => x.TaskID == 2 || x.TaskID == 3)
+                                    .Select(x => x).ToList();
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -63,7 +149,7 @@ namespace MarigoldSystem.BLL
                                                         Area = site.Area,
                                                         Notes = site.Notes,
                                                         ClosedDate = site.JobCards
-                                                                            .Where(job => job.TaskID == taskId && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year)
+                                                                            .Where(job => job.TaskID == taskId && site.Community.YardID == yardId && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year)
                                                                             .OrderByDescending(job => job.ClosedDate.HasValue)
                                                                             .ThenBy(job => job.ClosedDate)
                                                                             .Select(job => job.ClosedDate)
@@ -108,7 +194,7 @@ namespace MarigoldSystem.BLL
                                                 Notes = site.Notes,
                                                 Count = site.Grass,
                                                 Trimming = context.JobCards
-                                                                        .Where(job => job.TaskID == 7 && ((DateTime)(job.ClosedDate)).Year == DateTime.Now.Year)
+                                                                        .Where(job => job.TaskID == 7 && site.Community.YardID == yardId && ((DateTime)(job.ClosedDate)).Year == DateTime.Now.Year && site.SiteID == job.SiteID)
                                                                         .OrderBy(job => job.ClosedDate)
                                                                         .ThenBy(job => job)
                                                                         .Select(job => job.ClosedDate)
@@ -135,15 +221,13 @@ namespace MarigoldSystem.BLL
                                                 Area = site.Area,
                                                 Notes = site.Notes,
                                                 Planting = context.JobCards
-                                                                        .Where(job => job.TaskID == 2 && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year)
-                                                                        .OrderBy(job => job.ClosedDate)
-                                                                        .ThenBy(job => job)
+                                                                        .Where(job => job.TaskID == 2 && site.Community.YardID == yardId && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year && site.SiteID == job.SiteID)
+                                                                        .OrderByDescending(job => job.ClosedDate)
                                                                         .Select(job => job.ClosedDate)
                                                                         .FirstOrDefault(),
                                                 Uprooting = context.JobCards
-                                                                        .Where(job => job.TaskID == 3 && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year)
-                                                                        .OrderBy(job => job.ClosedDate)
-                                                                        .ThenBy(job => job)
+                                                                        .Where(job => job.TaskID == 3 && site.Community.YardID == yardId && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year && site.SiteID == job.SiteID)
+                                                                        .OrderByDescending(job => job.ClosedDate)
                                                                         .Select(Job => Job.ClosedDate)
                                                                         .FirstOrDefault()
                                             });
@@ -168,11 +252,11 @@ namespace MarigoldSystem.BLL
                                                 Area = site.Area,
                                                 Notes = site.Notes,
                                                 Count = context.JobCards
-                                                                    .Where(job => job.TaskID == 6 && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year)
+                                                                    .Where(job => job.TaskID == 6 && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year && site.SiteID == job.SiteID)
                                                                     .Select(job => job)
                                                                     .Count(),
                                                 Watering = context.JobCards
-                                                                        .Where(job => job.TaskID == 6 && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year)
+                                                                        .Where(job => job.TaskID == 6 && site.Community.YardID == yardId && ((DateTime)job.ClosedDate).Year == DateTime.Now.Year && site.SiteID == job.SiteID)
                                                                         .OrderByDescending(job => job.ClosedDate.HasValue)
                                                                         .ThenBy(job => job)
                                                                         .Select(job => job.ClosedDate)
