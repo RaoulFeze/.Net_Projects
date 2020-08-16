@@ -241,6 +241,7 @@
     <Content Include="App_Data\SiteMaps\City_Operations\CrewLeader.sitemap" />
     <Content Include="App_Data\SiteMaps\City_Operations\FieldStaff.sitemap" />
     <Content Include="App_Data\SiteMaps\City_Operations\TeamLeader.sitemap" />
+    <Content Include="Images\calendar.png" />
     <Content Include="Images\dispthumb.aspx.jpg" />
     <Content Include="Images\Marigold-Garuda-Deep-Gold-Mar888-15.jpg" />
     <Content Include="Images\Marigold-Garuda-Deep-Gold.jpg" />

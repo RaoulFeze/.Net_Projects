@@ -335,12 +335,13 @@ namespace MarigoldSystem.BLL
                                 .Select(job => new JobCardStatus
                                 {
                                     JobCardID = job.JobCardID,
+                                    AssignedDate = job.JobCardCrews.FirstOrDefault().Crew.CrewDate,
                                     Pin = job.Site.Pin,
                                     Community = job.Site.Community.Name,
                                     Description = job.Site.Description,
                                     Address = job.Site.StreetAddress,
-                                    AssignedDate = job.JobCardCrews.FirstOrDefault().Crew.CrewDate,
-                                    CompletedDate = job.ClosedDate
+                                    Task = job.Task.Description,
+                                    CompletedDate = DateTime.Today
                                 }).ToList();
             }
         }
@@ -374,6 +375,57 @@ namespace MarigoldSystem.BLL
                                     KM_End = x.KM_End,
                                     Comment = x.AdditionalComments
                                 }).ToList();
+            }
+        }
+
+        public void UpdateCrew(int crewId, int KmStart, int KmEnd, string comment)
+        {
+            using(var context = new MarigoldSystemContext())
+            {
+                Crew crew = context.Crews.Find(crewId);
+                if(crew == null)
+                {
+                    throw new Exception("This crew does not exist anymore");
+                }
+                else
+                {
+                    string message = "";
+                    if (KmStart == 0)
+                    {
+                        message += "KM Start cannot be equal to 0. ";
+                    }
+                    if (KmEnd == 0)
+                    {
+                        message += " KM End cannot be equal to 0. ";
+                    }
+
+                    if(KmStart > KmEnd)
+                    {
+                        message += " KM Start cannot be greater than KM End";
+                    }
+
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        crew.KM_Start = KmStart;
+                        context.Entry(crew).Property(x => x.KM_Start).IsModified = true;
+                        crew.KM_End = KmEnd;
+                        context.Entry(crew).Property(x => x.KM_End).IsModified = true;
+
+                        if (!string.IsNullOrEmpty(comment))
+                        {
+                            crew.AdditionalComments = comment;
+                            context.Entry(crew).Property(x => x.AdditionalComments).IsModified = true;
+                        }
+
+                        context.Entry(crew).State = System.Data.Entity.EntityState.Modified;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new Exception(message);
+                    }
+
+                }
             }
         }
     }

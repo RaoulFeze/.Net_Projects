@@ -33,9 +33,10 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     UserId.Text = (security.GetCurrentUserId(Context.User.Identity.GetUserName())).ToString();
                     EmployeeController employee = new EmployeeController();
                     YardID.Text = employee.GetYardID(int.Parse(UserId.Text)).ToString();
-
+                    
                     if (!IsPostBack)
                     {
+                        PopulateUnitReport();
                         PopulateRouteStatus();
                     }
                 });
@@ -63,6 +64,33 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 JobcardTitle.Visible = true;
             });
         }
+
+        /// <summary>
+        /// This method populates the GridView for reporting the mileage
+        /// </summary>
+        public void PopulateUnitReport()
+        {
+            int yardId = int.Parse(YardID.Text);
+            CrewController crewManager = new CrewController();
+            InfoUserControl.TryRun(() =>
+            {
+                List<UnitReport> report = crewManager.GetUnitReports(yardId);
+                if(report.Count < 0)
+                {
+                    UnitReportHeader.Visible = false;
+                }
+                else
+                {
+                    UnitReportHeader.Visible = true;
+                    UnitReoprtGV.Visible = true;
+                    report.Sort((x, y) => x.Unit.CompareTo(y.Unit));
+                    UnitReoprtGV.DataSource = report;
+                    UnitReoprtGV.DataBind();
+                }
+            });
+        }
+
+
         protected void CheckForException(object sender, ObjectDataSourceStatusEventArgs e)
         {
             MessageUserControl.HandleDataBoundException(e);
@@ -369,7 +397,8 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             SiteMenu.Visible = true;
             JobCardStatusGridView.Visible = false;
             JobcardTitle.Visible = false;
-
+            UnitReoprtGV.Visible = false;
+            UnitReportHeader.Visible = false;
 
             int driverId = 0;
 
@@ -500,6 +529,8 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     Done.Visible = true;
                     JobCardStatusGridView.Visible = false;
                     JobcardTitle.Visible = false;
+                    UnitReoprtGV.Visible = false;
+                    UnitReportHeader.Visible = false;
                     InfoUserControl.TryRun(() =>
                     {
                         FleetController fleet = new FleetController();
@@ -649,6 +680,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     SiteMenu.Visible = false;
                     RouteListView.Visible = false;
                     PopulateRouteStatus();
+                    PopulateUnitReport();
                     break;
             }
             
@@ -662,8 +694,13 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected void CloseDateCalendar_SelectionChanged(object sender, EventArgs e)
         {
             Calendar calendar = sender as Calendar;
-            TextBox completedDate = ((GridViewRow)calendar.Parent.Parent).FindControl("CompletedDate") as TextBox;
+            GridViewRow row = calendar.Parent.Parent as GridViewRow;
+            TextBox completedDate = row.FindControl("CompletedDate") as TextBox;
+            ImageButton image = row.FindControl("CalendarImage") as ImageButton;
+
             completedDate.Text = calendar.SelectedDate.ToShortDateString();
+            calendar.Visible = false;
+            image.Visible = true;
         }
 
         /// <summary>
@@ -683,43 +720,90 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         }
 
         /// <summary>
-        /// This event fires when the user closes (updates the completed Date of) a Job Card
+        /// This event fires when the user clicks on save unit report
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void JobCardStatusGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        protected void UnitReoprtGV_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int jobCardId = int.Parse((JobCardStatusGridView.Rows[e.RowIndex].FindControl("JobCardID") as TextBox).Text);
-            string completedDate = (JobCardStatusGridView.Rows[e.RowIndex].FindControl("CompletedDate") as TextBox).Text;
+            string command = e.CommandName;
+            if(command == "SaveUnitReport")
+            {
+                int crewId = int.Parse(e.CommandArgument.ToString());
+                GridViewRow row = ((e.CommandSource as LinkButton).NamingContainer) as GridViewRow; //Gets hold of the GridViewRow
+                string KS = ((row.FindControl("KM_Start") as TextBox).Text);
+                string KE = ((row.FindControl("KM_End") as TextBox).Text);
 
-            CrewController crewManager = new CrewController();
-            crewManager.UpdateJobCard(jobCardId, completedDate);
+                int KmStart = string.IsNullOrEmpty(KS) ? 0 : int.Parse(KS);
+                int KmEnd = string.IsNullOrEmpty(KE) ? 0 : int.Parse(KE);
+                string comment = (row.FindControl("Comment") as TextBox).Text;
 
-            JobCardStatusGridView.EditIndex = -1;
-            PopulateRouteStatus();
+                string crew = (row.FindControl("Unit") as Label).Text;
+
+                InfoUserControl.TryRun(() =>
+                {
+                    CrewController crewManager = new CrewController();
+                    crewManager.UpdateCrew(crewId, KmStart, KmEnd, comment);
+                }, crew + " was updated successfully!");
+
+                PopulateUnitReport();
+            }
         }
 
         /// <summary>
-        /// This event fires when the user cancel the Editing of a Job Card
+        /// This event fires when the user clicks on the calendar image or the save icon
+        ///     It populates the calendar control
+        ///     It updates a job card 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void JobCardStatusGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        protected void JobCardStatusGridView_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            JobCardStatusGridView.EditIndex = -1;
-            JobCardStatusGridView.DataBind();
-            PopulateRouteStatus();
+            string command = e.CommandName.ToString();
+
+            switch (command)
+            {
+                case "ChangeDate":
+
+                    GridViewRow row = ((e.CommandSource as ImageButton).NamingContainer) as GridViewRow;
+                    Calendar calendar = row.FindControl("Calendar") as Calendar;
+                    calendar.Visible = true;
+                    ImageButton image = row.FindControl("CalendarImage") as ImageButton;
+                    image.Visible = false;
+                    break;
+
+                case "SaveJobCard":
+                    GridViewRow gridRow = ((e.CommandSource as LinkButton).NamingContainer) as GridViewRow; //Gets hold of the GridViewRow
+                    int jobCardId = int.Parse(e.CommandArgument.ToString());
+                    string completedDate = (gridRow.FindControl("CompletedDate") as TextBox).Text;
+
+                    CrewController crewManager = new CrewController();
+                    crewManager.UpdateJobCard(jobCardId, completedDate);
+
+                    PopulateRouteStatus();
+                    break;
+            }
         }
 
         /// <summary>
-        /// This event fires when the user click on Edit in the GridView
-        ///     It enables the user to set the completed Date in a Job Card
+        /// This even fires when paging the Unit Reports GridView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void JobCardStatusGridView_RowEditing(object sender, GridViewEditEventArgs e)
+        protected void UnitReoprtGV_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            JobCardStatusGridView.EditIndex = e.NewEditIndex;
+            UnitReoprtGV.PageIndex = e.NewPageIndex;
+            PopulateUnitReport();
+        }
+
+        /// <summary>
+        /// this event fires when paging the job card Status GridView
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void JobCardStatusGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            JobCardStatusGridView.PageIndex = e.NewPageIndex;
             PopulateRouteStatus();
         }
     }

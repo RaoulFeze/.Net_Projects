@@ -106,12 +106,12 @@
                         <div class="crew-header">
                             <h4>
                                 <asp:LinkButton ID="SelectCrew" runat="server" CommandArgument='<%#Item.CrewID %>' CommandName="SelectedCrew" CssClass="crew-linkbutton">
-                                        CREW:  <%#Item.Description %>
+                                        <span title="Click to update this crew">CREW:  <%#Item.Description %></span>
                                 </asp:LinkButton>
                             </h4>
                             <div class="crew-glyphicon-remove">
                                 <asp:LinkButton ID="RemoveCrew" runat="server" CommandArgument='<%# Item.CrewID %>' CommandName="DeleteCrew" CssClass="crew-linkbutton">
-                                    <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span> 
+                                    <span aria-hidden="true" class="glyphicon glyphicon-remove" title="Delete all crew members and job cards" ></span> 
                                 </asp:LinkButton>
                             </div>
                         </div>
@@ -142,7 +142,7 @@
                                     <asp:TemplateField  ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:LinkButton ID="RemoveEmployee" runat="server" CommandArgument='<%# Eval("CrewMemberID") %>' CommandName="RemoveMember">
-                                                <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span>
+                                                <span aria-hidden="true" class="glyphicon glyphicon-trash" title="Remove employee from the crew" ></span>
                                             </asp:LinkButton>
                                         </ItemTemplate>
                                     </asp:TemplateField>
@@ -176,7 +176,7 @@
                                     <asp:TemplateField  ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:LinkButton ID="RemoveSite" runat="server" CommandArgument='<%# Eval("JobCardCrewID") %>' CommandName="DeleteJobCard" OnClientClick="return ConfirmRemoveSite()">
-                                                <span aria-hidden="true" class="glyphicon glyphicon-remove" ></span>
+                                                <span aria-hidden="true" class="glyphicon glyphicon-trash" title="Remove Job Card from the crew"></span>
                                             </asp:LinkButton>
                                         </ItemTemplate>
                                     </asp:TemplateField>
@@ -189,24 +189,20 @@
         </div>
         <div class="jobcard-routes">
             <h3>
-                <asp:Label ID="UnitReport" runat="server" Text="Unit Reports"></asp:Label>
+                <asp:Label ID="UnitReportHeader" runat="server" Text="Unit Reports"></asp:Label>
             </h3>
             <asp:GridView ID="UnitReoprtGV" runat="server" 
                 AutoGenerateColumns="False" 
-                DataSourceID="UnitReportODS" 
+                OnRowCommand="UnitReoprtGV_RowCommand"
                 CssClass="table table-striped table-bordered container close-jobcards"
-                AllowPaging="True">
+                AllowPaging="True" 
+                OnPageIndexChanging="UnitReoprtGV_PageIndexChanging">
                 <Columns>
                     <asp:TemplateField  ItemStyle-HorizontalAlign="Center">
                         <ItemTemplate>
                             <%# Container.DataItemIndex + 1%>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="CrewID" SortExpression="CrewID" Visible="False">
-                        <ItemTemplate>
-                            <asp:Label runat="server" Text='<%# Bind("CrewID") %>' ID="CrewID"></asp:Label>
-                        </ItemTemplate>
-                    </asp:TemplateField >
                     <asp:TemplateField HeaderText="Date" SortExpression="Date"  ItemStyle-HorizontalAlign="Center">
                         <ItemTemplate>
                             <asp:Label runat="server" Text='<%# Bind("Date", "{0:yyyy-MMM-dd}") %>' ID="Date"></asp:Label>
@@ -232,7 +228,13 @@
                             <asp:TextBox runat="server" Text='<%# Bind("Comment") %>' ID="Comment"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
-
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:LinkButton ID="Submit" runat="server"  CommandArgument='<%# Eval("CrewID") %>' CommandName="SaveUnitReport">
+                                <span aria-hidden="true" class="glyphicon glyphicon-floppy-disk" title="Save"></span>
+                            </asp:LinkButton>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
             </asp:GridView>
             
@@ -268,22 +270,19 @@
             </div>
              <asp:GridView ID="JobCardStatusGridView" runat="server" 
                     AutoGenerateColumns="False" 
-                    OnRowCancelingEdit="JobCardStatusGridView_RowCancelingEdit"
-                    CssClass="table table-striped table-bordered container close-jobcards"
-                    OnRowEditing="JobCardStatusGridView_RowEditing"
-                    OnRowUpdating="JobCardStatusGridView_RowUpdating">
+                    OnRowCommand="JobCardStatusGridView_RowCommand"
+                    AllowPaging="True"
+                   PageSize ="5"
+                    CssClass="table table-striped table-bordered container close-jobcards" OnPageIndexChanging="JobCardStatusGridView_PageIndexChanging">
                  <Columns>
                      <asp:TemplateField  ItemStyle-HorizontalAlign="Center">
                          <ItemTemplate>
                              <%# Container.DataItemIndex + 1%>
                          </ItemTemplate>
                      </asp:TemplateField>
-                     <asp:TemplateField HeaderText="JobCardID" SortExpression="JobCardID" Visible="false">
-                         <EditItemTemplate>
-                             <asp:TextBox runat="server" Text='<%# Bind("JobCardID") %>' ID="JobCardID" Visible="false"></asp:TextBox>
-                         </EditItemTemplate>
+                     <asp:TemplateField HeaderText="Assigned Date" SortExpression="AssignedDate"  ItemStyle-HorizontalAlign="Center">
                          <ItemTemplate>
-                             <asp:Label runat="server" Text='<%# Bind("JobCardID") %>' ID="Label1" Visible="false"></asp:Label>
+                             <asp:Label runat="server" Text='<%# Bind("AssignedDate", "{0:yyyy-MMM-dd}") %>' ID="Label6"></asp:Label>
                          </ItemTemplate>
                      </asp:TemplateField>
                      <asp:TemplateField HeaderText="Pin" SortExpression="Pin"  ItemStyle-HorizontalAlign="Center">
@@ -306,26 +305,35 @@
                              <asp:Label runat="server" Text='<%# Bind("Address") %>' ID="Label5"></asp:Label>
                          </ItemTemplate>
                      </asp:TemplateField>
-                     <asp:TemplateField HeaderText="AssignedDate" SortExpression="Assigned Date"  ItemStyle-HorizontalAlign="Center">
+                     <asp:TemplateField HeaderText="Task" SortExpression="Task">
                          <ItemTemplate>
-                             <asp:Label runat="server" Text='<%# Bind("AssignedDate", "{0:yy-MMM-dd}") %>' ID="Label6"></asp:Label>
+                             <asp:Label runat="server" Text='<%# Bind("Task") %>' ID="Label8"></asp:Label>
                          </ItemTemplate>
                      </asp:TemplateField>
-                     <asp:TemplateField HeaderText="CompletedDate" SortExpression="Completed Date">
-                         <EditItemTemplate>
-                             <asp:TextBox runat="server" Text='<%# Eval("CompletedDate") %>' ID="CompletedDate"></asp:TextBox>
-                             <asp:Calendar ID="CloseDateCalendar" runat="server" 
+                     <asp:TemplateField HeaderText="Completed Date" SortExpression="Completed Date">
+                         <ItemTemplate>
+                             <asp:TextBox runat="server" Text='<%# Bind("CompletedDate", "{0:yyyy-MMM-dd}") %>' ID="CompletedDate" CssClass ="jobCardTextBox"></asp:TextBox>
+                         </ItemTemplate>
+                     </asp:TemplateField>
+                     <asp:TemplateField>
+                         <ItemTemplate>
+                             <span title="Change the completed date"><asp:ImageButton ID="CalendarImage" runat="server" ImageUrl="~/Images/calendar.png" Commandname="ChangeDate"/></span>
+                             <asp:Calendar ID="Calendar" runat="server" 
                                  OnSelectionChanged="CloseDateCalendar_SelectionChanged" 
                                  OnDayRender="CloseDateCalendar_DayRender"
                                  TodayDayStyle-BackColor="ForestGreen"
-                                 TodayDayStyle-ForeColor="white">
+                                 TodayDayStyle-ForeColor="white"
+                                 Visible="false" Height="100px" Width="100px">
                              </asp:Calendar>
-                         </EditItemTemplate>
-                         <ItemTemplate>
-                             <asp:Label runat="server" Text='<%# Bind("CompletedDate", "{0:MMM-dd}") %>' ID="Label7"></asp:Label>
                          </ItemTemplate>
                      </asp:TemplateField>
-                     <asp:CommandField ShowEditButton="True" EditText="Close"></asp:CommandField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:LinkButton ID="Save" runat="server"  CommandArgument='<%# Eval("JobCardID") %>' CommandName="SaveJobCard">
+                                <span aria-hidden="true" class="glyphicon glyphicon-floppy-disk" title="Save"></span>
+                            </asp:LinkButton>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                  </Columns>
                 </asp:GridView>
             <div class="table table-striped table-bordered jobsite-lv">

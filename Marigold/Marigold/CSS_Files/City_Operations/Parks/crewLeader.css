@@ -4,15 +4,25 @@
 	height: 50px;
 }
 
-.glyphicon-remove {
+.glyphicon-remove{
+	font-size:1.3em;
+	margin-top:8px;
+}
+.glyphicon-remove, .glyphicon-trash {
 	color: red;
 }
-
-/**************************ROUTE PAGE******************************/
-.search-criteria input {
-	border: 1px solid black;
-	padding:0 0 0 5px;
+.glyphicon-floppy-disk{
+	color:forestgreen;
 }
+.glyphicon-floppy-disk:hover{
+
+}
+
+	/**************************ROUTE PAGE******************************/
+	.search-criteria input {
+		border: 1px solid black;
+		padding: 0 0 0 5px;
+	}
 .search-area {
 	display: flex;
 	flex-direction: row;
@@ -199,7 +209,7 @@
 	}
 	/**/ .jobcard-routes > h3 {
 		text-align: center;
-		margin: 30px 0;
+		margin: 20px 0;
 	}
 /**/ .jobsite-lv {
 		background-color: #FFFFFF;
@@ -213,6 +223,10 @@
 		width: 95%;
 		margin: 20px auto;
 	}
+
+.jobCardTextBox {
+	Width: 5vw;
+}
 /******************END JOBCARDS AND ROUTES********************/
 .summary {
 	grid-area: s;
