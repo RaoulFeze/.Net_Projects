@@ -13,10 +13,12 @@
     <asp:Label ID="UserId" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="Refresh" runat="server" Text="" Visible="false"></asp:Label>
     <asp:Label ID="CrewID" runat="server" Text="" Visible="false"></asp:Label>
+    <asp:Label ID="DriverID" runat="server" Text="0" Visible="false"></asp:Label>
     <asp:Label ID="SiteTypeID" runat="server" Text="1" Visible="false"></asp:Label>
     <%-- --------------------------------------------------------------------------------------------------- --%>
     <div class="info-message container">
         <uc1:InfoUserControl runat="server" ID="InfoUserControl" />
+        
     </div>
     <div class="crew-wrapper">
         <div class="crew-pane">
@@ -196,6 +198,7 @@
                 OnRowCommand="UnitReoprtGV_RowCommand"
                 CssClass="table table-striped table-bordered container close-jobcards"
                 AllowPaging="True" 
+                PageSize="5"
                 OnPageIndexChanging="UnitReoprtGV_PageIndexChanging">
                 <Columns>
                     <asp:TemplateField  ItemStyle-HorizontalAlign="Center">
@@ -213,19 +216,22 @@
                             <asp:Label runat="server" Text='<%# Bind("Unit") %>' ID="Unit"></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="KM_Start" SortExpression="KM_Start">
+                    <asp:TemplateField HeaderText="KM Start" SortExpression="KM_Start">
                         <ItemTemplate>
-                            <asp:TextBox runat="server" Text='<%# Bind("KM_Start") %>' ID="KM_Start"></asp:TextBox>
+                            <asp:TextBox runat="server" Text='<%# Bind("KM_Start") %>' ID="KM_Start"  CssClass ="resize-textbox"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="KM_End" SortExpression="KM_End">
+                    <asp:TemplateField HeaderText="KM End" SortExpression="KM_End">
                         <ItemTemplate>
-                            <asp:TextBox runat="server" Text='<%# Bind("KM_End") %>' ID="KM_End"></asp:TextBox>
+                            <asp:TextBox runat="server" Text='<%# Bind("KM_End") %>' ID="KM_End" CssClass ="resize-textbox"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Comment" SortExpression="Comment">
+                    <asp:TemplateField HeaderText="Damages / Comments" SortExpression="Comment">
                         <ItemTemplate>
-                            <asp:TextBox runat="server" Text='<%# Bind("Comment") %>' ID="Comment"></asp:TextBox>
+                            <asp:TextBox runat="server" Text='<%# Bind("Comment") %>' ID="Comment" 
+                                TextMode="MultiLine" 
+                                CssClass ="resize-textbox-multiline" 
+                                PlaceHolder="Drag down the bottom right corner to enlarge the text area"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
@@ -237,34 +243,27 @@
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
-            
-            
-            <asp:ObjectDataSource ID="UnitReportODS" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetUnitReports" TypeName="MarigoldSystem.BLL.CrewController">
-                <SelectParameters>
-                    <asp:ControlParameter ControlID="YardID" PropertyName="Text" Name="yardId" Type="Int32"></asp:ControlParameter>
-                </SelectParameters>
-            </asp:ObjectDataSource>
-
+ 
 
             <h3>
                 <asp:Label ID="JobcardTitle" runat="server" Text="Active Job Cards"></asp:Label>
             </h3>
             <div class="menu-control" id="SiteMenu" runat="server" visible="false">
                 <ul class="routes-nav">
-                    <li class="nav-tab  activeTab" onclick="activeTab(event)">
-                        <asp:LinkButton ID="ARoute" runat="server" CssClass="nav-link tab-menu" OnClick="ARoute_Click">A Routes</asp:LinkButton>
+                    <li class="nav-tab  " onclick="setActiveTab(this)">
+                        <asp:LinkButton ID="ARoute" runat="server" CssClass="tab-menu" OnClick="ARoute_Click">A Routes</asp:LinkButton>
                     </li>
-                    <li class="nav-tab" onclick="activeTab(event)">
-                        <asp:LinkButton ID="BRoute" runat="server" CssClass="nav-link tab-menu" OnClick="BRoute_Click">B Routes</asp:LinkButton>
+                    <li class="nav-tab" onclick="setActiveTab(this)">
+                        <asp:LinkButton ID="BRoute" runat="server" CssClass="tab-menu" OnClick="BRoute_Click">B Routes</asp:LinkButton>
                     </li>
-                    <li class="nav-tab" onclick="activeTab(event)">
-                        <asp:LinkButton ID="GRoute" runat="server" CssClass="nav-link tab-menu" OnClick="GRoute_Click">Grass Routes</asp:LinkButton>
+                    <li class="nav-tab" onclick="setActiveTab(this)">
+                        <asp:LinkButton ID="GRoute" runat="server" CssClass="tab-menu" OnClick="GRoute_Click">Grass Routes</asp:LinkButton>
                     </li>
-                    <li class="nav-tab" onclick="activeTab(event)">
-                        <asp:LinkButton ID="WRoute" runat="server" CssClass="nav-link tab-menu" OnClick="WRoute_Click">Watering Routes</asp:LinkButton>
+                    <li class="nav-tab" onclick="setActiveTab(this)">
+                        <asp:LinkButton ID="WRoute" runat="server" CssClass="tab-menu" OnClick="WRoute_Click">Watering Routes</asp:LinkButton>
                     </li>
-                    <li class="nav-tab" onclick="activeTab(event)">
-                        <asp:LinkButton ID="PRoute" runat="server" CssClass="nav-link tab-menu" OnClick="PRoute_Click">Planting Routes</asp:LinkButton>
+                    <li class="nav-tab" onclick="setActiveTab(this)">
+                        <asp:LinkButton ID="PRoute" runat="server" CssClass="tab-menu" OnClick="PRoute_Click">Planting Routes</asp:LinkButton>
                     </li>
                 </ul>
             </div>
@@ -272,8 +271,9 @@
                     AutoGenerateColumns="False" 
                     OnRowCommand="JobCardStatusGridView_RowCommand"
                     AllowPaging="True"
-                   PageSize ="5"
-                    CssClass="table table-striped table-bordered container close-jobcards" OnPageIndexChanging="JobCardStatusGridView_PageIndexChanging">
+                    PageSize ="5"
+                    CssClass="table table-striped table-bordered container close-jobcards" 
+                    OnPageIndexChanging="JobCardStatusGridView_PageIndexChanging">
                  <Columns>
                      <asp:TemplateField  ItemStyle-HorizontalAlign="Center">
                          <ItemTemplate>
@@ -312,7 +312,7 @@
                      </asp:TemplateField>
                      <asp:TemplateField HeaderText="Completed Date" SortExpression="Completed Date">
                          <ItemTemplate>
-                             <asp:TextBox runat="server" Text='<%# Bind("CompletedDate", "{0:yyyy-MMM-dd}") %>' ID="CompletedDate" CssClass ="jobCardTextBox"></asp:TextBox>
+                             <asp:TextBox runat="server" Text='<%# Bind("CompletedDate", "{0:yyyy-MMM-dd}") %>' ID="CompletedDate" CssClass ="resize-textbox"></asp:TextBox>
                          </ItemTemplate>
                      </asp:TemplateField>
                      <asp:TemplateField>
@@ -338,6 +338,7 @@
                 </asp:GridView>
             <div class="table table-striped table-bordered jobsite-lv">
                     <asp:ListView ID="RouteListView" runat="server"
+                       
                         Visible="false"
                         DataSourceID="Routes_Summary"
                         OnItemCommand="RouteListView_ItemCommand">
@@ -360,7 +361,7 @@
                                 <td>
                                     <asp:Label Text='<%# Eval("LastDate", "{0:MMM-dd}") %>' runat="server" ID="LastDateLabel" /></td>
                                 <td>
-                                    <asp:DropDownList ID="SelectTask" runat="server" DataSourceID="TaskODS" DataTextField="Description" DataValueField="TaskID"></asp:DropDownList></td>
+                                    <asp:DropDownList ID="SelectTask" runat="server" DataSourceID="TaskODS" DataTextField="Description" DataValueField="TaskID" ></asp:DropDownList></td>
                                 <td>
                                     <asp:LinkButton ID="AddSite" runat="server" CommandArgument='<%# Eval("SiteID") %>' CommandName="AddSite">
                                         <span aria-hidden="true" class="glyphicon glyphicon-plus"></span>
@@ -395,7 +396,7 @@
                                 <td>
                                     <asp:Label Text='<%# Eval("LastDate", "{0:MMM-dd}") %>' runat="server" ID="LastDateLabel" /></td>
                                 <td>
-                                    <asp:DropDownList ID="SelectTask" runat="server" DataSourceID="TaskODS" DataTextField="Description" DataValueField="TaskID"></asp:DropDownList></td>
+                                    <asp:DropDownList ID="SelectTask" runat="server" DataSourceID="TaskODS" DataTextField="Description" DataValueField="TaskID" ></asp:DropDownList></td>
                                 <td>
                                     <asp:LinkButton ID="AddSite" runat="server" CommandArgument='<%# Eval("SiteID") %>' CommandName="AddSite">
                                         <span aria-hidden="true" class="glyphicon glyphicon-plus"></span>
@@ -458,7 +459,42 @@
                     </asp:ListView>
                 </div>
         </div>
-        <div class="summary"></div>
+        <div class="summary">
+            <div class="summaryElements">
+                <div >
+                    <asp:Label ID="ActiveCrews" runat="server" Text="Number of Crews: "></asp:Label>
+                    <asp:Label ID="NumberCrews" runat="server" Text="3"></asp:Label>&nbsp;&nbsp;
+                </div>
+                <div>
+                    <asp:Label ID="FieldWorkers" runat="server" Text="Total Field Workers: "></asp:Label>
+                    <asp:Label ID="TotalFieldWorker" runat="server" Text="20"></asp:Label>&nbsp;&nbsp;
+                </div>
+                <div>
+                    <asp:Label ID="SBM" runat="server" Text="SBM: "></asp:Label>
+                    <asp:Label ID="TotalSBM" runat="server" Text="20"></asp:Label>&nbsp;&nbsp;
+                </div>
+                <div>
+                    <asp:Label ID="Planting" runat="server" Text="Planting: "></asp:Label>
+                    <asp:Label ID="TotalPlanting" runat="server" Text="20"></asp:Label>&nbsp;&nbsp;
+                </div>
+                <div>
+                    <asp:Label ID="Watering" runat="server" Text="Watering: "></asp:Label>
+                    <asp:Label ID="TotalWatering" runat="server" Text="20"></asp:Label>&nbsp;&nbsp;
+                </div>
+                <div>
+                    <asp:Label ID="Mulching" runat="server" Text="Mulcing: "></asp:Label>
+                    <asp:Label ID="TotalMulching" runat="server" Text="20"></asp:Label>&nbsp;&nbsp;
+                </div>
+                <div>
+                    <asp:Label ID="Uprooting" runat="server" Text="Uprooting: "></asp:Label>
+                    <asp:Label ID="TotalUprooting" runat="server" Text="20"></asp:Label>&nbsp;&nbsp;
+                </div>
+                <div>
+                    <asp:Label ID="Grass" runat="server" Text="Grass: "></asp:Label>
+                    <asp:Label ID="TotalGrass" runat="server" Text="20"></asp:Label>
+                </div>
+            </div>
+        </div>
     </div>
     <asp:ObjectDataSource ID="TaskODS" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="GetTasks" TypeName="MarigoldSystem.BLL.RouteController">
         <SelectParameters>

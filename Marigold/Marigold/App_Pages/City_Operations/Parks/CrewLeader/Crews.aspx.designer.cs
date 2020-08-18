@@ -60,6 +60,15 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected global::System.Web.UI.WebControls.Label CrewID;
 
         /// <summary>
+        /// DriverID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label DriverID;
+
+        /// <summary>
         /// SiteTypeID control.
         /// </summary>
         /// <remarks>
@@ -159,15 +168,6 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected global::System.Web.UI.WebControls.GridView UnitReoprtGV;
 
         /// <summary>
-        /// UnitReportODS control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource UnitReportODS;
-
-        /// <summary>
         /// JobcardTitle control.
         /// </summary>
         /// <remarks>
@@ -247,6 +247,150 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListView RouteListView;
+
+        /// <summary>
+        /// ActiveCrews control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label ActiveCrews;
+
+        /// <summary>
+        /// NumberCrews control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label NumberCrews;
+
+        /// <summary>
+        /// FieldWorkers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label FieldWorkers;
+
+        /// <summary>
+        /// TotalFieldWorker control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label TotalFieldWorker;
+
+        /// <summary>
+        /// SBM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label SBM;
+
+        /// <summary>
+        /// TotalSBM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label TotalSBM;
+
+        /// <summary>
+        /// Planting control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Planting;
+
+        /// <summary>
+        /// TotalPlanting control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label TotalPlanting;
+
+        /// <summary>
+        /// Watering control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Watering;
+
+        /// <summary>
+        /// TotalWatering control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label TotalWatering;
+
+        /// <summary>
+        /// Mulching control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Mulching;
+
+        /// <summary>
+        /// TotalMulching control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label TotalMulching;
+
+        /// <summary>
+        /// Uprooting control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Uprooting;
+
+        /// <summary>
+        /// TotalUprooting control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label TotalUprooting;
+
+        /// <summary>
+        /// Grass control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Grass;
+
+        /// <summary>
+        /// TotalGrass control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label TotalGrass;
 
         /// <summary>
         /// TaskODS control.

@@ -220,6 +220,7 @@
     <Content Include="App_Pages\City_Operations\Parks\CrewLeader\Crews.aspx" />
     <Content Include="App_Pages\City_Operations\Parks\CrewLeader\Routes.aspx" />
     <Content Include="App_Pages\City_Operations\Parks\TeamLeader\DefaultTL.aspx" />
+    <Content Include="App_Pages\City_Operations\JavaScript\CLScript.js" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />

@@ -33,6 +33,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     UserId.Text = (security.GetCurrentUserId(Context.User.Identity.GetUserName())).ToString();
                     EmployeeController employee = new EmployeeController();
                     YardID.Text = employee.GetYardID(int.Parse(UserId.Text)).ToString();
+                    //DriverID.Text = "0";
                     
                     if (!IsPostBack)
                     {
@@ -49,6 +50,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 Response.Redirect("~/Login.aspx");
             }
         }
+
         /// <summary>
         /// This method populates JobCards
         /// </summary>
@@ -60,8 +62,16 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 List<JobCardStatus> cardStatus = crewManager.Get_JobCardStatus();
                 JobCardStatusGridView.DataSource = cardStatus;
                 JobCardStatusGridView.DataBind();
-                JobCardStatusGridView.Visible = true;
-                JobcardTitle.Visible = true;
+                if (cardStatus.Count > 0)
+                {
+                    JobCardStatusGridView.Visible = true;
+                    JobcardTitle.Visible = true;
+                }
+                else
+                {
+                    JobCardStatusGridView.Visible = false;
+                    JobcardTitle.Visible = false;
+                }
             });
         }
 
@@ -75,9 +85,10 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             InfoUserControl.TryRun(() =>
             {
                 List<UnitReport> report = crewManager.GetUnitReports(yardId);
-                if(report.Count < 0)
+                if(report.Count == 0)
                 {
                     UnitReportHeader.Visible = false;
+                    UnitReoprtGV.Visible = false;
                 }
                 else
                 {
@@ -324,6 +335,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             }
             else
             {
+                DriverID.Text = driverId.ToString();
                 CrewController crewManager = new CrewController();
                 InfoUserControl.TryRun(() =>
                 {
@@ -332,6 +344,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     EmployeeGridView.PageIndex = 0;
                     Cancel.Visible = true;
                     CreateCrew.Visible = false;
+                    PopulateUnitReport();
                     RefreshCrewMember();
                     RefreshCurrentCrews();
                     InfoUserControl.ShowInfo("Add Crew Members");
@@ -394,93 +407,21 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected void Done_Click(object sender, EventArgs e)
         {
             string category = (FleetCategory.SelectedIndex < 0) ? "" : FleetCategory.SelectedItem.Text.Trim();
-            SiteMenu.Visible = true;
-            JobCardStatusGridView.Visible = false;
-            JobcardTitle.Visible = false;
-            UnitReoprtGV.Visible = false;
-            UnitReportHeader.Visible = false;
-
-            int driverId = 0;
-
             switch (category)
             {
                 case "Equipments":
-                    //Retrieve the selected DriverID 
-                    foreach (GridViewRow row in EmployeeGridView.Rows)
-                    {
-                        if ((row.FindControl("SelectedDriver") as RadioButton).Checked == true)
-                        {
-                            driverId = int.Parse((row.FindControl("EmployeeID") as Label).Text);
-                        }
-                    }
-
-                    //Checks that a driver is selecetd. then proceed
-                    if (driverId == 0)
-                    {
-                        InfoUserControl.ShowInfo("Please select a driver");
-                    }
-                    else
-                    {
-                        CrewController crewManager = new CrewController();
-                        InfoUserControl.TryRun(() =>
-                        {
-                            crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId, category);
-                            EmployeeGridView.Visible = false;
-                            RefreshCurrentCrews();
-                            SelectUnitDDL.Visible = false;
-                            FleetCategory.ClearSelection();
-                            Done.Visible = false;
-                            Cancel.Visible = false;
-                            List<CurrentCrews> crews = crewManager.GetCurrentCrews(int.Parse(YardID.Text));
-                            crews.Sort((x, y) => y.CrewID.CompareTo(x.CrewID));
-                            CrewID.Text = crews.Count <= 0 ? "" : (crews[0].CrewID).ToString();
-
-                        });
-                       
-
-                    }
+                    AssignDriver();
                     break;
 
                 case "Trucks":
 
-                    //Retrieve the selected DriverID 
-                    foreach (GridViewRow row in EmployeeGridView.Rows)
+                    if(int.Parse(DriverID.Text) == 0)
                     {
-                        if ((row.FindControl("SelectedDriver") as RadioButton).Checked == true)
-                        {
-                            driverId = int.Parse((row.FindControl("EmployeeID") as Label).Text);
-                        }
-                    }
-
-                    //Checks that a driver is selecetd. then proceed
-                    if (driverId == 0)
-                    {
-                        InfoUserControl.ShowInfo("Please select a driver");
+                        AssignDriver();
                     }
                     else
                     {
-                        CrewController crewManager = new CrewController();
-                        InfoUserControl.TryRun(() =>
-                        {
-                            crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId, category);
-                            //Refresh.Text = "Member";
-                            //EmployeeGridView.PageIndex = 0;
-                            //Cancel.Visible = true;
-                            //CreateCrew.Visible = false;
-                            RefreshCrewMember();
-                            RefreshCurrentCrews();
-                            //InfoUserControl.ShowInfo("Add Crew Members");
-                            List<CurrentCrews> crews = crewManager.GetCurrentCrews(int.Parse(YardID.Text));
-                            crews.Sort((x, y) => y.CrewID.CompareTo(x.CrewID));
-                            CrewID.Text = crews.Count <= 0 ? "" : (crews[0].CrewID).ToString();
-
-                            EmployeeGridView.Visible = false;
-                            SelectUnitDDL.Visible = false;
-                            FleetCategory.ClearSelection();
-                            Done.Visible = false;
-                            CreateCrew.Visible = false;
-                            Cancel.Visible = false;
-                        });
+                        CloseCrewPane();
                     }
 
                     break;
@@ -490,8 +431,62 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     Done.Visible = false;
                     break;
             }
+            SiteMenu.Visible = true;
+            JobCardStatusGridView.Visible = false;
+            JobcardTitle.Visible = false;
+            UnitReoprtGV.Visible = false;
+            UnitReportHeader.Visible = false;
+
         }
-     
+
+        protected void CloseCrewPane()
+        {
+            RefreshCrewMember();
+            RefreshCurrentCrews();
+            EmployeeGridView.Visible = false;
+            SelectUnitDDL.Visible = false;
+            FleetCategory.ClearSelection();
+            Done.Visible = false;
+            CreateCrew.Visible = false;
+            Cancel.Visible = false;
+        }
+
+        protected void AssignDriver()
+        {
+            string category = (FleetCategory.SelectedIndex < 0) ? "" : FleetCategory.SelectedItem.Text.Trim();
+
+            int driverId = 0;
+            //Retrieve the selected DriverID 
+            foreach (GridViewRow row in EmployeeGridView.Rows)
+            {
+                if ((row.FindControl("SelectedDriver") as RadioButton).Checked == true)
+                {
+                    driverId = int.Parse((row.FindControl("EmployeeID") as Label).Text);
+                }
+            }
+
+            //Checks that a driver is selecetd. then proceed
+            if (driverId == 0)
+            {
+                InfoUserControl.ShowInfo("Please select a driver");
+            }
+            else
+            {
+                CrewController crewManager = new CrewController();
+                InfoUserControl.TryRun(() =>
+                {
+                    crewManager.CreateCrew(int.Parse(SelectUnitDDL.SelectedValue), driverId, category);
+                    List<CurrentCrews> crews = crewManager.GetCurrentCrews(int.Parse(YardID.Text));
+                    crews.Sort((x, y) => y.CrewID.CompareTo(x.CrewID));
+                    CrewID.Text = crews.Count <= 0 ? "" : (crews[0].CrewID).ToString();
+                    CloseCrewPane();
+
+                });
+
+                PopulateUnitReport();
+
+            }
+        }
         /// <summary>
         /// This event add a new member to a given crew 
         ///     It calls the method that adds a new crew member to a crew
@@ -564,6 +559,8 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                         CrewController crewManager = new CrewController();
                         crewManager.DeleteCrew(int.Parse(e.CommandArgument.ToString()));
                         RefreshCurrentCrews();
+                        PopulateUnitReport();
+                        PopulateRouteStatus();
                     });
                     break;
             }
@@ -744,9 +741,9 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                 {
                     CrewController crewManager = new CrewController();
                     crewManager.UpdateCrew(crewId, KmStart, KmEnd, comment);
-                }, crew + " was updated successfully!");
 
-                PopulateUnitReport();
+                    PopulateUnitReport();
+                }, crew + " was updated successfully!");
             }
         }
 
@@ -781,6 +778,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     crewManager.UpdateJobCard(jobCardId, completedDate);
 
                     PopulateRouteStatus();
+                    RefreshCurrentCrews();
                     break;
             }
         }

@@ -73,11 +73,7 @@
             PageSize="20"
             CssClass="table table-striped table-hover table-bordered"
             OnPageIndexChanging="RoutesGridView_PageIndexChanging" 
-            AllowPaging="True"
-            OnRowEditing="RoutesGridView_RowEditing"
-            OnRowUpdating="RoutesGridView_RowUpdating"
-            OnRowCancelingEdit="RoutesGridView_RowCancelingEdit"
-            OnRowCommand="RoutesGridView_RowCommand">
+            AllowPaging="True">
             <Columns>
                 <asp:TemplateField HeaderText="" SortExpression="">
                     <ItemTemplate>
