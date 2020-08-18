@@ -343,6 +343,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         /// <param name="e"></param>
         protected void SearchButton_Click(object sender, EventArgs e)
         {
+            RoutesGridView.PageIndex = 0;
             RouteController routeManager = new RouteController();
             SearchFlag.Text = "1";
             if (!string.IsNullOrEmpty(TaskOption.SelectedValue))
