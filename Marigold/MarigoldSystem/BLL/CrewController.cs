@@ -253,49 +253,79 @@ namespace MarigoldSystem.BLL
             string message = "";
             using (var context = new MarigoldSystemContext())
             {
-                JobCardCrew jobCardCrew = context.JobCardCrews
-                                            .Where(x => x.CrewID == crewId && x.JobCard.SiteID == siteId)
-                                            .Select(x => x)
-                                            .FirstOrDefault();
-                if (jobCardCrew != null)
+                DateTime today = context.Crews.Find(crewId).CrewDate;
+                JobCard jobcard = context.JobCardCrews
+                                                .Where(x => DbFunctions.TruncateTime(x.Crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Now) && x.JobCard.SiteID == siteId)
+                                                .Select(x => x.JobCard)
+                                                .FirstOrDefault();
+
+               if(jobcard != null && jobcard.ClosedDate != null)
                 {
-                    //Check if the same site is not already assigned to the current crew
-                    throw new Exception("This site is already assigned to the current Crew");
+                    throw new Exception("The current job card was closed for the day. You can no longer assigned it today.");
                 }
                 else
                 {
-                    List<JobCardCrew> jobCardCrews = context.JobCardCrews
-                                                        .Where(x => x.JobCard.SiteID == siteId && DbFunctions.TruncateTime(x.Crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
-                                                        .Select(x => x)
-                                                        .ToList();
-
-                    //Notifies the users that existing crew(s) are also assigned to work on the same site.
-                    if (jobCardCrews.Count > 0)
+                    //Check How many times the curent site is done for the current season
+                    if (taskId == 1)
                     {
-                        foreach (JobCardCrew job in jobCardCrews)
+                        //Determines how many times the cuurent site was worked on in the current season.
+                        int cycle = context.Sites.Find(siteId).SiteType.NumberOfCyle;
+                        int count = context.JobCards
+                                                .Where(x => x.SiteID == siteId && ((DateTime)x.ClosedDate).Year == DateTime.Now.Year)
+                                                .Select(x => x)
+                                                .Count();
+
+                        if (count >= cycle)
                         {
-                            string unit = job.Crew.EquipmentID == null ? job.Crew.Truck.TruckDescription : job.Crew.Equipment.Description;
-                            message += unit + ", ";
+                            throw new Exception("The number of cycle (" + cycle + ") for this site has been reached for this season");
                         }
-                        jobCardCrew = new JobCardCrew();
-                        jobCardCrew.CrewID = crewId;
-                        jobCardCrew.JobCardID = jobCardCrews[0].JobCardID;
-                        context.JobCardCrews.Add(jobCardCrew);
+                    }
+
+                    JobCardCrew jobCardCrew = context.JobCardCrews
+                                                .Where(x => x.CrewID == crewId && x.JobCard.SiteID == siteId)
+                                                .Select(x => x)
+                                                .FirstOrDefault();
+                    if (jobCardCrew != null)
+                    {
+                        //Check if the same site is not already assigned to the current crew
+                        throw new Exception("This site is already assigned to the current Crew");
                     }
                     else
                     {
-                        JobCard jobCard = new JobCard();
-                        jobCard.SiteID = siteId;
-                        jobCard.TaskID = taskId;
-                        context.JobCards.Add(jobCard);
+                        List<JobCardCrew> jobCardCrews = context.JobCardCrews
+                                                            .Where(x => x.JobCard.SiteID == siteId && DbFunctions.TruncateTime(x.Crew.CrewDate) == DbFunctions.TruncateTime(DateTime.Today))
+                                                            .Select(x => x)
+                                                            .ToList();
 
-                        jobCardCrew = new JobCardCrew();
-                        jobCardCrew.CrewID = crewId;
+                        //Notifies the users that existing crew(s) are also assigned to work on the same site.
+                        if (jobCardCrews.Count > 0)
+                        {
+                            foreach (JobCardCrew job in jobCardCrews)
+                            {
+                                string unit = job.Crew.EquipmentID == null ? job.Crew.Truck.TruckDescription : job.Crew.Equipment.Description;
+                                message += unit + ", ";
+                            }
+                            jobCardCrew = new JobCardCrew();
+                            jobCardCrew.CrewID = crewId;
+                            jobCardCrew.JobCardID = jobCardCrews[0].JobCardID;
+                            context.JobCardCrews.Add(jobCardCrew);
+                        }
+                        else
+                        {
+                            JobCard jobCard = new JobCard();
+                            jobCard.SiteID = siteId;
+                            jobCard.TaskID = taskId;
+                            context.JobCards.Add(jobCard);
 
-                        jobCard.JobCardCrews.Add(jobCardCrew);
-                    };
-                    context.SaveChanges();
+                            jobCardCrew = new JobCardCrew();
+                            jobCardCrew.CrewID = crewId;
+
+                            jobCard.JobCardCrews.Add(jobCardCrew);
+                        };
+                        context.SaveChanges();
+                    }
                 }
+                
                 return message;
             }
         }

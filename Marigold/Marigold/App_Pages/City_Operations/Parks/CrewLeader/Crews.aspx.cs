@@ -660,9 +660,12 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                         }
                         else
                         {
+                            int crewId = int.Parse(CrewID.Text);
+                            int siteId = int.Parse(e.CommandArgument.ToString());
+                            int taskId = int.Parse(list.SelectedValue);
 
                             CrewController crewManager = new CrewController();
-                            message = crewManager.AddJobCard(int.Parse(CrewID.Text), int.Parse(e.CommandArgument.ToString()), int.Parse(list.SelectedValue));
+                            message = crewManager.AddJobCard(crewId, siteId,taskId);
                             RefreshCurrentCrews();
                         }
                     });
@@ -670,6 +673,7 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     if (!string.IsNullOrEmpty(message))
                     {
                         InfoUserControl.ShowInfo("The following Crew(s) are already assigned to this same Site:  " + message);
+                        RefreshCurrentCrews();
                     }
                     break;
 

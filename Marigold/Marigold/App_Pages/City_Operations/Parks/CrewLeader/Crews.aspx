@@ -461,7 +461,7 @@
         </div>
         <div class="summary">
             <div class="summaryElements">
-                <div >
+              <%--  <div >
                     <asp:Label ID="ActiveCrews" runat="server" Text="Number of Crews: "></asp:Label>
                     <asp:Label ID="NumberCrews" runat="server" Text="3"></asp:Label>&nbsp;&nbsp;
                 </div>
@@ -492,7 +492,7 @@
                 <div>
                     <asp:Label ID="Grass" runat="server" Text="Grass: "></asp:Label>
                     <asp:Label ID="TotalGrass" runat="server" Text="20"></asp:Label>
-                </div>
+                </div>--%>
             </div>
         </div>
     </div>
