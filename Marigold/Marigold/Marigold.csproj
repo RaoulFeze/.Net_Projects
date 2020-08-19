@@ -218,7 +218,11 @@
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
     <Content Include="Account\VerifyPhoneNumber.aspx" />
     <Content Include="App_Pages\City_Operations\Parks\CrewLeader\Crews.aspx" />
+    <Content Include="App_Pages\City_Operations\Parks\CrewLeader\Fleet.aspx" />
+    <Content Include="App_Pages\City_Operations\Parks\CrewLeader\Incident.aspx" />
     <Content Include="App_Pages\City_Operations\Parks\CrewLeader\Routes.aspx" />
+    <Content Include="App_Pages\City_Operations\Parks\CrewLeader\TimeCard.aspx" />
+    <Content Include="App_Pages\City_Operations\Parks\CrewLeader\Tools.aspx" />
     <Content Include="App_Pages\City_Operations\Parks\TeamLeader\DefaultTL.aspx" />
     <Content Include="App_Pages\City_Operations\JavaScript\CLScript.js" />
     <Content Include="Contact.aspx" />
@@ -504,12 +508,40 @@
     <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Crews.aspx.designer.cs">
       <DependentUpon>Crews.aspx</DependentUpon>
     </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Fleet.aspx.cs">
+      <DependentUpon>Fleet.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Fleet.aspx.designer.cs">
+      <DependentUpon>Fleet.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Incident.aspx.cs">
+      <DependentUpon>Incident.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Incident.aspx.designer.cs">
+      <DependentUpon>Incident.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Routes.aspx.cs">
       <DependentUpon>Routes.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Routes.aspx.designer.cs">
       <DependentUpon>Routes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\TimeCard.aspx.cs">
+      <DependentUpon>TimeCard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\TimeCard.aspx.designer.cs">
+      <DependentUpon>TimeCard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Tools.aspx.cs">
+      <DependentUpon>Tools.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="App_Pages\City_Operations\Parks\CrewLeader\Tools.aspx.designer.cs">
+      <DependentUpon>Tools.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Pages\City_Operations\Parks\TeamLeader\DefaultTL.aspx.cs">
       <DependentUpon>DefaultTL.aspx</DependentUpon>
