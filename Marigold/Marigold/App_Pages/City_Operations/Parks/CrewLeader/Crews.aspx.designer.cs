@@ -87,6 +87,24 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected global::Marigold.UserControls.InfoUserControl InfoUserControl;
 
         /// <summary>
+        /// MakeCrew control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button MakeCrew;
+
+        /// <summary>
+        /// LastCrews control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button LastCrews;
+
+        /// <summary>
         /// FleetCategory control.
         /// </summary>
         /// <remarks>
@@ -177,6 +195,15 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected global::System.Web.UI.WebControls.Label JobcardTitle;
 
         /// <summary>
+        /// JobCardStatusGridView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView JobCardStatusGridView;
+
+        /// <summary>
         /// SiteMenu control.
         /// </summary>
         /// <remarks>
@@ -229,15 +256,6 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton PRoute;
-
-        /// <summary>
-        /// JobCardStatusGridView control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView JobCardStatusGridView;
 
         /// <summary>
         /// RouteListView control.

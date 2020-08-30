@@ -582,6 +582,9 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
             Done.Visible = false;
             Cancel.Visible = false;
             CreateCrew.Visible = false;
+            MakeCrew.Visible = true;
+            LastCrews.Visible = true;
+            FleetCategory.Visible = false;
 
             //Deletes the crew in formation.
             InfoUserControl.TryRun(() =>
@@ -600,26 +603,51 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         protected void ARoute_Click(object sender, EventArgs e)
         {
             ResetDataPager("1");
+            ARoute.CssClass = "active-tab";
+            BRoute.CssClass = "default-tab";
+            GRoute.CssClass = "default-tab";
+            WRoute.CssClass = "default-tab";
+            PRoute.CssClass = "default-tab";
         }
 
         protected void BRoute_Click(object sender, EventArgs e)
         {
             ResetDataPager("2");
+            ARoute.CssClass = "default-tab";
+            BRoute.CssClass = "active-tab";
+            GRoute.CssClass = "default-tab";
+            WRoute.CssClass = "default-tab";
+            PRoute.CssClass = "default-tab";
         }
 
         protected void GRoute_Click(object sender, EventArgs e)
         {
             ResetDataPager("3");
+            ARoute.CssClass = "default-tab";
+            BRoute.CssClass = "default-tab";
+            GRoute.CssClass = "active-tab";
+            WRoute.CssClass = "default-tab";
+            PRoute.CssClass = "default-tab";
         }
 
         protected void WRoute_Click(object sender, EventArgs e)
         {
             ResetDataPager("4");
+            ARoute.CssClass = "default-tab";
+            BRoute.CssClass = "default-tab";
+            GRoute.CssClass = "default-tab";
+            WRoute.CssClass = "active-tab";
+            PRoute.CssClass = "default-tab";
         }
 
         protected void PRoute_Click(object sender, EventArgs e)
         {
             ResetDataPager("5");
+            ARoute.CssClass = "default-tab";
+            BRoute.CssClass = "default-tab";
+            GRoute.CssClass = "default-tab";
+            WRoute.CssClass = "default-tab";
+            PRoute.CssClass = "active-tab";
         }
 
         protected void ResetDataPager(string siteTypeID)
@@ -682,6 +710,15 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
                     RouteListView.Visible = false;
                     PopulateRouteStatus();
                     PopulateUnitReport();
+                    MakeCrew.Visible = true;
+                    LastCrews.Visible = true;
+                    FleetCategory.Visible = false;
+
+                    ARoute.CssClass = "default-tab";
+                    BRoute.CssClass = "default-tab";
+                    GRoute.CssClass = "default-tab";
+                    WRoute.CssClass = "default-tab";
+                    PRoute.CssClass = "default-tab";
                     break;
             }
             
@@ -807,6 +844,13 @@ namespace Marigold.App_Pages.City_Operations.Parks.CrewLeader
         {
             JobCardStatusGridView.PageIndex = e.NewPageIndex;
             PopulateRouteStatus();
+        }
+
+        protected void MakeCrew_Click(object sender, EventArgs e)
+        {
+            FleetCategory.Visible = true;
+            MakeCrew.Visible = false;
+            LastCrews.Visible = false;
         }
     }
 }
