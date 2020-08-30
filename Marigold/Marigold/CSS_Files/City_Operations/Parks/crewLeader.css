@@ -237,12 +237,13 @@
 		text-align: center;
 		margin: 20px 0;
 	}
-/**/ .jobsite-lv {
-		background-color: #FFFFFF;
-		margin:0 auto 10px auto;
-		width:100%;
-		overflow:auto;
-		}
+/**/
+.jobsite-lv {
+	background-color: #FFFFFF;
+	margin: 0 auto 10px auto;
+	width: 100%;
+	overflow: auto;
+}
 /**//**/.btn-finish{
 			float:right;
 		}
